@@ -129,54 +129,74 @@ bool HelloWorld::init()
 
 void HelloWorld::testUserService()
 {
-    Util::setTraceEnabled(true);
+    std::string userName = "<Enter_your_user_name>";
+    std::string password = "Password";
+    std::string emailId = "Email_Id";
+
     UserService::Initialize(APP_Key, SECRET_Key);
     UserService *user = UserService::getInstance();
-    //user->CreateUser("Rajeev3243590", "9934273686", "rajeevabcdegf@gmail.com",this,callfuncND_selector(HelloWorld::onUserRequestCompleted));
+    user->CreateUser(userName, password, emailId,this,callfuncND_selector(HelloWorld::onUserRequestCompleted));
     
-    //user->Authenticate("Rajeev324359", "9934273686", this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
-    //user->GetUser("Rajeev324359", this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
+    user->Authenticate(userName, password, this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
+    user->GetUser(userName, this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
     user->GetAllUsers(this,callfuncND_selector(HelloWorld::onUserRequestCompleted));
 }
 
 
 void HelloWorld::testGameService()
 {
+    std::string gameName = "<Enter_your_game_name>";
+    std::string description = "Description";
+
     GameService::Initialize(APP_Key, SECRET_Key);
     GameService *gameService = GameService::getInstance();
-    //gameService->CreateGame("NinjaJump", "NInja Jump", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    gameService->GetGamebyName("NinjaJump", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    gameService->CreateGame(gameName, description, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    gameService->GetGamebyName(gameName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
 }
 
 void HelloWorld::testScoreService()
 {
+    std::string gameName = "<Enter_your_game_name>";
+    std::string userName = "<Enter_your_user_name>";
+    double score = 100;
     ScoreService::Initialize(APP_Key, SECRET_Key);
     ScoreService *scoreService = ScoreService::getInstance();
-    //scoreService->AddScore("NinjaJump", "Rajeev3243590", 200, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->DeductScore("NinjaJump", "Rajeev3243590", 50, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->AddScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->DeductScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
 }
 
 void HelloWorld::testScoreBoardService()
 {
+    std::string gameName = "<Enter_your_game_name>";
+    std::string userName = "<Enter_your_user_name>";
+    double score = 100;
+
     ScoreBoardService::Initialize(APP_Key, SECRET_Key);
     ScoreBoardService *scoreService = ScoreBoardService::getInstance();
-    //scoreService->SaveUserScore("NinjaJump", "Rajeev3243590", 300, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //scoreService->GetHighestScoreByUser("NinjaJump", "Rajeev3243590", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //scoreService->GetTopRankings("NinjaJump", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //scoreService->GetAverageScoreByUser("NinjaJump", "Rajeev3243590", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //scoreService->GetUserRanking("NinjaJump", "Rajeev3243590", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->GetLastScoreByUser("NinjaJump", "Rajeev3243590", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->SaveUserScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->GetHighestScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->GetTopRankings(gameName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->GetAverageScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->GetUserRanking(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->GetLastScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
 }
 
 void HelloWorld::testRewardService()
 {
+    std::string gameName = "<Enter_your_game_name>";
+    std::string userName = "<Enter_your_user_name>";
+    std::string rewardName = "<Enter_your_user_name>";
+    std::string description = "<Enter_your_user_name>";
+
+    double rewardPoints = 100;
+    
     RewardService::Initialize(APP_Key, SECRET_Key);
     RewardService *rewardService = RewardService::getInstance();
-    //rewardService->CreateReward("TestReward", "CReating to test", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //rewardService->GetAllRewards(this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //rewardService->EarnRewards("NinjaJump", "Rajeev3243590", "TestReward", 101, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //rewardService->RedeemRewards("NinjaJump", "Rajeev3243590", "TestReward", 60, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    rewardService->GetGameRewardPointsForUser("NinjaJump", "Rajeev3243590", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    rewardService->CreateReward(rewardName, description, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    rewardService->GetAllRewards(this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    rewardService->EarnRewards(gameName, userName, rewardName, rewardPoints, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    rewardService->RedeemRewards(gameName, userName, rewardName, rewardPoints, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    rewardService->GetGameRewardPointsForUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
     
 }
 
@@ -195,36 +215,50 @@ string getJsonString(string key, string value)
 
 void HelloWorld::testStorageService()
 {
+    std::string dbName = "jsonDocument2";
+    std::string collectionName = "jsonCollection";
+    std::string docId = "515bc5b0e4b06691bd02d438";
+    std::string key = "Version";
+    std::string value = "2.3";
+
+    
     StorageService::Initialize(APP_Key, SECRET_Key);
     StorageService *storageService = StorageService::getInstance();
     
     string json = getJsonString("key", "App42 coud api cocos2d-x version testing.");
     
-    storageService->InsertJsonDocument("jsonDocument2", "Testing2", json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    //storageService->FindAllCollections("jsonDocument2", this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    //storageService->FindAllDocuments("jsonDocument2", "jsonCollection", this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    //storageService->FindDocumentById("jsonDocument2", "jsonCollection", "515bc5b0e4b06691bd02d438", this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    //storageService->FindDocumentByKeyValue("jsonDocument2", "jsonCollection", "Version", "2.3", this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    storageService->InsertJsonDocument(dbName, collectionName, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    storageService->FindAllCollections(dbName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    storageService->FindAllDocuments(dbName, collectionName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    storageService->FindDocumentById(dbName, collectionName, docId, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    storageService->FindDocumentByKeyValue(dbName, collectionName, key, value, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
 }
 
 void HelloWorld::testPushService()
 {
+    std::string deviceToken = "Enter_device_token";
+    std::string userName = "Enter_your_user_name";
+    std::string message = "Your_push_message";
+    std::string deviceType = "iOS";
+    std::string channelName = "Enter_your_channel_name";
+
+    
     PushNotificationService::Initialize(APP_Key, SECRET_Key);
     PushNotificationService *pushService = PushNotificationService::getInstance();
-    //pushService->registerDeviceToken("deviceToken", "DhruvC", "iOS", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    //pushService->sendPushMessageToUser("DhruvC", "Hello From Cocos2d-x", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->registerDeviceToken(deviceToken, userName, deviceType, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->sendPushMessageToUser(userName, message, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
     
     map<string, string> messageMap;
     messageMap["alert"] = "Hello, Custom message from channel!";
     messageMap["sound"] = "default";
     messageMap["badge"] = "2";
     
-    //pushService->sendPushMessageToUser("DhruvC", messageMap, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->sendPushMessageToUser(userName, messageMap, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
     
-    //pushService->subscribeToChannel("Test Channel", "DhruvC", this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->subscribeToChannel(channelName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
     
-    pushService->sendPushMessageToChannel("Test Channel", "Hello From Channel!", this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
-    //pushService->sendPushMessageToChannel("Test Channel", messageMap, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->sendPushMessageToChannel(channelName, message, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
+    pushService->sendPushMessageToChannel(channelName, messageMap, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
 }
 
 void HelloWorld::onPushRequestCompleted(cocos2d::CCNode *sender, void *response)
@@ -237,6 +271,8 @@ void HelloWorld::onPushRequestCompleted(cocos2d::CCNode *sender, void *response)
     {
         printf("\n UserName=%s",it->userName.c_str());
         printf("\n Message=%s\n",it->message.c_str());
+        printf("\n Type=%s\n",it->type.c_str());
+        printf("\n Device Token=%s\n",it->deviceToken.c_str());
     }
 }
 
@@ -249,7 +285,7 @@ void HelloWorld::onUserRequestCompleted(cocos2d::CCNode *sender, void *response)
     for(std::vector<App42User>::iterator it = userResponse->users.begin(); it != userResponse->users.end(); ++it)
     {
         printf("\n UserName=%s",it->userName.c_str());
-        printf("\n Message=%s\n",it->email.c_str());
+        printf("\n Email=%s\n",it->email.c_str());
     }
 }
 
@@ -264,7 +300,51 @@ void HelloWorld::onStorageRequestCompleted(cocos2d::CCNode *sender, void *respon
         printf("\n UserName=%s",it->dbName.c_str());
         printf("\n Message=%s\n",it->collectionName.c_str());
     }
+    
+    for(std::vector<JSONDocument>::iterator it = storageResponse->documents.begin(); it != storageResponse->documents.end(); ++it)
+    {
+        printf("\n DocId=%s",it->docId.c_str());
+        printf("\n Json =%s\n",it->jsonDoc.c_str());
+    }
 }
+
+void HelloWorld::onGameRequestCompleted(cocos2d::CCNode *sender, void *response)
+{
+    App42GameResponse *gameResponse = (App42GameResponse*)response;
+    printf("\ncode=%d",gameResponse->getCode());
+    printf("\nResponse Body=%s",gameResponse->getBody().c_str());
+    
+    for(std::vector<App42Game>::iterator it = gameResponse->games.begin(); it != gameResponse->games.end(); ++it)
+    {
+        printf("\n Game Name=%s",it->name.c_str());
+        printf("\n Description=%s\n",it->description.c_str());
+    }
+    
+    for(std::vector<App42Score>::iterator it = gameResponse->scores.begin(); it != gameResponse->scores.end(); ++it)
+    {
+        printf("\n User Name=%s",it->userName.c_str());
+        printf("\n Score Id=%s\n",it->scoreId.c_str());
+        printf("\n Value=%f\n",it->value);
+
+    }
+}
+
+void HelloWorld::onRewardRequestCompleted(cocos2d::CCNode *sender, void *response)
+{
+    App42RewardResponse *rewardResponse = (App42RewardResponse*)response;
+    printf("\ncode=%d",rewardResponse->getCode());
+    printf("\nResponse Body=%s",rewardResponse->getBody().c_str());
+    
+    for(std::vector<App42Reward>::iterator it = rewardResponse->rewards.begin(); it != rewardResponse->rewards.end(); ++it)
+    {
+        printf("\n Reward Name=%s",it->name.c_str());
+        printf("\n Game Name=%s\n",it->gameName.c_str());
+        printf("\n Points=%f\n",it->points);
+        printf("\n Description=%s\n",it->description.c_str());
+
+    }
+}
+
 
 void HelloWorld::onHttpRequestCompleted(cocos2d::CCNode *sender, void *response)
 {
