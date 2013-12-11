@@ -1,10 +1,8 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 
-#define APP_Key "3c1d8c1d23e1dde0d820b06e33e6260e3b9ac0438d522a4ac9d524fc12cb8559"
-                //"cad2bfab6310acd9696187b98682925125e469ab0d0d585db0b00609f461b791"
-#define SECRET_Key "254964c8a7fcc95cee0362adc2e0e06e0a64ec53c7a9e5279c11b3c4303edf73"
-                //"55811709916e7ce4405cde0cdc5a254cf4b506fbafdae05760a73100b8080b67"
+#define APP_Key "Application_Key"
+#define SECRET_Key "App_Secret_Key"
 
 
 using namespace cocos2d;
