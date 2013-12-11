@@ -38,7 +38,7 @@ namespace Util
         
         headers.push_back("Accept: application/json");
         headers.push_back("Content-Type: application/json");
-        headers.push_back("SDKName: iOS");
+        headers.push_back("SDKName: Cocos2d-X");
         
         request->setHeaders(headers);
         
@@ -59,7 +59,7 @@ namespace Util
         
         headers.push_back("Accept: application/json");
         headers.push_back("Content-Type: application/json");
-        headers.push_back("SDKName: iOS");
+        headers.push_back("SDKName: Cocos2d-X");
         
         request->setHeaders(headers);
         
