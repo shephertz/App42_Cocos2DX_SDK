@@ -159,8 +159,8 @@ void HelloWorld::testScoreService()
     double score = 100;
     ScoreService::Initialize(APP_Key, SECRET_Key);
     ScoreService *scoreService = ScoreService::getInstance();
-    scoreService->AddScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->DeductScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->AddScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    scoreService->DeductScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
 }
 
 void HelloWorld::testScoreBoardService()
@@ -171,12 +171,12 @@ void HelloWorld::testScoreBoardService()
 
     ScoreBoardService::Initialize(APP_Key, SECRET_Key);
     ScoreBoardService *scoreService = ScoreBoardService::getInstance();
-    scoreService->SaveUserScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->GetHighestScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->GetTopRankings(gameName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->GetAverageScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->GetUserRanking(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    scoreService->GetLastScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    scoreService->SaveUserScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    scoreService->GetHighestScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    scoreService->GetTopRankings(gameName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    scoreService->GetAverageScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    scoreService->GetUserRanking(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    scoreService->GetLastScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
 }
 
 void HelloWorld::testRewardService()
@@ -190,11 +190,11 @@ void HelloWorld::testRewardService()
     
     RewardService::Initialize(APP_Key, SECRET_Key);
     RewardService *rewardService = RewardService::getInstance();
-    rewardService->CreateReward(rewardName, description, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    rewardService->GetAllRewards(this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    rewardService->EarnRewards(gameName, userName, rewardName, rewardPoints, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    rewardService->RedeemRewards(gameName, userName, rewardName, rewardPoints, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    rewardService->GetGameRewardPointsForUser(gameName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    rewardService->CreateReward(rewardName, description, this, callfuncND_selector(HelloWorld::onRewardRequestCompleted));
+    rewardService->GetAllRewards(this, callfuncND_selector(HelloWorld::onRewardRequestCompleted));
+    rewardService->EarnRewards(gameName, userName, rewardName, rewardPoints, this, callfuncND_selector(HelloWorld::onRewardRequestCompleted));
+    rewardService->RedeemRewards(gameName, userName, rewardName, rewardPoints, this, callfuncND_selector(HelloWorld::onRewardRequestCompleted));
+    rewardService->GetGameRewardPointsForUser(gameName, userName, this, callfuncND_selector(HelloWorld::onRewardRequestCompleted));
     
 }
 
@@ -243,21 +243,27 @@ void HelloWorld::testPushService()
     
     PushNotificationService::Initialize(APP_Key, SECRET_Key);
     PushNotificationService *pushService = PushNotificationService::getInstance();
-    pushService->registerDeviceToken(deviceToken, userName, deviceType, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
-    pushService->sendPushMessageToUser(userName, message, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->registerDeviceToken(deviceToken, userName, deviceType, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
+    pushService->sendPushMessageToUser(userName, message, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
     
     map<string, string> messageMap;
     messageMap["alert"] = "Hello, Custom message from channel!";
     messageMap["sound"] = "default";
     messageMap["badge"] = "2";
     
-    pushService->sendPushMessageToUser(userName, messageMap, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->sendPushMessageToUser(userName, messageMap, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
     
-    pushService->subscribeToChannel(channelName, userName, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->subscribeToChannel(channelName, userName, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
     
     pushService->sendPushMessageToChannel(channelName, message, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
-    pushService->sendPushMessageToChannel(channelName, messageMap, this, callfuncND_selector(HelloWorld::onHttpRequestCompleted));
+    pushService->sendPushMessageToChannel(channelName, messageMap, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
 }
+
+
+
+#pragma mark-
+#pragma mark- --- Callback methods ---
+#pragma mark-
 
 void HelloWorld::onPushRequestCompleted(cocos2d::CCNode *sender, void *response)
 {
