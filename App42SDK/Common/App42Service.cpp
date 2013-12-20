@@ -39,15 +39,15 @@ void App42Service::populateSignParams(std::map<string, string>& signParamsMap)
 
 void App42Service::populateMetaHeaderParams(std::map<string, string>& signParamsMap)
 {
-    signParamsMap["SDKName"] = "iOS";
+    signParamsMap["SDKName"] = "Cocos2d-X";
 }
 
 string App42Service::getBaseUrl(string resource)
 {
     string url = "";
-    url.append(PROTOCOL);       //"https://"
-    url.append(BASE_URL); //"api.shephertz.com"
-    url.append(RESOURCE_BASE);  //"/1.0/cloud/"
-    url.append(resource);       //"user"
+    url.append(PROTOCOL);
+    url.append(BASE_URL);
+    url.append(RESOURCE_BASE);
+    url.append(resource);
     return url;
 }

@@ -55,7 +55,6 @@ public:
      *
      */
 	void CreateUser(string username, string password, string email,CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
-    void CreateUser(string username, string password, string email, string roleList, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
 	/**
      * Authenticate user based on userName and password
      *

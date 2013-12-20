@@ -51,6 +51,27 @@ namespace Util
         return;
     }
     
+    static void executePut(string baseUrl,std::vector<std::string> headers, const char* postData,CCObject* pTarget, SEL_CallFuncND pSelector)
+    {
+        cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest();
+        request->setUrl(baseUrl.c_str());
+        request->setRequestType(cocos2d::extension::CCHttpRequest::kHttpPost);
+        
+        headers.push_back("Accept: application/json");
+        headers.push_back("Content-Type: application/json");
+        headers.push_back("SDKName: Cocos2d-X");
+        headers.push_back("Custom-Headers: PUT");
+        request->setHeaders(headers);
+        
+        request->setResponseCallback(pTarget, pSelector);
+        
+        request->setRequestData(postData, strlen(postData));
+        
+        cocos2d::extension::CCHttpClient::getInstance()->send(request);
+        request->release();
+        return;
+    }
+
     static void executeGet(string baseUrl,std::vector<std::string> headers,CCObject* pTarget, SEL_CallFuncND pSelector)
     {
         cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest();
@@ -60,6 +81,26 @@ namespace Util
         headers.push_back("Accept: application/json");
         headers.push_back("Content-Type: application/json");
         headers.push_back("SDKName: Cocos2d-X");
+        
+        request->setHeaders(headers);
+        
+        request->setResponseCallback(pTarget, pSelector);
+        
+        cocos2d::extension::CCHttpClient::getInstance()->send(request);
+        request->release();
+        return;
+    }
+    
+    static void executeDelete(string baseUrl,std::vector<std::string> headers,CCObject* pTarget, SEL_CallFuncND pSelector)
+    {
+        cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest();
+        request->setUrl(baseUrl.c_str());
+        request->setRequestType(cocos2d::extension::CCHttpRequest::kHttpGet);
+        
+        headers.push_back("Accept: application/json");
+        headers.push_back("Content-Type: application/json");
+        headers.push_back("SDKName: Cocos2d-X");
+        headers.push_back("Custom-Headers:DELETE");
         
         request->setHeaders(headers);
         

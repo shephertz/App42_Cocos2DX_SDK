@@ -80,7 +80,7 @@ bool HelloWorld::init()
      * Test User Service
      */
     
-    testUserService();
+    //testUserService();
     
     
     /**
@@ -113,7 +113,7 @@ bool HelloWorld::init()
      * Test Storage Service
      */
     
-    //testStorageService();
+    testStorageService();
     
     /**
      * Test Push Service
@@ -215,21 +215,24 @@ void HelloWorld::testStorageService()
 {
     std::string dbName = "jsonDocument2";
     std::string collectionName = "jsonCollection";
-    std::string docId = "515bc5b0e4b06691bd02d438";
-    std::string key = "Version";
-    std::string value = "2.3";
+    std::string docId = "52b4378ae4b0f001c5c0e811";
+    std::string key = "mykey";//"Version";
+    std::string value = "1400";//"2.3";
 
-    
     StorageService::Initialize(APP_Key, SECRET_Key);
     StorageService *storageService = StorageService::getInstance();
     
-    string json = getJsonString("key", "App42 coud api cocos2d-x version testing.");
+    string json = getJsonString("mykey", "1300");
     
-    storageService->InsertJsonDocument(dbName, collectionName, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    storageService->FindAllCollections(dbName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    storageService->FindAllDocuments(dbName, collectionName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    storageService->FindDocumentById(dbName, collectionName, docId, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    storageService->FindDocumentByKeyValue(dbName, collectionName, key, value, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->InsertJsonDocument(dbName, collectionName, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->FindAllCollections(dbName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->FindAllDocuments(dbName, collectionName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->FindDocumentById(dbName, collectionName, docId, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->FindDocumentByKeyValue(dbName, collectionName, key, value, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->UpdateDocumentByDocId(dbName, collectionName, docId, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->UpdateDocumentByKeyValue(dbName, collectionName, "mykey", "1200", json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->DeleteDocumentsById(dbName, collectionName, docId, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    storageService->SaveOrUpdateDocumentByKeyValue(dbName, collectionName, key, value, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
 }
 
 void HelloWorld::testPushService()
@@ -301,8 +304,8 @@ void HelloWorld::onStorageRequestCompleted(cocos2d::CCNode *sender, void *respon
     
     for(std::vector<App42Storage>::iterator it = storageResponse->storages.begin(); it != storageResponse->storages.end(); ++it)
     {
-        printf("\n UserName=%s",it->dbName.c_str());
-        printf("\n Message=%s\n",it->collectionName.c_str());
+        printf("\n DBName=%s",it->dbName.c_str());
+        printf("\n CollectionName=%s\n",it->collectionName.c_str());
     }
     
     for(std::vector<JSONDocument>::iterator it = storageResponse->documents.begin(); it != storageResponse->documents.end(); ++it)
@@ -310,6 +313,7 @@ void HelloWorld::onStorageRequestCompleted(cocos2d::CCNode *sender, void *respon
         printf("\n DocId=%s",it->docId.c_str());
         printf("\n Json =%s\n",it->jsonDoc.c_str());
     }
+    
 }
 
 void HelloWorld::onGameRequestCompleted(cocos2d::CCNode *sender, void *response)

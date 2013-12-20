@@ -48,6 +48,16 @@ public:
 	void FindAllDocuments(string dbName, string collectionName, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
 	void FindDocumentById(string dbName, string collectionName, string docId, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
 	void FindDocumentByKeyValue(string dbName, string collectionName, string key,string value, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    void UpdateDocumentByDocId(string dbName, string collectionName, string docId,string newJsonDoc, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    void UpdateDocumentByKeyValue(string dbName, string collectionName, string key,string value,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    void SaveOrUpdateDocumentByKeyValue(string dbName, string collectionName, string key,string value,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+
+    void DeleteDocumentsById(string dbName, string collectionName, string docId, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+
+
 };
 
 #endif /* defined(__App42CPPSDK__StorageService__) */

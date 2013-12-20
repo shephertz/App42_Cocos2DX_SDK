@@ -206,3 +206,139 @@ void StorageService::FindDocumentByKeyValue(string dbName, string collectionName
     Util::executeGet(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
 
 }
+
+void StorageService::UpdateDocumentByDocId(string dbName, string collectionName, string docId,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+{
+    
+    map<string, string> postMap;
+    string timestamp = Util::getTimeStamp();
+    populateSignParams(postMap);
+    postMap["dbName"] = dbName;
+	postMap["collectionName"] = collectionName;
+    postMap["docId"] = docId;
+    
+    
+    string storageBody = BuildStorageBody(json);
+    postMap["body"] = storageBody;
+    
+    
+    string signature = Util::signMap(secretKey, postMap);
+    
+    string resource = "storage/updateByDocId/dbName/";
+    resource.append(dbName + "/collectionName/");
+	resource.append(collectionName+"/docId/");
+    resource.append(docId);
+    
+    string baseUrl = getBaseUrl(resource);
+    baseUrl.append("?");
+    
+    std::vector<std::string> headers;
+    
+    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+    
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    Util::executePut(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
+}
+
+void StorageService::UpdateDocumentByKeyValue(string dbName, string collectionName, string key,string value,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+{
+    
+    map<string, string> postMap;
+    string timestamp = Util::getTimeStamp();
+    populateSignParams(postMap);
+    postMap["dbName"] = dbName;
+	postMap["collectionName"] = collectionName;
+    postMap["key"] = key;
+    postMap["value"] = value;
+    
+    string storageBody = BuildStorageBody(json);
+    postMap["body"] = storageBody;
+    
+    string signature = Util::signMap(secretKey, postMap);
+    
+    string resource = "storage/update/dbName/";
+    resource.append(dbName + "/collectionName/");
+	resource.append(collectionName+"/");
+    resource.append(key+"/");
+    resource.append(value);
+
+    
+    string baseUrl = getBaseUrl(resource);
+    baseUrl.append("?");
+    
+    printf("baseUrl=%s",baseUrl.c_str());
+    printf("storageBody=%s",storageBody.c_str());
+
+    std::vector<std::string> headers;
+    
+    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+    
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    Util::executePut(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
+}
+
+void StorageService::SaveOrUpdateDocumentByKeyValue(string dbName, string collectionName, string key,string value,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+{
+    
+    map<string, string> postMap;
+    string timestamp = Util::getTimeStamp();
+    populateSignParams(postMap);
+    postMap["dbName"] = dbName;
+	postMap["collectionName"] = collectionName;
+    postMap["key"] = key;
+    postMap["value"] = value;
+    
+    string storageBody = BuildStorageBody(json);
+    postMap["body"] = storageBody;
+    
+    string signature = Util::signMap(secretKey, postMap);
+    
+    string resource = "storage/saveorupdate/dbName/";
+    resource.append(dbName + "/collectionName/");
+	resource.append(collectionName+"/");
+    resource.append(key+"/");
+    resource.append(value);
+    
+    
+    string baseUrl = getBaseUrl(resource);
+    baseUrl.append("?");
+    
+    printf("baseUrl=%s",baseUrl.c_str());
+    printf("storageBody=%s",storageBody.c_str());
+    
+    std::vector<std::string> headers;
+    
+    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+    
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    Util::executePut(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
+}
+
+void StorageService::DeleteDocumentsById(string dbName, string collectionName, string docId, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+{
+    string resource = "storage/deleteDocById/dbName/";
+	resource.append(dbName+ "/collectionName/");
+	resource.append(collectionName+ "/docId/");
+	resource.append(docId);
+    
+	string url = getBaseUrl(resource);
+	string timestamp = Util::getTimeStamp();
+    
+    map<string, string> getMap;
+	Util::BuildGetSigningMap(apiKey, timestamp, VERSION, getMap);
+    getMap["dbName"] = dbName;
+    getMap["collectionName"] = collectionName;
+    getMap["docId"] = docId;
+	string signature = Util::signMap(secretKey, getMap);
+    url.append("?");
+    
+    std::vector<std::string> headers;
+    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+    
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    Util::executeDelete(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
+    
+}
+
+
+
