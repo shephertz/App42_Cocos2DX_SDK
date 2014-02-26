@@ -24,13 +24,14 @@ RewardService::RewardService()
     
 }
 
-void RewardService::Initialize(string apikey, string secretkey)
+RewardService* RewardService::Initialize(string apikey, string secretkey)
 {
     if(_instance == NULL)
     {
         _instance = new RewardService();
     }
     _instance->Init(apikey,secretkey);
+    return _instance;
 }
 
 RewardService* RewardService::getInstance()
@@ -123,6 +124,10 @@ void RewardService::CreateReward(string rewardName,string description, cocos2d::
     //Util::app42Trace("\n createRewardbody = %s",rewardbody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -145,6 +150,10 @@ void RewardService::GetAllRewards(cocos2d::CCObject* pTarget, cocos2d::SEL_CallF
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
@@ -167,6 +176,10 @@ void RewardService::EarnRewards(string gameName, string userName, string rewardN
     //Util::app42Trace("\n createRewardbody = %s",rewardbody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -189,6 +202,10 @@ void RewardService::RedeemRewards(string gameName, string userName, string rewar
     //Util::app42Trace("\n createRewardbody = %s",rewardbody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -214,6 +231,10 @@ void RewardService::GetGameRewardPointsForUser(string gameName, string userName,
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);

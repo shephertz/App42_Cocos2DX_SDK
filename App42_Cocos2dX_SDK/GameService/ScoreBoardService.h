@@ -29,7 +29,7 @@ public:
      *
      */
 	
-    static void Initialize(string apikey, string secretkey);
+    static ScoreBoardService* Initialize(string apikey, string secretkey);
     
 	static void Terminate();
     
@@ -45,11 +45,21 @@ public:
      *
      * @param gameName - Name of the game for which score has to be saved.
      * @param userName - The user for which score has to be saved.
-     * @param score - The sore that has to be saved.
+     * @param score - The score that has to be saved.
      * @return app42Result - The result of the request.
      *
      */
 	void SaveUserScore(string gameName,string userName, double score, cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    /**
+     * Edits the User score for a game
+     *
+     * @param scoreId - The id for score that has to be edited.
+     * @param gameScore - The new score that has to be saved.
+     * @return app42Result - The result of the request.
+     *
+     */
+    void EditScoreValueById(string scoreId, double gameScore, cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
     
     /**
      * Retrieves the average game score for the specified user
@@ -97,5 +107,71 @@ public:
      *
      */
 	void GetUserRanking(string gameName, string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    /**
+     * Retrieves the Top Rankers for the specified game
+     *
+     * @param gameName - Name of the game for which ranks have to be fetched
+     * @param max - maximum number of result need to be fetched
+     * @return app42Result - The result of the request.
+     *
+     */
+    void GetTopNRankers(string gameName,int max,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    /**
+     * Retrieves the scores for a game for the specified name
+     *
+     * @param gameName
+     *            - Name of the game for which score has to be fetched
+     * @param userName
+     *            - The user for which score has to be fetched
+     *
+     * @return the game score for the specified user
+     *
+     */
+
+    void GetScoresByUser(string gameName,string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+
+    /**
+     * Retrieves the lowest game score for the specified user
+     *
+     * @param gameName
+     *            - Name of the game for which lowest score has to be fetched
+     * @param userName
+     *            - The user for which lowest score has to be fetched
+     *
+     * @return the lowest game score for the specified user
+     *
+     */
+    void GetLowestScoreByUser(string gameName,string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+
+    /**
+     * Retrieves the Top Rankers/Scorers for the specified game within the
+     * given group
+     * @param gameName
+     *            - Name of the game for which ranks have to be fetched
+     * @param group
+     *            - array of usernames in the group
+     *
+     * @return the Top rankers for a game
+     *
+     */
+    void GetTopRankersByGroup(string gameName,std::vector<std::string>group,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+
+    /**
+     * Retrieves the last score made by the user in all games
+     *
+     * @param userName
+     *            - Name of the user for which the last score has to be fetched
+     *
+     * @return the Top rankers for a game
+     *
+     */
+
+    void GetLastGameScore(string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    void GetTopNTargetRankers(string gameName,int max,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+
 };
+
 #endif /* defined(__App42CPPSDK__ScoreBoardService__) */

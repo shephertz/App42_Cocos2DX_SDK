@@ -32,7 +32,7 @@ public:
      *
      */
 	
-    static void Initialize(string apikey, string secretkey);
+    static StorageService* Initialize(string apikey, string secretkey);
     
 	static void Terminate();
     
@@ -44,9 +44,15 @@ public:
 	static StorageService* getInstance();
     
     void InsertJsonDocument(string dbName, string collectionName, string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
 	void FindAllCollections(string dbName, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
 	void FindAllDocuments(string dbName, string collectionName, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
 	void FindDocumentById(string dbName, string collectionName, string docId, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
+    void FindDocumentByQuery(string dbName, string collectionName, Query *query, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
 	void FindDocumentByKeyValue(string dbName, string collectionName, string key,string value, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
     
     void UpdateDocumentByDocId(string dbName, string collectionName, string docId,string newJsonDoc, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);

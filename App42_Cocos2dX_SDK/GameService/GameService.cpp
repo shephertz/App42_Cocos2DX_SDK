@@ -19,13 +19,14 @@
 // define the static..
 GameService* GameService::_instance = NULL;
 
-void GameService::Initialize(string apikey, string secretkey)
+GameService* GameService::Initialize(string apikey, string secretkey)
 {
 	if(_instance == NULL)
     {
 		_instance = new GameService();
 	}
     _instance->Init(apikey, secretkey);
+    return _instance;
 }
 
 GameService* GameService::getInstance()
@@ -93,6 +94,10 @@ void GameService::CreateGame(string gameName,string description, CCObject* pTarg
     //Util::app42Trace("\n createGamebody = %s",createGamebody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -117,6 +122,9 @@ void GameService::GetGamebyName(string gameName,CCObject* pTarget, cocos2d::SEL_
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
@@ -138,6 +146,10 @@ void GameService::GetAllGames(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelect
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);

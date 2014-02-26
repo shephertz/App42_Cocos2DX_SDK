@@ -77,3 +77,56 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     
     
 }
+
+void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet)
+{
+    
+    cJSON *docIdJson = Util::getJSONChild("_id", json);
+    if (docIdJson!=NULL)
+    {
+        cJSON* child2 = docIdJson;
+        while(child2 != NULL && child2->type == cJSON_Object)
+        {
+            jsonDocumnet->setDocId(Util::getJSONString("$oid", child2));
+            child2 = child2->next;
+        }
+        cJSON_DeleteItemFromObject(json, "_id");
+    }
+    
+    cJSON *ownerJson = Util::getJSONChild("_$owner", json);
+    if (ownerJson!=NULL)
+    {
+        cJSON* child2 = ownerJson;
+        while(child2 != NULL && child2->type == cJSON_Object)
+        {
+            jsonDocumnet->setOwner(Util::getJSONString("owner", child2));
+            child2 = child2->next;
+        }
+        cJSON_DeleteItemFromObject(json,"_$owner");
+    }
+    
+    string createdAt = Util::getJSONString("_$createdAt", json);
+    if (createdAt.c_str()!=NULL)
+    {
+        jsonDocumnet->setCreatedAt(createdAt);
+        cJSON_DeleteItemFromObject(json, "_$createdAt");
+    }
+    
+    string updatedAt = Util::getJSONString("_$updatedAt", json);
+    if (updatedAt.c_str()!=NULL)
+    {
+        jsonDocumnet->setUpdatedAt(updatedAt);
+        cJSON_DeleteItemFromObject(json, "_$updatedAt");
+    }
+    
+    string event = Util::getJSONString("_$event", json);
+    if (event.c_str()!=NULL)
+    {
+        jsonDocumnet->setEvent(event);
+        cJSON_DeleteItemFromObject(json, "_$event");
+    }
+    char *doc = cJSON_PrintUnformatted(json);
+    jsonDocumnet->setJsonDoc(doc);
+    free(doc);
+    
+}

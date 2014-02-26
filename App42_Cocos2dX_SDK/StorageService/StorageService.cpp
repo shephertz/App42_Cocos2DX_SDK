@@ -19,13 +19,14 @@
 // define the static..
 StorageService* StorageService::_instance = NULL;
 
-void StorageService::Initialize(string apikey, string secretkey)
+StorageService* StorageService::Initialize(string apikey, string secretkey)
 {
 	if(_instance == NULL)
     {
 		_instance = new StorageService();
 	}
     _instance->Init(apikey, secretkey);
+    return _instance;
 }
 
 StorageService* StorageService::getInstance()
@@ -64,27 +65,26 @@ string BuildStorageBody(string json)
 	cJSON_Delete(app42JSON);
 	cJSON_Delete(bodyJSON);
 	free(cptrFormatted);
-    
 	return bodyString;
-    
 }
 
 
 void StorageService::InsertJsonDocument(string dbName, string collectionName, string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
     
-    map<string, string> postMap;
+    map<string, string> signParams;
     string timestamp = Util::getTimeStamp();
-    populateSignParams(postMap);
-    postMap["dbName"] = dbName;
-	postMap["collectionName"] = collectionName;
+    populateSignParams(signParams);
+    signParams["dbName"] = dbName;
+	signParams["collectionName"] = collectionName;
     
     
     string storageBody = BuildStorageBody(json);
-    postMap["body"] = storageBody;
+    signParams["body"] = storageBody;
     
     
-    string signature = Util::signMap(secretKey, postMap);
+    string signature = Util::signMap(secretKey, signParams);
+    
     
     string resource = "storage/insert/dbName/";
     resource.append(dbName + "/collectionName/");
@@ -96,7 +96,9 @@ void StorageService::InsertJsonDocument(string dbName, string collectionName, st
     //Util::app42Trace("\n createRewardbody = %s",storageBody.c_str());
     
     std::vector<std::string> headers;
-    
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
@@ -120,6 +122,9 @@ void StorageService::FindAllCollections(string dbName, CCObject* pTarget, cocos2
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
@@ -144,6 +149,10 @@ void StorageService::FindAllDocuments(string dbName, string collectionName, CCOb
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
@@ -171,12 +180,52 @@ void StorageService::FindDocumentById(string dbName, string collectionName, stri
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
 
 }
+
+void StorageService::FindDocumentByQuery(string dbName, string collectionName, Query *query, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+{
+    string resource = "storage/findDocsByQuery/dbName/";
+	resource.append(dbName + "/collectionName/");
+	resource.append(collectionName);
+    
+	string url = getBaseUrl(resource);
+	string timestamp = Util::getTimeStamp();
+    
+    map<string, string> getMap;
+	Util::BuildGetSigningMap(apiKey, timestamp, VERSION, getMap);
+    getMap["dbName"] = dbName;
+    getMap["collectionName"] = collectionName;
+    getMap["jsonQuery"] = query->getString();
+    //Util::printMap(getMap);
+	string signature = Util::signMap(secretKey, getMap);
+    url.append("?");
+
+    map<string, string> queryParamsMap;
+    queryParamsMap["jsonQuery"]=query->getString();
+    string queryString = buildQueryString(queryParamsMap);
+    url.append(queryString);
+    //char *encodedUrl = Util::url_encode(url);
+    printf("\nQueryString=%s",queryString.c_str());
+    
+    std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+    
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    Util::executeGet(url.c_str(),headers, response, callfuncND_selector(App42StorageResponse::onComplete));
+    
+}
+
 
 void StorageService::FindDocumentByKeyValue(string dbName, string collectionName, string key,string value, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
@@ -200,6 +249,9 @@ void StorageService::FindDocumentByKeyValue(string dbName, string collectionName
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
@@ -233,6 +285,9 @@ void StorageService::UpdateDocumentByDocId(string dbName, string collectionName,
     baseUrl.append("?");
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -270,6 +325,9 @@ void StorageService::UpdateDocumentByKeyValue(string dbName, string collectionNa
     printf("storageBody=%s",storageBody.c_str());
 
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -307,6 +365,9 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(string dbName, string collec
     printf("storageBody=%s",storageBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -333,6 +394,10 @@ void StorageService::DeleteDocumentsById(string dbName, string collectionName, s
     url.append("?");
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);

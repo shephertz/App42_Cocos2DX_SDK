@@ -13,12 +13,13 @@
 #include "cJSON.h"
 #include "App42Response.h"
 #include "CCObject.h"
+#include "App42Score.h"
 
 using namespace cocos2d::extension;
 using namespace std;
 
 struct App42Game;
-struct App42Score;
+//struct App42Score;
 
 class App42GameResponse : public App42Response
 {
@@ -32,15 +33,9 @@ public:
     void onComplete(cocos2d::CCNode *sender, void *data);
 private:
     void init();
-    
+        
 };
 
-typedef struct App42Score
-{
-	string userName;
-    double value;
-    string scoreId;
-}App42Score;
 
 typedef struct App42Game
 {

@@ -32,7 +32,7 @@ public:
      *
      */
 	
-    static void Initialize(string apikey, string secretkey);
+    static PushNotificationService* Initialize(string apikey, string secretkey);
     
 	static void Terminate();
     

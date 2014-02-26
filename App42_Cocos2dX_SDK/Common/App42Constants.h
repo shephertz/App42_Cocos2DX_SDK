@@ -33,6 +33,7 @@
 #define SELECT_KEYS_HEADER  "selectKeys"
 #define FB_ACCESS_TOKEN     "fbAccessToken"
 #define GEO_TAG             "geoTag"
+#define EVENT               "event"
 
 
 #define APP_Key "cad2bfab6310acd9696187b98682925125e469ab0d0d585db0b00609f461b791"

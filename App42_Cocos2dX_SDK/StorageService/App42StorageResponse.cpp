@@ -81,23 +81,42 @@ void App42StorageResponse::init()
 					cJSON* child2 = ptrDocId;
 					while(child2 != NULL && child2->type == cJSON_Object)
                     {
-						document.docId = Util::getJSONString("$oid", child2);
+                        document.setDocId(Util::getJSONString("$oid", child2));
 						child2 = child2->next;
 					}
 					cJSON_DeleteItemFromObject(child, "_id");
 				}
                 
+                if(Util::getJSONChild("_$owner",child))
+                {
+					cJSON* ptrDocId = Util::getJSONChild("_$owner",child);
+					cJSON* child2 = ptrDocId;
+					while(child2 != NULL && child2->type == cJSON_Object)
+                    {
+                        document.setOwner(Util::getJSONString("owner", child2));
+						child2 = child2->next;
+					}
+					cJSON_DeleteItemFromObject(child,"_$owner");
+				}
+                
 				if(Util::getJSONChild("_$updatedAt",child))
                 {
+                    document.setUpdatedAt(Util::getJSONString("_$updatedAt",child));
 					cJSON_DeleteItemFromObject(child, "_$updatedAt");
 				}
 				if(Util::getJSONChild("_$createdAt",child))
                 {
+                    document.setCreatedAt(Util::getJSONString("_$createdAt",child));
 					cJSON_DeleteItemFromObject(child, "_$createdAt");
+				}
+                if(Util::getJSONChild("_$event",child))
+                {
+                    document.setEvent(Util::getJSONString("_$event",child));
+					cJSON_DeleteItemFromObject(child, "_$event");
 				}
                 
 				char *doc = cJSON_PrintUnformatted(child);
-				document.jsonDoc = doc;//Util::getJSONString("jsonDoc", child);
+                document.setJsonDoc(doc);
 				free(doc);
 				documents.push_back(document);
 				child = child->next;

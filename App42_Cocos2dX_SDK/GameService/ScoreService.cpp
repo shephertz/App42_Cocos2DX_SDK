@@ -24,13 +24,14 @@ ScoreService::ScoreService()
     
 }
 
-void ScoreService::Initialize(string apikey, string secretkey)
+ScoreService* ScoreService::Initialize(string apikey, string secretkey)
 {
     if(_instance == NULL)
     {
         _instance = new ScoreService();
     }
     _instance->Init(apikey,secretkey);
+    return _instance;
 }
 
 ScoreService* ScoreService::getInstance()
@@ -98,6 +99,10 @@ void ScoreService::AddScore(string gameName, string userName, double score, CCOb
     //Util::app42Trace("\n addScoreBody = %s",addScoreBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -122,6 +127,10 @@ void ScoreService::DeductScore(string gameName, string userName, double score, C
    // Util::app42Trace("\n addScoreBody = %s",deductScoreBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     

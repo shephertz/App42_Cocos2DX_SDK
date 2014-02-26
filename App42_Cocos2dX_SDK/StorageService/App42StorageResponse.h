@@ -13,12 +13,12 @@
 #include "cJSON.h"
 #include "App42Response.h"
 #include "CCObject.h"
+#include "JSONDocument.h"
 
 using namespace cocos2d::extension;
 using namespace std;
 
 struct App42Storage;
-struct JSONDocument;
 
 class App42StorageResponse : public App42Response
 {
@@ -35,11 +35,11 @@ private:
     
 };
 
-typedef struct JSONDocument
-{
-	string docId;
-	string jsonDoc;
-}JSONDocument;
+//typedef struct JSONDocument
+//{
+//	string docId;
+//	string jsonDoc;
+//}JSONDocument;
 
 typedef struct App42Storage
 {

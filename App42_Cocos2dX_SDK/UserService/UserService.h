@@ -34,7 +34,7 @@ public:
      *
      */
 	
-    static void Initialize(string apikey, string secretkey);
+    static UserService* Initialize(string apikey, string secretkey);
 
 	static void Terminate();
     

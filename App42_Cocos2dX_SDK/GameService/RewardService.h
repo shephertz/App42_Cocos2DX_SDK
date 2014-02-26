@@ -29,7 +29,7 @@ public:
      *
      */
 	
-    static void Initialize(string apikey, string secretkey);
+    static RewardService* Initialize(string apikey, string secretkey);
     
 	static void Terminate();
     

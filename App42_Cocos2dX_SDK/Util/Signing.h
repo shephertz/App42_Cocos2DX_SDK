@@ -24,7 +24,7 @@ using namespace std;
 
 namespace Util
 {
-    
+
     static string signString(string key, string data){        
         unsigned char hmac_digest[20];
         memset(hmac_digest, 0, 20);

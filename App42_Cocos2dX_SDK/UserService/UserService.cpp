@@ -26,13 +26,14 @@ UserService::UserService()
     
 }
 
-void UserService::Initialize(string apikey, string secretkey)
+UserService* UserService::Initialize(string apikey, string secretkey)
 {
 	if(_instance == NULL)
     {
 		_instance = new UserService();
 	}
     _instance->Init(apikey, secretkey);
+    return _instance;
 }
 
 UserService* UserService::getInstance()
@@ -121,6 +122,10 @@ void UserService::CreateUser(string username, string password, string email,CCOb
    // Util::app42Trace("\n createUserbody = %s",createUserbody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, createUserbody.c_str(), response, callfuncND_selector(App42UserResponse::onComplete));
@@ -169,6 +174,10 @@ void UserService::Authenticate(string username, string password, cocos2d::CCObje
     //Util::app42Trace("\n createUserbody = %s",postBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, postBody.c_str(), response, callfuncND_selector(App42UserResponse::onComplete));
@@ -191,6 +200,10 @@ void UserService::GetUser(string username, CCObject* pTarget, cocos2d::SEL_CallF
     
     //Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42UserResponse::onComplete));
@@ -212,6 +225,10 @@ void UserService::GetAllUsers(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelect
     
    // Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
+    
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector); //callfuncND_selector(App42UserResponse::onComplete)
     Util::executeGet(url,headers, response, callfuncND_selector(App42UserResponse::onComplete));

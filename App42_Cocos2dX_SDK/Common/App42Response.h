@@ -12,6 +12,9 @@
 #include <iostream>
 #include "cocos-ext.h"
 #include "cocos2d.h"
+#include "JSONDocument.h"
+#include "cJSON.h"
+
 class App42Response: public cocos2d::CCObject
 {
 protected:
@@ -35,6 +38,8 @@ public:
     // The JSON body of the HTTP response containing details
     std::string getBody();
     virtual void onComplete(cocos2d::CCNode *sender, void *data);
+    void buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet);
+
 };
 
 #endif /* defined(__App42CPPSDK__App42Response__) */

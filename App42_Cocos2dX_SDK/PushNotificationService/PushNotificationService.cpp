@@ -21,13 +21,14 @@
 // define the static..
 PushNotificationService* PushNotificationService::_instance = NULL;
 
-void PushNotificationService::Initialize(string apikey, string secretkey)
+PushNotificationService* PushNotificationService::Initialize(string apikey, string secretkey)
 {
 	if(_instance == NULL)
     {
 		_instance = new PushNotificationService();
 	}
     _instance->Init(apikey, secretkey);
+    return _instance;
 }
 
 PushNotificationService* PushNotificationService::getInstance()
@@ -215,10 +216,6 @@ string BuildSendPushToChannelBody(string channel, cJSON *message,string expiry)
     
 }
 
-
-
-
-
 cJSON* getJsonFromMap(map<string, string>messageMap)
 {
     cJSON *messageJSON = cJSON_CreateObject();
@@ -259,6 +256,9 @@ void PushNotificationService::registerDeviceToken(string devoceToken, string use
     //Util::app42Trace("\n addScoreBody = %s",pushBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -286,6 +286,9 @@ void PushNotificationService::sendPushMessageToUser(string username,  string mes
     //Util::app42Trace("\n addScoreBody = %s",pushBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -313,6 +316,9 @@ void PushNotificationService::sendPushMessageToUser(string username, map<string,
     //Util::app42Trace("\n addScoreBody = %s",pushBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -340,6 +346,9 @@ void PushNotificationService::subscribeToChannel(string channel, string userName
     //Util::app42Trace("\n addScoreBody = %s",pushBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -367,6 +376,9 @@ void PushNotificationService::sendPushMessageToChannel(string channel, string me
     //Util::app42Trace("\n addScoreBody = %s",pushBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
@@ -394,6 +406,9 @@ void PushNotificationService::sendPushMessageToChannel(string channel, map<strin
     //Util::app42Trace("\n addScoreBody = %s",pushBody.c_str());
     
     std::vector<std::string> headers;
+    map<string, string> metaHeaders;
+    populateMetaHeaderParams(metaHeaders);
+    Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     

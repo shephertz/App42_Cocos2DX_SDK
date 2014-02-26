@@ -8,7 +8,7 @@
 
 #include "App42GameResponse.h"
 #include "Common.h"
-
+#include "JSONDocument.h"
 
 App42GameResponse::App42GameResponse(cocos2d::CCObject *pTarget, cocos2d::SEL_CallFuncND pSelector)
 :App42Response(pTarget,pSelector)
@@ -72,9 +72,29 @@ void App42GameResponse::init()
 			while(child != NULL && child->type == cJSON_Object)
             {
 				App42Score app42Score;
-				app42Score.userName = Util::getJSONString("userName", child);
-				app42Score.scoreId = Util::getJSONString("scoreId", child);
-				app42Score.value = Util::getJSONDouble("value", child);
+                app42Score.setUserName(Util::getJSONString("userName", child));
+                app42Score.setRank(Util::getJSONString("rank", child));
+                app42Score.setScoreId(Util::getJSONString("scoreId", child));
+                app42Score.setScoreValue(Util::getJSONDouble("value", child));
+                app42Score.setCreatedOn(Util::getJSONString("createdOn", child));
+                
+                cJSON *ptrJsonDoc = Util::getJSONChild("jsonDoc", child);
+                if (ptrJsonDoc != NULL)
+                {
+                    vector<JSONDocument> docArray;
+                    if (ptrJsonDoc->type == cJSON_Array)
+                    {
+                        ptrJsonDoc = ptrJsonDoc->child;
+                    }
+                    while(ptrJsonDoc != NULL && ptrJsonDoc->type == cJSON_Object)
+                    {
+                        JSONDocument jsonDOC;
+                        buildJsonDocument(ptrJsonDoc, &jsonDOC);
+                        ptrJsonDoc = ptrJsonDoc->next;
+                        docArray.push_back(jsonDOC);
+                    }
+                    app42Score.setJsonDocList(docArray);
+                }
 				scores.push_back(app42Score);
 				child = child->next;
 			}
@@ -82,3 +102,5 @@ void App42GameResponse::init()
     }
     cJSON_Delete(ptrBody);
 }
+
+

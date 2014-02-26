@@ -64,6 +64,35 @@ namespace Util {
         headers.push_back(stringValue);
         
     }
+    
+    static void BuildHeaders(std::map<std::string, std::string>metaHeaders,std::vector<std::string> &headers)
+    {
+        std::map<string,string>::iterator it;
+        
+        for(it=metaHeaders.begin(); it!=metaHeaders.end(); ++it)
+        {
+            string stringValue = it->first;
+            stringValue.append(":");
+            stringValue.append(it->second);
+            headers.push_back(stringValue);
+        }
+    }
+    
+    static string GetStringFromVector(std::vector<std::string>vec)
+    {
+        std::vector<string>::iterator it;
+        string stringValue;
+        for(it=vec.begin(); it!=vec.end(); ++it)
+        {
+            if (it!=vec.begin() && it!=vec.end())
+            {
+                stringValue.append(",");
+            }
+            stringValue.append(it->c_str());
+            stringValue.append(", ");
+        }
+        return stringValue;
+    }
 }
 
 #endif
