@@ -39,6 +39,7 @@ void App42RewardResponse::init()
     if(_result != 200)
     {
         Util::app42Trace("App42Reward failed result is %d", _result);
+        buildErrorMessage();
         return;
     }
     cJSON *ptrBody = cJSON_Parse(_body.c_str());

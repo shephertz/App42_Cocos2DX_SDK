@@ -42,7 +42,7 @@ public:
     
     void setQuery(std::string _dbName, std::string _collectionName,Query *_metaInfoQuery);
     void setQuery(std::string _dbName, std::string _collectionName);
-
+    
 protected:
     std::string apiKey;
     std::string secretKey;

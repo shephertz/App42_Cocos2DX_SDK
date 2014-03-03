@@ -14,6 +14,7 @@
 #include "cocos2d.h"
 #include "JSONDocument.h"
 #include "cJSON.h"
+#include "Exceptions.h"
 
 class App42Response: public cocos2d::CCObject
 {
@@ -30,16 +31,22 @@ public:
     
     virtual ~App42Response();
     
+    bool isSuccess;
     // The HTTP response code.
     int getCode();
+    int httpErrorCode;
     // The App Error Code.
     int appErrorCode;
+    std::string errorDetails;
+    std::string errorMessage;
     
     // The JSON body of the HTTP response containing details
     std::string getBody();
     virtual void onComplete(cocos2d::CCNode *sender, void *data);
-    void buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet);
+    void onException(App42Exception *e);
 
+    void buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet);
+    void buildErrorMessage();
 };
 
 #endif /* defined(__App42CPPSDK__App42Response__) */

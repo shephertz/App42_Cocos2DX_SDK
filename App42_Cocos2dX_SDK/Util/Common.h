@@ -60,6 +60,24 @@ namespace Util {
         return value;
     }
     
+    static int getJSONInt(string name, cJSON *json)
+    {
+        int value = 0;
+        
+        json = json->child;
+        while(json != NULL)
+        {
+            if((json->string!=NULL) && (strcmp(json->string,name.c_str()) ==  0))
+            {
+                value = json->valueint;
+                break;
+            }
+            json = json->next;
+        }
+        return value;
+        
+    }
+    
     static cJSON* getJSONChild(string name,cJSON *json)
     {
         json = json->child;
@@ -82,6 +100,8 @@ namespace Util {
         cJSON_Delete(ptrJson);
         return detailString;
     }
+    
+    
     
     static void app42Trace(const char* str, ...)
     {

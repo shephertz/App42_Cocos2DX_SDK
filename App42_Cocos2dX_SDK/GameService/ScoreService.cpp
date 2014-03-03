@@ -85,7 +85,31 @@ string BuildScoreBody(string gameName, string userName, double score)
 
 void ScoreService::AddScore(string gameName, string userName, double score, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     map<string, string> postMap;
     populateSignParams(postMap);
     string addScoreBody = BuildScoreBody(gameName, userName,score);
@@ -106,7 +130,6 @@ void ScoreService::AddScore(string gameName, string userName, double score, CCOb
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, addScoreBody.c_str(), response, callfuncND_selector(App42GameResponse::onComplete));
 }
 
@@ -114,6 +137,30 @@ void ScoreService::AddScore(string gameName, string userName, double score, CCOb
 
 void ScoreService::DeductScore(string gameName, string userName, double score, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     populateSignParams(postMap);
     string deductScoreBody = BuildScoreBody(gameName, userName,score);
@@ -134,7 +181,6 @@ void ScoreService::DeductScore(string gameName, string userName, double score, C
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, deductScoreBody.c_str(), response, callfuncND_selector(App42GameResponse::onComplete));
 }
 

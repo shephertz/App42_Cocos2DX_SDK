@@ -40,7 +40,7 @@ void App42PushNotificationResponse::init()
     if(_result != 200)
     {
         Util::app42Trace("App42PushNotification failed result is %d", _result);
-
+        buildErrorMessage();
         return;
     }
     // parse the body

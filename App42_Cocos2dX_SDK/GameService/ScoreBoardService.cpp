@@ -120,6 +120,31 @@ string BuildEditUserScoreBody(string scoreId, double score)
 
 void ScoreBoardService::SaveUserScore(string gameName,string userName, double score, cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     map<string, string> postMap;
     populateSignParams(postMap);
     string saveScoreBody = BuildSaveUserScoreBody(gameName, userName,score);
@@ -140,13 +165,36 @@ void ScoreBoardService::SaveUserScore(string gameName,string userName, double sc
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, saveScoreBody.c_str(), response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
 
 void ScoreBoardService::EditScoreValueById(string scoreId, double gameScore, cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(scoreId, "Score ID");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     map<string, string> postMap;
     populateSignParams(postMap);
     string saveScoreBody = BuildEditUserScoreBody(scoreId, gameScore);
@@ -165,13 +213,38 @@ void ScoreBoardService::EditScoreValueById(string scoreId, double gameScore, coc
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executePut(baseUrl, headers, saveScoreBody.c_str(), response, callfuncND_selector(App42GameResponse::onComplete));
     
 }
 
 void ScoreBoardService::GetAverageScoreByUser(string gameName, string userName, cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     string resource = "game/scoreboard/";
     resource.append(gameName+"/");
     resource.append(userName);
@@ -195,13 +268,38 @@ void ScoreBoardService::GetAverageScoreByUser(string gameName, string userName, 
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
 
 void ScoreBoardService::GetHighestScoreByUser(string gameName,string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
+    
     string resource = "game/scoreboard/";
     resource.append(gameName+"/");
     resource.append(userName);
@@ -225,13 +323,38 @@ void ScoreBoardService::GetHighestScoreByUser(string gameName,string userName,co
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
 
 void ScoreBoardService::GetLastScoreByUser(string gameName,string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
+    
     string resource = "game/scoreboard/";
     resource.append(gameName+"/");
     resource.append(userName);
@@ -255,13 +378,36 @@ void ScoreBoardService::GetLastScoreByUser(string gameName,string userName,cocos
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
 
 void ScoreBoardService::GetTopRankings(string gameName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     string resource = "game/scoreboard/";
     resource.append(gameName);
 	resource.append("/ranking");
@@ -282,7 +428,6 @@ void ScoreBoardService::GetTopRankings(string gameName,cocos2d::CCObject* pTarge
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
@@ -290,6 +435,31 @@ void ScoreBoardService::GetTopRankings(string gameName,cocos2d::CCObject* pTarge
 
 void ScoreBoardService::GetTopNRankers(string gameName,int max,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfMaxIsNotValid(max, "Max");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     string resource = "game/scoreboard/";
     resource.append(gameName);
 	resource.append("/rankers/");
@@ -312,7 +482,6 @@ void ScoreBoardService::GetTopNRankers(string gameName,int max,cocos2d::CCObject
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
     
 }
@@ -320,6 +489,31 @@ void ScoreBoardService::GetTopNRankers(string gameName,int max,cocos2d::CCObject
 
 void ScoreBoardService::GetUserRanking(string gameName, string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     string resource = "game/scoreboard/";
     resource.append(gameName+"/");
     resource.append(userName);
@@ -342,7 +536,6 @@ void ScoreBoardService::GetUserRanking(string gameName, string userName,cocos2d:
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
@@ -350,6 +543,31 @@ void ScoreBoardService::GetUserRanking(string gameName, string userName,cocos2d:
 void ScoreBoardService::GetScoresByUser(string gameName,string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
     
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
 	string timestamp = Util::getTimeStamp();
     
     /**
@@ -382,7 +600,6 @@ void ScoreBoardService::GetScoresByUser(string gameName,string userName,cocos2d:
     /**
      * Initiating Http call
      */
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
     
 }
@@ -390,7 +607,31 @@ void ScoreBoardService::GetScoresByUser(string gameName,string userName,cocos2d:
 
 void ScoreBoardService::GetLowestScoreByUser(string gameName,string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
 	string timestamp = Util::getTimeStamp();
     
     /**
@@ -424,14 +665,36 @@ void ScoreBoardService::GetLowestScoreByUser(string gameName,string userName,coc
     /**
      * Initiating Http call
      */
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
     
 }
 
 void ScoreBoardService::GetTopRankersByGroup(string gameName,std::vector<std::string>group,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
 	string timestamp = Util::getTimeStamp();
     /**
      * Creating SignParams and signature
@@ -471,14 +734,36 @@ void ScoreBoardService::GetTopRankersByGroup(string gameName,std::vector<std::st
     /**
      * Initiating Http call
      */
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
     
 }
 
 void ScoreBoardService::GetLastGameScore(string userName,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
 	string timestamp = Util::getTimeStamp();
     
     /**
@@ -510,14 +795,37 @@ void ScoreBoardService::GetLastGameScore(string userName,cocos2d::CCObject* pTar
     /**
      * Initiating Http call
      */
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
     
 }
 
 void ScoreBoardService::GetTopNTargetRankers(string gameName,int max,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfMaxIsNotValid(max, "Max");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
 	string timestamp = Util::getTimeStamp();
     
     /**
@@ -551,7 +859,6 @@ void ScoreBoardService::GetTopNTargetRankers(string gameName,int max,cocos2d::CC
     /**
      * Initiating Http call
      */
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
     
 }

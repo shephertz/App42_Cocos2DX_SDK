@@ -31,7 +31,6 @@ void App42GameResponse::onComplete(cocos2d::CCNode *sender, void *data)
     {
         (_pTarget->*_pSelector)((cocos2d::CCNode *)_pTarget, this);
     }
-    
 }
 
 void App42GameResponse::init()
@@ -39,7 +38,7 @@ void App42GameResponse::init()
     if(_result != 200)
     {
         Util::app42Trace("App42Game failed result is %d", _result);
-
+        buildErrorMessage();
         return;
     }
     cJSON *ptrBody = cJSON_Parse(_body.c_str());

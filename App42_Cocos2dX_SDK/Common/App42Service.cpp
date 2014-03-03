@@ -88,7 +88,6 @@ void App42Service::populateMetaHeaderParams(std::map<string, string>& metaHeader
         cJSON_AddStringToObject(obj, "collectionName", collectionName.c_str());
         metaHeaderParamsMap["dbCredentials"] = cJSON_PrintUnformatted(obj);
     }
-    //metaHeaderParamsMap["SDKName"] = "Cocos2d-X";
 }
 
 string App42Service::getBaseUrl(string resource)

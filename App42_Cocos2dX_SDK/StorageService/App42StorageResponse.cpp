@@ -41,6 +41,7 @@ void App42StorageResponse::init()
     if(_result != 200)
     {
         Util::app42Trace("App42StorageResult failed result is %d", _result);
+        buildErrorMessage();
         return;
     }
     // parse the body

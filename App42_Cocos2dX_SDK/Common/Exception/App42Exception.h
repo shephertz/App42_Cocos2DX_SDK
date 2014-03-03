@@ -33,7 +33,9 @@ public:
     
     virtual const char* what() const throw()
     {
-        return cJSON_PrintUnformatted(exceptionString);
+        const char *str = cJSON_PrintUnformatted(exceptionString);
+        printf("\nApp42Exception : %s\n",str);
+        return str;
     }
     
 private:

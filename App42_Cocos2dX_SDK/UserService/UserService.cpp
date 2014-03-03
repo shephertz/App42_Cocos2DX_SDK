@@ -104,8 +104,31 @@ string UserService::buildCreateUserBody(string username, string password, string
 
 void UserService::CreateUser(string username, string password, string email,CCObject* pTarget, SEL_CallFuncND pSelector)
 {
-    //string metaheaders = populateMetaHeaderParams();
+    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(username, "User Name");
+        Util::throwExceptionIfStringNullOrBlank(password, "Password");
+        Util::throwExceptionIfStringNullOrBlank(email, "Email");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     populateSignParams(postMap);
     string createUserbody = buildCreateUserBody(username, password, email,"");
@@ -127,7 +150,6 @@ void UserService::CreateUser(string username, string password, string email,CCOb
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, createUserbody.c_str(), response, callfuncND_selector(App42UserResponse::onComplete));
     
 }
@@ -158,6 +180,31 @@ void UserService::CreateUser(string username, string password, string email, str
 
 void UserService::Authenticate(string username, string password, cocos2d::CCObject *pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(username, "User Name");
+        Util::throwExceptionIfStringNullOrBlank(password, "Password");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+        
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     populateSignParams(postMap);
     string postBody = buildCreateUserBody(username, password, "","");
@@ -179,12 +226,35 @@ void UserService::Authenticate(string username, string password, cocos2d::CCObje
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, postBody.c_str(), response, callfuncND_selector(App42UserResponse::onComplete));
 }
 
 void UserService::GetUser(string username, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(username, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "user/";
 	resource.append(username);
     
@@ -205,13 +275,36 @@ void UserService::GetUser(string username, CCObject* pTarget, cocos2d::SEL_CallF
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42UserResponse::onComplete));
 }
 
 
 void UserService::GetAllUsers(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        e = NULL;
+        return;
+    }
+    
     string resource = "user/";
     
 	string url = getBaseUrl(resource);
@@ -220,17 +313,14 @@ void UserService::GetAllUsers(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelect
     map<string, string> getMap;
 	Util::BuildGetSigningMap(apiKey, timestamp, VERSION, getMap);
 	string signature = Util::signMap(secretKey, getMap);
-    //string queryString = Util::BuildQueryString(apiKey, timestamp, VERSION, signature);
-    url.append("?");//.append(queryString);
+    url.append("?");
     
-   // Util::app42Trace("\n baseUrl = %s",url.c_str());
     std::vector<std::string> headers;
     map<string, string> metaHeaders;
     populateMetaHeaderParams(metaHeaders);
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector); //callfuncND_selector(App42UserResponse::onComplete)
     Util::executeGet(url,headers, response, callfuncND_selector(App42UserResponse::onComplete));
 }
 

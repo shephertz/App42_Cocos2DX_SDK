@@ -12,6 +12,7 @@
 #include <iostream>
 #include "App42Service.h"
 #include "cocos2d.h"
+#include "App42GameResponse.h"
 
 using namespace std;
 
@@ -69,5 +70,6 @@ public:
      *
      */
 	void GetAllGames(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector);
+    
 };
 #endif /* defined(__App42CPPSDK__GameService__) */

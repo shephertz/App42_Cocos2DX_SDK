@@ -134,6 +134,11 @@ namespace Util
         return;
     }
     
+    static void handleException()
+    {
+        
+    }
+    
     
 }
 

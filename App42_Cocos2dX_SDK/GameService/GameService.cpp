@@ -13,8 +13,9 @@
 #include "Signing.h"
 #include "BodyBuilder.h"
 #include "cocos-ext.h"
-#include "App42GameResponse.h"
+//#include "App42GameResponse.h"
 #include "Connector.h"
+#include "Exceptions.h"
 
 // define the static..
 GameService* GameService::_instance = NULL;
@@ -81,6 +82,29 @@ string BuildCreateGameBody(string gameName, string descrption)
 
 void GameService::CreateGame(string gameName,string description, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(description, "Description");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     populateSignParams(postMap);
     string createGamebody = BuildCreateGameBody(gameName, description);
@@ -101,13 +125,36 @@ void GameService::CreateGame(string gameName,string description, CCObject* pTarg
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+    
     Util::executePost(baseUrl, headers, createGamebody.c_str(), response, callfuncND_selector(App42GameResponse::onComplete));
-
 }
 
 void GameService::GetGamebyName(string gameName,CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "game/";
 	resource.append(gameName);
     
@@ -127,13 +174,35 @@ void GameService::GetGamebyName(string gameName,CCObject* pTarget, cocos2d::SEL_
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
 
 void GameService::GetAllGames(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
+
+    try
+    {
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "game/";
     
 	string url = getBaseUrl(resource);
@@ -152,7 +221,7 @@ void GameService::GetAllGames(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelect
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42GameResponse *response = new App42GameResponse::App42GameResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42GameResponse::onComplete));
 
 }
+

@@ -60,7 +60,9 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     //m_labelStatusCode->setString(statusString);
     Util::app42Trace("response code: %d", _result);
     
-    if (!response->isSucceed())
+    isSuccess = response->isSucceed();
+
+    if (!isSuccess)
     {
         Util::app42Trace("response failed");
         Util::app42Trace("error buffer: %s", response->getErrorBuffer());
@@ -74,7 +76,10 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     std::string str(buffer->begin(),buffer->end());
     _body = str;
     Util::app42Trace("Response string=%s",str.c_str());
-    
+}
+
+void App42Response::onException(App42Exception *e)
+{
     
 }
 
@@ -130,3 +135,14 @@ void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet)
     free(doc);
     
 }
+
+void App42Response::buildErrorMessage()
+{
+    cJSON *ptrErrorBody = cJSON_Parse(_body.c_str());
+    cJSON* ptrApp42Fault = Util::getJSONChild("app42Fault", ptrErrorBody);
+    appErrorCode = Util::getJSONInt("appErrorCode", ptrApp42Fault);
+    httpErrorCode = Util::getJSONInt("httpErrorCode", ptrApp42Fault);
+    errorDetails = Util::getJSONString("details", ptrApp42Fault);
+    errorMessage = Util::getJSONString("message", ptrApp42Fault);
+}
+

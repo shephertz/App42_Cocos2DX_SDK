@@ -50,6 +50,9 @@ Query* QueryBuilder::CompoundOperator(Query *q1,std::string op,Query *q2)
     try
     {
         Util::throwExceptionIfStringNullOrBlank(op, "Operator");
+        Util::throwExceptionIfObjectIsNull(q1, "Query");
+        Util::throwExceptionIfObjectIsNull(q2, "Query");
+
     }
     catch (App42Exception *e)
     {

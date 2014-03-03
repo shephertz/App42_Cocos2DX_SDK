@@ -10,11 +10,14 @@
 #include "App42Constants.h"
 #include "cJSON.h"
 #include <map>
+//#include "Exceptions.h"
+//#include "App42Exception.h"
 #include "Signing.h"
 #include "BodyBuilder.h"
 #include "cocos-ext.h"
 #include "App42StorageResponse.h"
 #include "Connector.h"
+
 
 // define the static..
 StorageService* StorageService::_instance = NULL;
@@ -71,43 +74,98 @@ string BuildStorageBody(string json)
 
 void StorageService::InsertJsonDocument(string dbName, string collectionName, string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
-    
-    map<string, string> signParams;
-    string timestamp = Util::getTimeStamp();
-    populateSignParams(signParams);
-    signParams["dbName"] = dbName;
-	signParams["collectionName"] = collectionName;
-    
-    
-    string storageBody = BuildStorageBody(json);
-    signParams["body"] = storageBody;
-    
-    
-    string signature = Util::signMap(secretKey, signParams);
-    
-    
-    string resource = "storage/insert/dbName/";
-    resource.append(dbName + "/collectionName/");
-	resource.append(collectionName);
-    string baseUrl = getBaseUrl(resource);
-    
-    baseUrl.append("?");
-    //Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
-    //Util::app42Trace("\n createRewardbody = %s",storageBody.c_str());
-    
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    
     App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
-    Util::executePost(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfStringNullOrBlank(json, "Json String");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
+    try {
+        map<string, string> signParams;
+        string timestamp = Util::getTimeStamp();
+        populateSignParams(signParams);
+        signParams["dbName"] = dbName;
+        signParams["collectionName"] = collectionName;
+        
+        
+        string storageBody = BuildStorageBody(json);
+        signParams["body"] = storageBody;
+        
+        
+        string signature = Util::signMap(secretKey, signParams);
+        
+        
+        string resource = "storage/insert/dbName/";
+        resource.append(dbName + "/collectionName/");
+        resource.append(collectionName);
+        string baseUrl = getBaseUrl(resource);
+        
+        baseUrl.append("?");
+        //Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
+        //Util::app42Trace("\n createRewardbody = %s",storageBody.c_str());
+        
+        std::vector<std::string> headers;
+        map<string, string> metaHeaders;
+        populateMetaHeaderParams(metaHeaders);
+        Util::BuildHeaders(metaHeaders, headers);
+        Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+        
+        Util::executePost(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
+
+    }
+    catch (exception *e)
+    {
+        throw e;
+    }
 }
 
 
 void StorageService::FindAllCollections(string dbName, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "storage/findCollections/dbName/";
     resource.append(dbName);
     
@@ -127,12 +185,36 @@ void StorageService::FindAllCollections(string dbName, CCObject* pTarget, cocos2
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
 }
 
 void StorageService::FindAllDocuments(string dbName, string collectionName, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "storage/findAll/dbName/";
 	resource.append(dbName+ "/collectionName/");
 	resource.append(collectionName);
@@ -155,13 +237,38 @@ void StorageService::FindAllDocuments(string dbName, string collectionName, CCOb
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
 
 }
 
 void StorageService::FindDocumentById(string dbName, string collectionName, string docId, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfStringNullOrBlank(docId, "Doc ID");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "storage/findDocById/dbName/";
 	resource.append(dbName + "/collectionName/");
 	resource.append(collectionName + "/docId/");
@@ -185,13 +292,37 @@ void StorageService::FindDocumentById(string dbName, string collectionName, stri
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
 
 }
 
 void StorageService::FindDocumentByQuery(string dbName, string collectionName, Query *query, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "storage/findDocsByQuery/dbName/";
 	resource.append(dbName + "/collectionName/");
 	resource.append(collectionName);
@@ -221,7 +352,6 @@ void StorageService::FindDocumentByQuery(string dbName, string collectionName, Q
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executeGet(url.c_str(),headers, response, callfuncND_selector(App42StorageResponse::onComplete));
     
 }
@@ -229,6 +359,33 @@ void StorageService::FindDocumentByQuery(string dbName, string collectionName, Q
 
 void StorageService::FindDocumentByKeyValue(string dbName, string collectionName, string key,string value, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfStringNullOrBlank(key, "Key");
+        Util::throwExceptionIfStringNullOrBlank(value, "Value");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "storage/findDocByKV/dbName/";
 	resource.append(dbName+ "/collectionName/");
 	resource.append(collectionName+ "/");
@@ -254,13 +411,38 @@ void StorageService::FindDocumentByKeyValue(string dbName, string collectionName
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
 
 }
 
 void StorageService::UpdateDocumentByDocId(string dbName, string collectionName, string docId,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfStringNullOrBlank(docId, "Doc ID");
+        Util::throwExceptionIfStringNullOrBlank(json, "Json String");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
@@ -291,12 +473,38 @@ void StorageService::UpdateDocumentByDocId(string dbName, string collectionName,
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executePut(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
 }
 
 void StorageService::UpdateDocumentByKeyValue(string dbName, string collectionName, string key,string value,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfStringNullOrBlank(key, "Key");
+        Util::throwExceptionIfStringNullOrBlank(value, "Value");
+        Util::throwExceptionIfStringNullOrBlank(json, "Json String");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
@@ -331,12 +539,38 @@ void StorageService::UpdateDocumentByKeyValue(string dbName, string collectionNa
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executePut(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
 }
 
 void StorageService::SaveOrUpdateDocumentByKeyValue(string dbName, string collectionName, string key,string value,string json, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfStringNullOrBlank(key, "Key");
+        Util::throwExceptionIfStringNullOrBlank(value, "Value");
+        Util::throwExceptionIfStringNullOrBlank(json, "Json String");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
@@ -371,12 +605,37 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(string dbName, string collec
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executePut(baseUrl, headers, storageBody.c_str(), response, callfuncND_selector(App42StorageResponse::onComplete));
 }
 
 void StorageService::DeleteDocumentsById(string dbName, string collectionName, string docId, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
+        Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
+        Util::throwExceptionIfStringNullOrBlank(docId, "Doc ID");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+    
     string resource = "storage/deleteDocById/dbName/";
 	resource.append(dbName+ "/collectionName/");
 	resource.append(collectionName+ "/docId/");
@@ -400,7 +659,6 @@ void StorageService::DeleteDocumentsById(string dbName, string collectionName, s
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42StorageResponse *response = new App42StorageResponse::App42StorageResponse(pTarget,pSelector);
     Util::executeDelete(url,headers, response, callfuncND_selector(App42StorageResponse::onComplete));
     
 }

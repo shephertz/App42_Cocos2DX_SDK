@@ -111,6 +111,33 @@ string BuildRewardBody(string gameName, string userName, string rewardName, doub
 
 void RewardService::CreateReward(string rewardName,string description, cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    
+    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(description, "Description");
+        Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
+    
     map<string, string> postMap;
     populateSignParams(postMap);
     string rewardbody = BuildCreateRewardBody(rewardName, description);
@@ -131,13 +158,35 @@ void RewardService::CreateReward(string rewardName,string description, cocos2d::
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, rewardbody.c_str(), response, callfuncND_selector(App42RewardResponse::onComplete));
     
 }
 
 void RewardService::GetAllRewards(cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     string resource = "game/reward";
     
 	string url = getBaseUrl(resource);
@@ -156,13 +205,38 @@ void RewardService::GetAllRewards(cocos2d::CCObject* pTarget, cocos2d::SEL_CallF
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42RewardResponse::onComplete));
 
 }
 
 void RewardService::EarnRewards(string gameName, string userName, string rewardName, double rewardPoints,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     map<string, string> postMap;
     populateSignParams(postMap);
     string rewardbody = BuildRewardBody(gameName, userName,rewardName,rewardPoints);
@@ -183,12 +257,37 @@ void RewardService::EarnRewards(string gameName, string userName, string rewardN
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, rewardbody.c_str(), response, callfuncND_selector(App42RewardResponse::onComplete));
 }
 
 void RewardService::RedeemRewards(string gameName, string userName, string rewardName, double rewardPoints,cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     map<string, string> postMap;
     populateSignParams(postMap);
     string rewardbody = BuildRewardBody(gameName, userName,rewardName,rewardPoints);
@@ -209,12 +308,36 @@ void RewardService::RedeemRewards(string gameName, string userName, string rewar
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, rewardbody.c_str(), response, callfuncND_selector(App42RewardResponse::onComplete));
 }
 
 void RewardService::GetGameRewardPointsForUser(string gameName, string userName, cocos2d::CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
+
     string resource = "game/reward/";
     resource.append(gameName+"/");
     resource.append(userName);
@@ -237,6 +360,5 @@ void RewardService::GetGameRewardPointsForUser(string gameName, string userName,
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42RewardResponse *response = new App42RewardResponse::App42RewardResponse(pTarget,pSelector);
     Util::executeGet(url,headers, response, callfuncND_selector(App42RewardResponse::onComplete));
 }

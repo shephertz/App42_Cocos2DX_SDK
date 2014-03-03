@@ -237,12 +237,38 @@ cJSON* getJsonFromMap(map<string, string>messageMap)
 
 
 
-void PushNotificationService::registerDeviceToken(string devoceToken, string userName, string deviceType, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+void PushNotificationService::registerDeviceToken(string deviceToken, string userName, string deviceType, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfStringNullOrBlank(deviceType, "Device Type");
+        Util::throwExceptionIfStringNullOrBlank(deviceToken, "Device Token");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+        
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
     populateSignParams(postMap);
-    string pushBody = BuildRegisterDeviceTokenBody(devoceToken, userName,deviceType);
+    string pushBody = BuildRegisterDeviceTokenBody(deviceToken, userName,deviceType);
     postMap["body"] = pushBody;
     
     string signature = Util::signMap(secretKey, postMap);
@@ -262,13 +288,36 @@ void PushNotificationService::registerDeviceToken(string devoceToken, string use
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, pushBody.c_str(), response, callfuncND_selector(App42PushNotificationResponse::onComplete));
     
 }
 
 void PushNotificationService::sendPushMessageToUser(string username,  string message, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(username, "User Name");
+        Util::throwExceptionIfStringNullOrBlank(message, "Message");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
     populateSignParams(postMap);
@@ -292,12 +341,35 @@ void PushNotificationService::sendPushMessageToUser(string username,  string mes
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, pushBody.c_str(), response, callfuncND_selector(App42PushNotificationResponse::onComplete));
 }
 
 void PushNotificationService::sendPushMessageToUser(string username, map<string, string>messageMap, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(username, "User Name");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+        Util::throwExceptionIfMapIsNullOrBlank(messageMap, "Push Message");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
     populateSignParams(postMap);
@@ -322,13 +394,36 @@ void PushNotificationService::sendPushMessageToUser(string username, map<string,
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, pushBody.c_str(), response, callfuncND_selector(App42PushNotificationResponse::onComplete));
 }
 
 
 void PushNotificationService::subscribeToChannel(string channel, string userName, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
+        Util::throwExceptionIfStringNullOrBlank(channel, "Channel");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
     populateSignParams(postMap);
@@ -352,13 +447,36 @@ void PushNotificationService::subscribeToChannel(string channel, string userName
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, pushBody.c_str(), response, callfuncND_selector(App42PushNotificationResponse::onComplete));
     
 }
 
 void PushNotificationService::sendPushMessageToChannel(string channel, string message, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(channel, "Channel Name");
+        Util::throwExceptionIfStringNullOrBlank(message, "Message");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
     populateSignParams(postMap);
@@ -382,12 +500,35 @@ void PushNotificationService::sendPushMessageToChannel(string channel, string me
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
     Util::executePost(encodedUrl, headers, pushBody.c_str(), response, callfuncND_selector(App42PushNotificationResponse::onComplete));
 }
 
 void PushNotificationService::sendPushMessageToChannel(string channel, map<string, string>messageMap, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
+    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
+    
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(channel, "Channel Name");
+        Util::throwExceptionIfMapIsNullOrBlank(messageMap, "Push Message");
+        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+    }
+    catch (App42Exception *e)
+    {
+        std::string ex = e->what();
+        response->httpErrorCode = e->getHttpErrorCode();
+        response->appErrorCode  = e->getAppErrorCode();
+        response->errorDetails  = ex;
+        response->isSuccess = false;
+        if (pTarget && pSelector)
+        {
+            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+        }
+        delete e;
+        e = NULL;
+        return;
+    }
     map<string, string> postMap;
     string timestamp = Util::getTimeStamp();
     populateSignParams(postMap);
@@ -412,7 +553,6 @@ void PushNotificationService::sendPushMessageToChannel(string channel, map<strin
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    App42PushNotificationResponse *response = new App42PushNotificationResponse::App42PushNotificationResponse(pTarget,pSelector);
     Util::executePost(baseUrl, headers, pushBody.c_str(), response, callfuncND_selector(App42PushNotificationResponse::onComplete));
 }
 
