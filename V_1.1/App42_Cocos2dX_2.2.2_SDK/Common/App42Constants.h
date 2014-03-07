@@ -9,10 +9,10 @@
 #ifndef App42CPPSDK_App42Constants_h
 #define App42CPPSDK_App42Constants_h
 
-#define BASE_URL "api.shephertz.com"
+#define BASE_URL "192.168.1.60:8082/App42_API_SERVER"//"api.shephertz.com"
 
 
-#define PROTOCOL  "https://"
+#define PROTOCOL  "http://"//"https://"
 #define RESOURCE_BASE  "/cloud/1.0/"
 #define VERSION  "1.0"
 

@@ -89,7 +89,6 @@ namespace Util {
                 stringValue.append(",");
             }
             stringValue.append(it->c_str());
-            stringValue.append(", ");
         }
         return stringValue;
     }

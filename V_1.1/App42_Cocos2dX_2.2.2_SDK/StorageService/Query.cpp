@@ -59,9 +59,7 @@ std::string Query::getString()
     else
     {
         std::string queryString;
-        queryString.append("[");
         queryString.append(cJSON_PrintUnformatted(jsonArray));
-        queryString.append("]");
         return queryString;
     }
 }
