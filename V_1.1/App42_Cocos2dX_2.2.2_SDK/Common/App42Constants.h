@@ -9,10 +9,10 @@
 #ifndef App42CPPSDK_App42Constants_h
 #define App42CPPSDK_App42Constants_h
 
-#define BASE_URL "192.168.1.60:8082/App42_API_SERVER"//"api.shephertz.com"
+#define BASE_URL "api.shephertz.com"
 
 
-#define PROTOCOL  "http://"//"https://"
+#define PROTOCOL  "https://"
 #define RESOURCE_BASE  "/cloud/1.0/"
 #define VERSION  "1.0"
 
@@ -35,8 +35,5 @@
 #define GEO_TAG             "geoTag"
 #define EVENT               "event"
 
-
-#define APP_Key "cad2bfab6310acd9696187b98682925125e469ab0d0d585db0b00609f461b791"
-#define SECRET_Key "55811709916e7ce4405cde0cdc5a254cf4b506fbafdae05760a73100b8080b67"
 
 #endif
