@@ -310,8 +310,8 @@ void HelloWorld::onStorageRequestCompleted(cocos2d::CCNode *sender, void *respon
     
     for(std::vector<JSONDocument>::iterator it = storageResponse->documents.begin(); it != storageResponse->documents.end(); ++it)
     {
-        printf("\n DocId=%s",it->docId.c_str());
-        printf("\n Json =%s\n",it->jsonDoc.c_str());
+        printf("\n DocId=%s",it->getDocId().c_str());
+        printf("\n Json =%s\n",it->getJsonDoc().c_str());
     }
     
 }
@@ -330,9 +330,9 @@ void HelloWorld::onGameRequestCompleted(cocos2d::CCNode *sender, void *response)
     
     for(std::vector<App42Score>::iterator it = gameResponse->scores.begin(); it != gameResponse->scores.end(); ++it)
     {
-        printf("\n User Name=%s",it->userName.c_str());
-        printf("\n Score Id=%s\n",it->scoreId.c_str());
-        printf("\n Value=%f\n",it->value);
+        printf("\n User Name=%s",it->getUserName().c_str());
+        printf("\n Score Id=%s\n",it->getScoreId().c_str());
+        printf("\n Value=%f\n",it->getScoreValue());
 
     }
 }
