@@ -14,9 +14,11 @@ Query::Query(cJSON *_jsonObject)
     if (_jsonObject->type == cJSON_Array)
     {
         jsonArray = _jsonObject;
+        jsonObject = NULL;
     }
     else
     {
+        jsonArray = NULL;
         jsonObject = _jsonObject;
     }
 }
@@ -48,20 +50,17 @@ std::string Query::getString()
 {
     if (jsonObject)
     {
-        std::string queryString;// = cJSON_PrintUnformatted(jsonObject);
+        std::string queryString;
         queryString.append("[");
         queryString.append(cJSON_PrintUnformatted(jsonObject));
         queryString.append("]");
-        return queryString;//cJSON_PrintUnformatted(jsonObject);
+        return queryString;
     }
     else
     {
-        std::string queryString;// = cJSON_PrintUnformatted(jsonObject);
-        queryString.append("[");
+        std::string queryString;
         queryString.append(cJSON_PrintUnformatted(jsonArray));
-        queryString.append("]");
         return queryString;
     }
-        //return cJSON_PrintUnformatted(jsonArray);
 }
 

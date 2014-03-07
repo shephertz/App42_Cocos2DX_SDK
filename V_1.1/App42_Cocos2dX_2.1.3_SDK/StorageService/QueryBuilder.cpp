@@ -9,6 +9,7 @@
 #include "QueryBuilder.h"
 #include "Exceptions.h"
 #include "App42Exception.h"
+#include "BodyBuilder.h"
 
 QueryBuilder::QueryBuilder()
 {
@@ -44,6 +45,34 @@ Query* QueryBuilder::BuildQuery(std::string key,std::string value,std::string op
     query = new Query(jsonObject);
     return query;
 }
+
+Query* QueryBuilder::BuildQuery(std::string key,std::vector<std::string> value,std::string op)
+{
+    try
+    {
+        Util::throwExceptionIfStringNullOrBlank(key, "Key");
+        Util::throwExceptionIfStringNullOrBlank(op, "Operator");
+    }
+    catch (App42Exception *e)
+    {
+        throw e;
+    }
+    
+    Query *query = NULL;
+    
+    cJSON *jsonObject = cJSON_CreateObject();
+    cJSON_AddStringToObject(jsonObject, "key", key.c_str());
+    string valueString = "[";
+    valueString.append(Util::GetStringFromVector(value));
+    valueString.append("]");
+    cJSON_AddStringToObject(jsonObject, "value", valueString.c_str());
+    cJSON_AddStringToObject(jsonObject, "operator", op.c_str());
+    
+    query = new Query(jsonObject);
+    return query;
+    
+}
+
 
 Query* QueryBuilder::CompoundOperator(Query *q1,std::string op,Query *q2)
 {
