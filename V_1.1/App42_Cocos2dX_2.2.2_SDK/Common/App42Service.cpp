@@ -88,6 +88,12 @@ void App42Service::populateMetaHeaderParams(std::map<string, string>& metaHeader
         cJSON_AddStringToObject(obj, "collectionName", collectionName.c_str());
         metaHeaderParamsMap["dbCredentials"] = cJSON_PrintUnformatted(obj);
     }
+    
+    std::map<string,string>::iterator it;
+    for(it=otherMetaHearders.begin(); it!=otherMetaHearders.end(); ++it)
+    {
+        metaHeaderParamsMap[it->first] = it->second;
+    }
 }
 
 string App42Service::getBaseUrl(string resource)
@@ -127,4 +133,8 @@ void App42Service::setQuery(string _dbName, string _collectionName)
 {
     dbName = _dbName;
     collectionName = _collectionName;
+}
+void App42Service::setOtherMetaHeaders(std::map<std::string, std::string> l_otherMetaHearders)
+{
+    otherMetaHearders = l_otherMetaHearders;
 }

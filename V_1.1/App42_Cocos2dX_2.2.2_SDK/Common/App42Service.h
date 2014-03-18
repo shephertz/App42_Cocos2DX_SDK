@@ -42,7 +42,8 @@ public:
     
     void setQuery(std::string _dbName, std::string _collectionName,Query *_metaInfoQuery);
     void setQuery(std::string _dbName, std::string _collectionName);
-    
+    void setOtherMetaHeaders(std::map<std::string, std::string> l_otherMetaHearders);
+
 protected:
     std::string apiKey;
     std::string secretKey;

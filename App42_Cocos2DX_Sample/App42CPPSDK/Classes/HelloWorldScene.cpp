@@ -23,6 +23,8 @@ CCScene* HelloWorld::scene()
     return scene;
 }
 
+
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -113,13 +115,13 @@ bool HelloWorld::init()
      * Test Storage Service
      */
     
-    testStorageService();
+    //testStorageService();
     
     /**
      * Test Push Service
      */
     
-    //testPushService();
+    testPushService();
     
     
     return true;
@@ -127,7 +129,7 @@ bool HelloWorld::init()
 
 void HelloWorld::testUserService()
 {
-    std::string userName = "<Enter_your_user_name>";
+    std::string userName = "Enter_your_user_name";
     std::string password = "Password";
     std::string emailId = "Email_Id";
 
@@ -135,9 +137,9 @@ void HelloWorld::testUserService()
     UserService *user = UserService::getInstance();
     user->CreateUser(userName, password, emailId,this,callfuncND_selector(HelloWorld::onUserRequestCompleted));
     
-    user->Authenticate(userName, password, this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
-    user->GetUser(userName, this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
-    user->GetAllUsers(this,callfuncND_selector(HelloWorld::onUserRequestCompleted));
+    //user->Authenticate(userName, password, this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
+    //user->GetUser(userName, this, callfuncND_selector(HelloWorld::onUserRequestCompleted));
+    //user->GetAllUsers(this,callfuncND_selector(HelloWorld::onUserRequestCompleted));
 }
 
 
@@ -219,12 +221,13 @@ void HelloWorld::testStorageService()
     std::string key = "mykey";//"Version";
     std::string value = "1400";//"2.3";
 
-    StorageService::Initialize(APP_Key, SECRET_Key);
-    StorageService *storageService = StorageService::getInstance();
+    App42API::Initialize(APP_Key, SECRET_Key);
+    //StorageService::Initialize(APP_KEY, SECRET_KEY);
+    StorageService *storageService = App42API::BuildStorageService();//StorageService::getInstance();
     
     string json = getJsonString("mykey", "1300");
     
-    //storageService->InsertJsonDocument(dbName, collectionName, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    storageService->InsertJsonDocument(dbName, collectionName, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
     //storageService->FindAllCollections(dbName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
     //storageService->FindAllDocuments(dbName, collectionName, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
     //storageService->FindDocumentById(dbName, collectionName, docId, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
@@ -232,34 +235,39 @@ void HelloWorld::testStorageService()
     //storageService->UpdateDocumentByDocId(dbName, collectionName, docId, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
     //storageService->UpdateDocumentByKeyValue(dbName, collectionName, "mykey", "1200", json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
     //storageService->DeleteDocumentsById(dbName, collectionName, docId, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
-    storageService->SaveOrUpdateDocumentByKeyValue(dbName, collectionName, key, value, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
+    //storageService->SaveOrUpdateDocumentByKeyValue(dbName, collectionName, key, value, json, this, callfuncND_selector(HelloWorld::onStorageRequestCompleted));
 }
 
 void HelloWorld::testPushService()
 {
     std::string deviceToken = "Enter_device_token";
-    std::string userName = "Enter_your_user_name";
-    std::string message = "Your_push_message";
+    std::string userName = "Daljeet";
+    std::string message = "漢語";
     std::string deviceType = "iOS";
     std::string channelName = "Enter_your_channel_name";
 
     
     PushNotificationService::Initialize(APP_Key, SECRET_Key);
     PushNotificationService *pushService = PushNotificationService::getInstance();
-    pushService->registerDeviceToken(deviceToken, userName, deviceType, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
+    std::map<std::string,std::string> otherMetaHeaders;
+    otherMetaHeaders["dataEncoding"] = "true";
+    pushService->setOtherMetaHeaders(otherMetaHeaders);
+
+    
+    //pushService->registerDeviceToken(deviceToken, userName, deviceType, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
     pushService->sendPushMessageToUser(userName, message, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
     
-    map<string, string> messageMap;
-    messageMap["alert"] = "Hello, Custom message from channel!";
-    messageMap["sound"] = "default";
-    messageMap["badge"] = "2";
-    
-    pushService->sendPushMessageToUser(userName, messageMap, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
-    
-    pushService->subscribeToChannel(channelName, userName, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
-    
-    pushService->sendPushMessageToChannel(channelName, message, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
-    pushService->sendPushMessageToChannel(channelName, messageMap, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
+//    map<string, string> messageMap;
+//    messageMap["alert"] = "Hello, Custom message from channel!";
+//    messageMap["sound"] = "default";
+//    messageMap["badge"] = "2";
+//    
+//    pushService->sendPushMessageToUser(userName, messageMap, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
+//    
+//    pushService->subscribeToChannel(channelName, userName, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
+//    
+//    pushService->sendPushMessageToChannel(channelName, message, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
+//    pushService->sendPushMessageToChannel(channelName, messageMap, this, callfuncND_selector(HelloWorld::onPushRequestCompleted));
 }
 
 
