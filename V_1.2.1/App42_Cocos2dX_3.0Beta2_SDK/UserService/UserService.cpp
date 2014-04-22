@@ -102,7 +102,7 @@ string UserService::buildCreateUserBody(string username, string password, string
 
 
 
-void UserService::CreateUser(string username, string password, string email,CCObject* pTarget, SEL_CallFuncND pSelector)
+void UserService::CreateUser(string username, string password, string email,Object* pTarget, SEL_CallFuncND pSelector)
 {
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     
@@ -123,7 +123,7 @@ void UserService::CreateUser(string username, string password, string email,CCOb
         response->isSuccess = false;
         if (pTarget && pSelector)
         {
-            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+            (pTarget->*pSelector)((cocos2d::Node *)pTarget, response);
         }
         delete e;
         e = NULL;
@@ -141,8 +141,8 @@ void UserService::CreateUser(string username, string password, string email,CCOb
     
     string baseUrl = getBaseUrl("user");
     baseUrl.append("?").append(queryString);
-    Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
-    Util::app42Trace("\n createUserbody = %s",createUserbody.c_str());
+   // Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
+   // Util::app42Trace("\n createUserbody = %s",createUserbody.c_str());
     
     std::vector<std::string> headers;
     map<string, string> metaHeaders;
@@ -150,12 +150,12 @@ void UserService::CreateUser(string username, string password, string email,CCOb
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    Util::executePost(baseUrl, headers, createUserbody.c_str(), response, callfuncND_selector(App42UserResponse::onComplete));
+    Util::executePost(baseUrl, headers, createUserbody.c_str(), response, httpresponse_selector(App42UserResponse::onComplete));
     
 }
 
 /*
-void UserService::CreateUser(string username, string password, string email, string roleList, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+void UserService::CreateUser(string username, string password, string email, string roleList, Object* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
     map<string, string> postMap;
     populateSignParams(postMap);
@@ -178,7 +178,7 @@ void UserService::CreateUser(string username, string password, string email, str
 }
 */
 
-void UserService::Authenticate(string username, string password, cocos2d::CCObject *pTarget, cocos2d::SEL_CallFuncND pSelector)
+void UserService::Authenticate(string username, string password, cocos2d::Object *pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     
@@ -199,7 +199,7 @@ void UserService::Authenticate(string username, string password, cocos2d::CCObje
         response->isSuccess = false;
         if (pTarget && pSelector)
         {
-            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+            (pTarget->*pSelector)((cocos2d::Node *)pTarget, response);
         }
         delete e;
         e = NULL;
@@ -226,10 +226,10 @@ void UserService::Authenticate(string username, string password, cocos2d::CCObje
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    Util::executePost(baseUrl, headers, postBody.c_str(), response, callfuncND_selector(App42UserResponse::onComplete));
+    Util::executePost(baseUrl, headers, postBody.c_str(), response, httpresponse_selector(App42UserResponse::onComplete));
 }
 
-void UserService::GetUser(string username, CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+void UserService::GetUser(string username, Object* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     
@@ -248,7 +248,7 @@ void UserService::GetUser(string username, CCObject* pTarget, cocos2d::SEL_CallF
         response->isSuccess = false;
         if (pTarget && pSelector)
         {
-            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+            (pTarget->*pSelector)((cocos2d::Node *)pTarget, response);
         }
         delete e;
         e = NULL;
@@ -275,11 +275,11 @@ void UserService::GetUser(string username, CCObject* pTarget, cocos2d::SEL_CallF
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    Util::executeGet(url,headers, response, callfuncND_selector(App42UserResponse::onComplete));
+    Util::executeGet(url,headers, response, httpresponse_selector(App42UserResponse::onComplete));
 }
 
 
-void UserService::GetAllUsers(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelector)
+void UserService::GetAllUsers(Object* pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
     App42UserResponse *response = new App42UserResponse::App42UserResponse(pTarget,pSelector);
     
@@ -297,7 +297,7 @@ void UserService::GetAllUsers(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelect
         response->isSuccess = false;
         if (pTarget && pSelector)
         {
-            (pTarget->*pSelector)((cocos2d::CCNode *)pTarget, response);
+            (pTarget->*pSelector)((cocos2d::Node *)pTarget, response);
         }
         delete e;
         e = NULL;
@@ -321,6 +321,6 @@ void UserService::GetAllUsers(CCObject* pTarget, cocos2d::SEL_CallFuncND pSelect
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    Util::executeGet(url,headers, response, callfuncND_selector(App42UserResponse::onComplete));
+    Util::executeGet(url,headers, response, httpresponse_selector(App42UserResponse::onComplete));
 }
 

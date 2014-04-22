@@ -14,7 +14,9 @@
 #include "App42UserResponse.h"
 #include "curl/curl.h"
 #include "Common.h"
-
+#include "network/HttpRequest.h"
+#include "network/HttpResponse.h"
+#include "network/HttpClient.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -22,12 +24,10 @@ using namespace cocos2d;
 namespace Util
 {
     
-    static char* url_encode(string &url)
+    static const char* url_encode(string &url)
     {
         CURL *curl = curl_easy_init();
         char *str = curl_easy_escape(curl, url.c_str(), url.size());
-        
-        //app42Trace("URL == %s",str);
         return str;
     }
     
@@ -51,32 +51,32 @@ namespace Util
         }
     }
     
-    static void executePost(string baseUrl,std::vector<std::string> headers, const char* postData,CCObject* pTarget, SEL_CallFuncND pSelector)
+    static void executePost(string baseUrl,std::vector<std::string> headers, const char* postData,Object* pTarget, cocos2d::network::SEL_HttpResponse pSelector)
     {
-        cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest();
+        
+        cocos2d::network::HttpRequest* request = new cocos2d::network::HttpRequest();
         request->setUrl(baseUrl.c_str());
-        request->setRequestType(cocos2d::extension::CCHttpRequest::kHttpPost);
+        request->setRequestType(cocos2d::network::HttpRequest::Type::POST);
         
         headers.push_back("Accept: application/json");
         headers.push_back("Content-Type: application/json");
         headers.push_back("SDKName: Cocos2d-X");
         
         request->setHeaders(headers);
-        //printVector(headers);
         request->setResponseCallback(pTarget, pSelector);
         
         request->setRequestData(postData, strlen(postData));
         
-        cocos2d::extension::CCHttpClient::getInstance()->send(request);
+        cocos2d::network::HttpClient::getInstance()->send(request);
         request->release();
         return;
     }
     
-    static void executePut(string baseUrl,std::vector<std::string> headers, const char* postData,CCObject* pTarget, SEL_CallFuncND pSelector)
+    static void executePut(string baseUrl,std::vector<std::string> headers, const char* postData,Object* pTarget, cocos2d::network::SEL_HttpResponse pSelector)
     {
-        cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest();
+        cocos2d::network::HttpRequest* request = new cocos2d::network::HttpRequest();
         request->setUrl(baseUrl.c_str());
-        request->setRequestType(cocos2d::extension::CCHttpRequest::kHttpPost);
+        request->setRequestType(cocos2d::network::HttpRequest::Type::POST);
         
         headers.push_back("Accept: application/json");
         headers.push_back("Content-Type: application/json");
@@ -88,36 +88,34 @@ namespace Util
         
         request->setRequestData(postData, strlen(postData));
         
-        cocos2d::extension::CCHttpClient::getInstance()->send(request);
+        cocos2d::network::HttpClient::getInstance()->send(request);
         request->release();
         return;
     }
 
-    static void executeGet(string baseUrl,std::vector<std::string> headers,CCObject* pTarget, SEL_CallFuncND pSelector)
+    static void executeGet(string baseUrl,std::vector<std::string> headers,Object* pTarget, cocos2d::network::SEL_HttpResponse pSelector)
     {
-        cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest();
+        cocos2d::network::HttpRequest* request = new cocos2d::network::HttpRequest();
         request->setUrl(baseUrl.c_str());
-        request->setRequestType(cocos2d::extension::CCHttpRequest::kHttpGet);
+        request->setRequestType(cocos2d::network::HttpRequest::Type::GET);
         
         headers.push_back("Accept: application/json");
         headers.push_back("Content-Type: application/json");
         headers.push_back("SDKName: Cocos2d-X");
         
         request->setHeaders(headers);
-        //printVector(headers);
-        //printf("\nBaseUrl=%s",baseUrl.c_str());
         request->setResponseCallback(pTarget, pSelector);
         
-        cocos2d::extension::CCHttpClient::getInstance()->send(request);
+        cocos2d::network::HttpClient::getInstance()->send(request);
         request->release();
         return;
     }
     
-    static void executeDelete(string baseUrl,std::vector<std::string> headers,CCObject* pTarget, SEL_CallFuncND pSelector)
+    static void executeDelete(string baseUrl,std::vector<std::string> headers,Object* pTarget, cocos2d::network::SEL_HttpResponse pSelector)
     {
-        cocos2d::extension::CCHttpRequest* request = new cocos2d::extension::CCHttpRequest();
+        cocos2d::network::HttpRequest* request = new cocos2d::network::HttpRequest();
         request->setUrl(baseUrl.c_str());
-        request->setRequestType(cocos2d::extension::CCHttpRequest::kHttpGet);
+        request->setRequestType(cocos2d::network::HttpRequest::Type::GET);
         
         headers.push_back("Accept: application/json");
         headers.push_back("Content-Type: application/json");
@@ -128,16 +126,10 @@ namespace Util
         
         request->setResponseCallback(pTarget, pSelector);
         
-        cocos2d::extension::CCHttpClient::getInstance()->send(request);
+        cocos2d::network::HttpClient::getInstance()->send(request);
         request->release();
         return;
     }
-    
-    static void handleException()
-    {
-        
-    }
-    
     
 }
 

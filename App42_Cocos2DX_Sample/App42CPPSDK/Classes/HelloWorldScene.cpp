@@ -5,6 +5,7 @@
 #define SECRET_Key "App_Secret_Key"
 
 
+
 using namespace cocos2d;
 using namespace CocosDenshion;
 
@@ -102,7 +103,7 @@ bool HelloWorld::init()
      * Test Score Board Service
      */
     
-    //testScoreBoardService();
+    testScoreBoardService();
     
     /**
      * Test Reward Service
@@ -121,7 +122,7 @@ bool HelloWorld::init()
      * Test Push Service
      */
     
-    testPushService();
+    //testPushService();
     
     
     return true;
@@ -167,18 +168,23 @@ void HelloWorld::testScoreService()
 
 void HelloWorld::testScoreBoardService()
 {
-    std::string gameName = "<Enter_your_game_name>";
+    std::string gameName = "TestScore";//"<Enter_your_game_name>";
     std::string userName = "<Enter_your_user_name>";
     double score = 100;
 
     ScoreBoardService::Initialize(APP_Key, SECRET_Key);
     ScoreBoardService *scoreService = ScoreBoardService::getInstance();
-    scoreService->SaveUserScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
-    scoreService->GetHighestScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
-    scoreService->GetTopRankings(gameName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
-    scoreService->GetAverageScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
-    scoreService->GetUserRanking(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
-    scoreService->GetLastScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+//    scoreService->SaveUserScore(gameName, userName, score, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+//    scoreService->GetHighestScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+//    scoreService->GetTopRankings(gameName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+//    scoreService->GetAverageScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+//    scoreService->GetUserRanking(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+//    scoreService->GetLastScoreByUser(gameName, userName, this, callfuncND_selector(HelloWorld::onGameRequestCompleted));
+    
+    std::vector<string>userList;
+    userList.push_back("r12");
+    userList.push_back("r1");
+    scoreService->GetTopRankersByGroup(gameName, userList,this, callfuncND_selector(HelloWorld::onScoreBoardRequestCompleted));
 }
 
 void HelloWorld::testRewardService()
@@ -247,7 +253,7 @@ void HelloWorld::testPushService()
     std::string channelName = "Enter_your_channel_name";
 
     
-    PushNotificationService::Initialize(APP_Key, SECRET_Key);
+    PushNotificationService::Initialize(APP_KEY, SECRET_KEY);
     PushNotificationService *pushService = PushNotificationService::getInstance();
     std::map<std::string,std::string> otherMetaHeaders;
     otherMetaHeaders["dataEncoding"] = "true";
@@ -360,6 +366,38 @@ void HelloWorld::onRewardRequestCompleted(cocos2d::CCNode *sender, void *respons
 
     }
 }
+
+
+void HelloWorld::onScoreBoardRequestCompleted(cocos2d::CCNode *sender, void *response)
+{
+    App42GameResponse *scoreResponse = (App42GameResponse*)response;
+    printf("\ncode=%d",scoreResponse->getCode());
+    printf("\nResponse Body=%s",scoreResponse->getBody().c_str());
+    
+    for(std::vector<App42Score>::iterator it = scoreResponse->scores.begin(); it != scoreResponse->scores.end(); ++it)
+    {
+        printf("\n CreatedAt=%s",it->getCreatedOn().c_str());
+        printf("\n Rank=%s\n",it->getRank().c_str());
+        printf("\n ScoreId=%s\n",it->getScoreId().c_str());
+        printf("\n ScoreValue=%f\n",it->getScoreValue());
+        printf("\n UserName=%s\n",it->getUserName().c_str());
+        
+        for(std::vector<JSONDocument>::iterator it1 = it->getJsonDocList().begin(); it1 != it->getJsonDocList().end(); ++it1)
+        {
+            if (it1->getCreatedAt().c_str()!=NULL)
+            {
+                printf("\n CreatedAt=%s",it1->getCreatedAt().c_str());
+            }
+            
+            printf("\n DocId=%s",it1->getDocId().c_str());
+            printf("\n Event=%s",it1->getEvent().c_str());
+            printf("\n Owner=%s",it1->getOwner().c_str());
+            printf("\n UpdatedAt=%s",it1->getUpdatedAt().c_str());
+            printf("\n JsonDoc=%s\n",it1->getJsonDoc().c_str());
+        }
+    }
+}
+
 
 
 void HelloWorld::onHttpRequestCompleted(cocos2d::CCNode *sender, void *response)

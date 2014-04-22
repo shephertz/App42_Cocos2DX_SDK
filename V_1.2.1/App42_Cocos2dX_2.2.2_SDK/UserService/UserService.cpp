@@ -141,8 +141,8 @@ void UserService::CreateUser(string username, string password, string email,CCOb
     
     string baseUrl = getBaseUrl("user");
     baseUrl.append("?").append(queryString);
-    Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
-    Util::app42Trace("\n createUserbody = %s",createUserbody.c_str());
+   // Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
+   // Util::app42Trace("\n createUserbody = %s",createUserbody.c_str());
     
     std::vector<std::string> headers;
     map<string, string> metaHeaders;

@@ -9,13 +9,15 @@
 #include "App42Response.h"
 #include "Common.h"
 
-App42Response::App42Response(cocos2d::CCObject *pTarget, cocos2d::SEL_CallFuncND pSelector)//(int code, std::string body, cocos2d::extension::CCHttpRequest* request)
+App42Response::App42Response(cocos2d::CCObject *pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
-//    _result = code;
-//    _body = body;
-//    _httpRequest = request;
     _pTarget = pTarget;
     _pSelector = pSelector;
+    appErrorCode = 0;
+    httpErrorCode = 0;
+    _result = 0;
+    errorMessage = "";
+    errorDetails = "";
 }
 
 App42Response::~App42Response()
@@ -49,12 +51,10 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     }
     
     // You can get original request type from: response->request->reqType
-    printf("%s completed", response->getHttpRequest()->getTag());
     if (0 != strlen(response->getHttpRequest()->getTag()))
     {
         Util::app42Trace("%s completed", response->getHttpRequest()->getTag());
     }
-    
     
     _result = response->getResponseCode();
     char statusString[64] = {};
@@ -68,6 +68,7 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     {
         Util::app42Trace("response failed");
         Util::app42Trace("error buffer: %s", response->getErrorBuffer());
+        //return;
     }
     _httpRequest = response->getHttpRequest();
     
@@ -79,10 +80,7 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     Util::app42Trace("Response string=%s",str.c_str());
 }
 
-void App42Response::onException(App42Exception *e)
-{
-    
-}
+
 
 void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet)
 {
@@ -90,24 +88,16 @@ void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet)
     cJSON *docIdJson = Util::getJSONChild("_id", json);
     if (docIdJson!=NULL)
     {
-        cJSON* child2 = docIdJson;
-        while(child2 != NULL && child2->type == cJSON_Object)
-        {
-            jsonDocumnet->setDocId(Util::getJSONString("$oid", child2));
-            child2 = child2->next;
-        }
+        
+        jsonDocumnet->setDocId(Util::getJSONString("$oid", docIdJson));
         cJSON_DeleteItemFromObject(json, "_id");
     }
     
     cJSON *ownerJson = Util::getJSONChild("_$owner", json);
     if (ownerJson!=NULL)
     {
-        cJSON* child2 = ownerJson;
-        while(child2 != NULL && child2->type == cJSON_Object)
-        {
-            jsonDocumnet->setOwner(Util::getJSONString("owner", child2));
-            child2 = child2->next;
-        }
+        
+        jsonDocumnet->setOwner(Util::getJSONString("owner", ownerJson));
         cJSON_DeleteItemFromObject(json,"_$owner");
     }
     

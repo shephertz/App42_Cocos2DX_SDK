@@ -9,13 +9,15 @@
 #include "App42Response.h"
 #include "Common.h"
 
-App42Response::App42Response(cocos2d::CCObject *pTarget, cocos2d::SEL_CallFuncND pSelector)//(int code, std::string body, cocos2d::extension::CCHttpRequest* request)
+App42Response::App42Response(cocos2d::Object *pTarget, cocos2d::SEL_CallFuncND pSelector)
 {
-//    _result = code;
-//    _body = body;
-//    _httpRequest = request;
     _pTarget = pTarget;
     _pSelector = pSelector;
+    appErrorCode = 0;
+    httpErrorCode = 0;
+    _result = 0;
+    errorMessage = "";
+    errorDetails = "";
 }
 
 App42Response::~App42Response()
@@ -39,24 +41,17 @@ std::string App42Response::getBody()
 }
 
 
-void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
+void App42Response::onComplete(cocos2d::Node *sender, void *data)
 {
-    cocos2d::extension::CCHttpResponse *response = (cocos2d::extension::CCHttpResponse*)data;
+    cocos2d::network::HttpResponse *response = (cocos2d::network::HttpResponse*)data;
     
     if (!response)
     {
         return;
     }
     
-    // You can get original request type from: response->request->reqType
-    printf("%s completed", response->getHttpRequest()->getTag());
-    if (0 != strlen(response->getHttpRequest()->getTag()))
-    {
-        Util::app42Trace("%s completed", response->getHttpRequest()->getTag());
-    }
     
-    
-    _result = response->getResponseCode();
+    _result = (int)response->getResponseCode();
     char statusString[64] = {};
     sprintf(statusString, "HTTP Status Code: %d, tag = %s", _result, response->getHttpRequest()->getTag());
     //m_labelStatusCode->setString(statusString);
@@ -68,6 +63,7 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     {
         Util::app42Trace("response failed");
         Util::app42Trace("error buffer: %s", response->getErrorBuffer());
+        //return;
     }
     _httpRequest = response->getHttpRequest();
     
@@ -79,10 +75,7 @@ void App42Response::onComplete(cocos2d::CCNode *sender, void *data)
     Util::app42Trace("Response string=%s",str.c_str());
 }
 
-void App42Response::onException(App42Exception *e)
-{
-    
-}
+
 
 void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet)
 {
@@ -90,24 +83,16 @@ void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet)
     cJSON *docIdJson = Util::getJSONChild("_id", json);
     if (docIdJson!=NULL)
     {
-        cJSON* child2 = docIdJson;
-        while(child2 != NULL && child2->type == cJSON_Object)
-        {
-            jsonDocumnet->setDocId(Util::getJSONString("$oid", child2));
-            child2 = child2->next;
-        }
+        
+        jsonDocumnet->setDocId(Util::getJSONString("$oid", docIdJson));
         cJSON_DeleteItemFromObject(json, "_id");
     }
     
     cJSON *ownerJson = Util::getJSONChild("_$owner", json);
     if (ownerJson!=NULL)
     {
-        cJSON* child2 = ownerJson;
-        while(child2 != NULL && child2->type == cJSON_Object)
-        {
-            jsonDocumnet->setOwner(Util::getJSONString("owner", child2));
-            child2 = child2->next;
-        }
+        
+        jsonDocumnet->setOwner(Util::getJSONString("owner", ownerJson));
         cJSON_DeleteItemFromObject(json,"_$owner");
     }
     

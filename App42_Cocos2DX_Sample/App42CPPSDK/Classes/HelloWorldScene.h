@@ -20,7 +20,7 @@ public:
     void onStorageRequestCompleted(cocos2d::CCNode *sender, void *response);
     void onGameRequestCompleted(cocos2d::CCNode *sender, void *response);
     void onRewardRequestCompleted(cocos2d::CCNode *sender, void *response);
-
+    void onScoreBoardRequestCompleted(cocos2d::CCNode *sender, void *response);
     void onHttpRequestCompleted(cocos2d::CCNode *sender, void *response);
 
     // preprocessor macro for "static create()" constructor ( node() deprecated )
