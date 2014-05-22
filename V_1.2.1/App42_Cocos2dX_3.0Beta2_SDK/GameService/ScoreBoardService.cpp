@@ -844,7 +844,7 @@ void ScoreBoardService::GetTopNTargetRankers(string gameName,int max,cocos2d::Ob
      * Creating URL
      */
     string resource = "game/scoreboard/";
-    resource.append(gameName+"/");
+    resource.append(gameName);
     resource.append("/targetedrankers/");
     resource.append(Util::ItoA(max));
 	string url = getBaseUrl(resource);
