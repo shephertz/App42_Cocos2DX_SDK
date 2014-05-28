@@ -7,6 +7,7 @@
 
 **Release Version:** 1.3
 
+__If you are migrating from older SDK versions to this version, please read the [migration note](https://github.com/shephertz/App42_Cocos2DX_SDK/wiki/Migration-Notes).__
 
 **The following Services have been pushed :**
 
