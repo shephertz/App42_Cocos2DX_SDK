@@ -7,7 +7,6 @@
 
 **Release Version:** 1.3
 
-**
 **The following Services have been pushed :**
 
 ```
