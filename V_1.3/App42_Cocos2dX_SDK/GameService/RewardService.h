@@ -50,14 +50,14 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void CreateReward(const char* rewardName,const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void CreateReward(const char* rewardName,const char* description, SEL_App42CallFuncND pSelector);
 	/**
      * Fetches all the Rewards
      *
      * @return app42Result - The result of the request.
      *
      */
-	void GetAllRewards(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllRewards(SEL_App42CallFuncND pSelector);
     /**
      * Fetches all the Rewards by paging.
      *
@@ -69,7 +69,7 @@ public:
      * @return List of Reward objects containing all the rewards of the App
      *
      */
-    void GetAllRewards(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAllRewards(int max, int offset, SEL_App42CallFuncND pSelector);
     
     /**
      * Fetches all the Rewards
@@ -77,7 +77,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetAllRewardsCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllRewardsCount(SEL_App42CallFuncND pSelector);
 	/**
      * Adds the reward points to an users account. Reward Points can be earned
      * by the user which can be redeemed later.
@@ -89,7 +89,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void EarnRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void EarnRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints, SEL_App42CallFuncND pSelector);
 	/**
      * Deducts the reward points from the earned rewards by a user.
      *
@@ -100,7 +100,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void RedeemRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void RedeemRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints, SEL_App42CallFuncND pSelector);
 	/**
      * Fetches the reward points for a particular user
      *
@@ -109,7 +109,7 @@ public:
      * @return app42Result - The result of the request.
      * 
      */
-	void GetGameRewardPointsForUser(const char* gameName, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetGameRewardPointsForUser(const char* gameName, const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the reward for the specified name
@@ -120,7 +120,7 @@ public:
      * @return Reward object containing the reward based on the rewardName
      *
      */
-     void GetRewardByName(const char* rewardName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+     void GetRewardByName(const char* rewardName, SEL_App42CallFuncND pSelector);
     
     /**
      * This function provides a list of specified number of top reward earners
@@ -136,7 +136,7 @@ public:
      * @return ArrayList of Reward object
      * @throws App42Exception
      */
-    void GetTopNRewardEarners(const char* gameName, const char* rewardName, int max, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopNRewardEarners(const char* gameName, const char* rewardName, int max, SEL_App42CallFuncND pSelector);
     
     /**
      * This function returns you the details of all the specific rewards earned
@@ -149,7 +149,7 @@ public:
      * @return ArrayList of Reward object
      * @throws App42Exception
      */
-    void GetAllRewardsByUser(const char* userName, const char* rewardName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAllRewardsByUser(const char* userName, const char* rewardName, SEL_App42CallFuncND pSelector);
     
     /**
      * This function returns you a list of group wise users who earned the top
@@ -165,7 +165,7 @@ public:
      * @return ArrayList of Reward object
      * @throws App42Exception
      */
-    void GetTopNRewardEarnersByGroup(const char* gameName, const char* rewardName, vector<std::string>userList, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopNRewardEarnersByGroup(const char* gameName, const char* rewardName, vector<std::string>userList, SEL_App42CallFuncND pSelector);
     
     /**
      * This function returns you a list of group wise users who earned the top
@@ -181,7 +181,7 @@ public:
      * @return Reward object containing the ranking for the specified user
      * @throws App42Exception
      */
-    void GetUserRankingOnReward(const char* gameName, const char* rewardName, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetUserRankingOnReward(const char* gameName, const char* rewardName, const char* userName, SEL_App42CallFuncND pSelector);
 
     
 };

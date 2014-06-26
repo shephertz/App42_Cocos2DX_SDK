@@ -440,15 +440,14 @@ cJSON* getJsonFromMap(map<string, string>messageMap)
 
 
 
-void PushNotificationService::RegisterDeviceToken(const char* deviceToken, const char* userName, DeviceType deviceType, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::RegisterDeviceToken(const char* deviceToken, const char* userName, DeviceType deviceType, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(deviceToken, "Device Token");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
         
     }
@@ -459,9 +458,9 @@ void PushNotificationService::RegisterDeviceToken(const char* deviceToken, const
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -498,19 +497,18 @@ void PushNotificationService::RegisterDeviceToken(const char* deviceToken, const
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+    Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete,response,std::placeholders::_1,std::placeholders::_2));
     
 }
 
-void PushNotificationService::SendPushMessageToUser(const char* username,  const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushMessageToUser(const char* username,  const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -520,9 +518,9 @@ void PushNotificationService::SendPushMessageToUser(const char* username,  const
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -558,17 +556,16 @@ void PushNotificationService::SendPushMessageToUser(const char* username,  const
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void PushNotificationService::SendPushMessageToUser(const char* username, map<string, string>messageMap, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushMessageToUser(const char* username, map<string, string>messageMap, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
         Util::throwExceptionIfMapIsNullOrBlank(messageMap, "Push Message");
     }
@@ -579,9 +576,9 @@ void PushNotificationService::SendPushMessageToUser(const char* username, map<st
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -619,17 +616,16 @@ void PushNotificationService::SendPushMessageToUser(const char* username, map<st
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void PushNotificationService::SendPushMessageToAllByType(const char* message,DeviceType deviceType, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushMessageToAllByType(const char* message,DeviceType deviceType, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -639,9 +635,9 @@ void PushNotificationService::SendPushMessageToAllByType(const char* message,Dev
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -676,17 +672,16 @@ void PushNotificationService::SendPushMessageToAllByType(const char* message,Dev
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void PushNotificationService::SendPushMessageToAll(const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushMessageToAll(const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -696,9 +691,9 @@ void PushNotificationService::SendPushMessageToAll(const char* message, App42Cal
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -733,18 +728,17 @@ void PushNotificationService::SendPushMessageToAll(const char* message, App42Cal
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void PushNotificationService::SubscribeToChannel(const char* channel, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SubscribeToChannel(const char* channel, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(channel, "Channel");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -754,9 +748,9 @@ void PushNotificationService::SubscribeToChannel(const char* channel, const char
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -795,20 +789,19 @@ void PushNotificationService::SubscribeToChannel(const char* channel, const char
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::SubscribeToChannel(const char* channel,const char* userName, const char* deviceToken, DeviceType deviceType, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SubscribeToChannel(const char* channel,const char* userName, const char* deviceToken, DeviceType deviceType, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(channel, "Channel");
         Util::throwExceptionIfStringNullOrBlank(deviceToken, "Device Token");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -818,9 +811,9 @@ void PushNotificationService::SubscribeToChannel(const char* channel,const char*
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -856,18 +849,17 @@ void PushNotificationService::SubscribeToChannel(const char* channel,const char*
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
-void PushNotificationService::UnsubscribeFromChannel(const char* channel, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::UnsubscribeFromChannel(const char* channel, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(channel, "Channel");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -877,9 +869,9 @@ void PushNotificationService::UnsubscribeFromChannel(const char* channel, const 
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -916,20 +908,19 @@ void PushNotificationService::UnsubscribeFromChannel(const char* channel, const 
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePut(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::UnsubscribeDeviceToChannel(const char* channel,const char* userName, const char* deviceToken, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::UnsubscribeDeviceToChannel(const char* channel,const char* userName, const char* deviceToken, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(channel, "Channel");
         Util::throwExceptionIfStringNullOrBlank(deviceToken, "Device Token");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -939,9 +930,9 @@ void PushNotificationService::UnsubscribeDeviceToChannel(const char* channel,con
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -978,19 +969,18 @@ void PushNotificationService::UnsubscribeDeviceToChannel(const char* channel,con
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::SendPushMessageToChannel(const char* channel, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushMessageToChannel(const char* channel, const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(channel, "Channel Name");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1000,9 +990,9 @@ void PushNotificationService::SendPushMessageToChannel(const char* channel, cons
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1039,18 +1029,17 @@ void PushNotificationService::SendPushMessageToChannel(const char* channel, cons
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void PushNotificationService::SendPushMessageToChannel(const char* channel, map<string, string>messageMap, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushMessageToChannel(const char* channel, map<string, string>messageMap, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(channel, "Channel Name");
         Util::throwExceptionIfMapIsNullOrBlank(messageMap, "Push Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1060,9 +1049,9 @@ void PushNotificationService::SendPushMessageToChannel(const char* channel, map<
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1101,18 +1090,17 @@ void PushNotificationService::SendPushMessageToChannel(const char* channel, map<
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void PushNotificationService::CreateChannel(const char* channel,const char* description,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::CreateChannel(const char* channel,const char* description, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(channel, "Channel Name");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
         
     }
@@ -1123,9 +1111,9 @@ void PushNotificationService::CreateChannel(const char* channel,const char* desc
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1161,19 +1149,18 @@ void PushNotificationService::CreateChannel(const char* channel,const char* desc
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::DeleteDeviceToken(const char* deviceToken, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::DeleteDeviceToken(const char* deviceToken, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(deviceToken, "Device Token");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1183,9 +1170,9 @@ void PushNotificationService::DeleteDeviceToken(const char* deviceToken, const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1230,18 +1217,17 @@ void PushNotificationService::DeleteDeviceToken(const char* deviceToken, const c
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::DeleteAllDevices(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::DeleteAllDevices(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1251,9 +1237,9 @@ void PushNotificationService::DeleteAllDevices(const char* userName, App42CallBa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1296,19 +1282,18 @@ void PushNotificationService::DeleteAllDevices(const char* userName, App42CallBa
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::UnsubscribeDevice(const char* deviceToken, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::UnsubscribeDevice(const char* deviceToken, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(deviceToken, "Device Token");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
         
     }
@@ -1319,9 +1304,9 @@ void PushNotificationService::UnsubscribeDevice(const char* deviceToken, const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1358,19 +1343,18 @@ void PushNotificationService::UnsubscribeDevice(const char* deviceToken, const c
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePut(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::ResubscribeDevice(const char* deviceToken, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::ResubscribeDevice(const char* deviceToken, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(deviceToken, "Device Token");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
         
     }
@@ -1381,9 +1365,9 @@ void PushNotificationService::ResubscribeDevice(const char* deviceToken, const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1419,18 +1403,17 @@ void PushNotificationService::ResubscribeDevice(const char* deviceToken, const c
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePut(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void PushNotificationService::SendPushMessageToGroup(vector<string> userList,const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushMessageToGroup(vector<string> userList,const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1440,9 +1423,9 @@ void PushNotificationService::SendPushMessageToGroup(vector<string> userList,con
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1479,12 +1462,12 @@ void PushNotificationService::SendPushMessageToGroup(vector<string> userList,con
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void PushNotificationService::SendPushToTargetUsers(const char* message,const char* dbName, const char* collectionName, Query *query, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::SendPushToTargetUsers(const char* message,const char* dbName, const char* collectionName, Query *query, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
@@ -1492,7 +1475,6 @@ void PushNotificationService::SendPushToTargetUsers(const char* message,const ch
         Util::throwExceptionIfStringNullOrBlank(dbName, "DB Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfObjectIsNull(query, "Query");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1502,9 +1484,9 @@ void PushNotificationService::SendPushToTargetUsers(const char* message,const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1554,19 +1536,18 @@ void PushNotificationService::SendPushToTargetUsers(const char* message,const ch
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
 
-void PushNotificationService::ScheduleMessageToUser(const char* userName,const char* message, tm *expiryDate, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void PushNotificationService::ScheduleMessageToUser(const char* userName,const char* message, tm *expiryDate, SEL_App42CallFuncND pSelector)
 {
-    App42PushNotificationResponse *response = new App42PushNotificationResponse(pTarget,pSelector);
+    App42PushNotificationResponse *response = new App42PushNotificationResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1576,9 +1557,9 @@ void PushNotificationService::ScheduleMessageToUser(const char* userName,const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response); 
+            (pSelector)(response); 
         }
         delete e;
         e = NULL;
@@ -1621,5 +1602,5 @@ void PushNotificationService::ScheduleMessageToUser(const char* userName,const c
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, pushBody.c_str(), response, app42response_selector(App42PushNotificationResponse::onComplete));
+	Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }

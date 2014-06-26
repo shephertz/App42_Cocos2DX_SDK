@@ -62,7 +62,7 @@ public:
      * @return app42Result - The result of the request
      *
      */
-	void CreateUser(const char *username, const char *password, const char *email, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void CreateUser(const char *username, const char *password, const char *email, SEL_App42CallFuncND pSelector);
     
     /**
      * Create a User with userName, password & emailAddress and assigns the
@@ -80,7 +80,7 @@ public:
      * @return
      * 
      */
-    void CreateUser(const char *username, const char *password, const char *email, vector<string>roleList, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void CreateUser(const char *username, const char *password, const char *email, vector<string>roleList, SEL_App42CallFuncND pSelector);
 
 	/**
      * Authenticate user based on userName and password
@@ -89,7 +89,7 @@ public:
      * @param password - Password for the User
      * @return app42Result - The result of the request
      */
-	void Authenticate(const char *userName, const char *password, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void Authenticate(const char *userName, const char *password, SEL_App42CallFuncND pSelector);
     
 	/**
      * Gets the User details based on userName
@@ -97,26 +97,26 @@ public:
      * @param userName - Name of the User to retrieve.
      * @return app42Result - The result of the request.
      */
-	void GetUser(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetUser(const char *username, SEL_App42CallFuncND pSelector);
     /**
      * Gets the User details based on emailId
      *
      * @param emailId - EmailId of the User to retrieve.
      * @return app42Result - The result of the request.
      */
-    void GetUserByEmailId(const char *emailId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetUserByEmailId(const char *emailId, SEL_App42CallFuncND pSelector);
 	/**
      * Gets the details of all users
      * 
      * @return app42Result - The result of the request.
      */
-	void GetAllUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllUsers( SEL_App42CallFuncND pSelector);
     /**
      * Gets Total user count
      *
      * @return app42Result - The result of the request.
      */
-	void GetAllUsersCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllUsersCount( SEL_App42CallFuncND pSelector);
     
     /**
      * Gets all users by Paging
@@ -129,7 +129,7 @@ public:
      * @return the List that contains all User Object
      * 
      */
-    void GetAllUsers(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAllUsers(int max, int offset, SEL_App42CallFuncND pSelector);
     
     /**
      * Locks the user based on the userName. Apps can use these feature to lock
@@ -142,7 +142,7 @@ public:
      * @returns the locked User Object
      * 
      */
-    void LockUser(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void LockUser(const char *username, SEL_App42CallFuncND pSelector);
     /**
      * Unlocks the user based on the userName. App developers can use this
      * feature to unlock a user because of reasons specific to their usercase
@@ -155,14 +155,14 @@ public:
      * @returns the unlocked User Object
      * 
      */
-    void UnlockUser(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void UnlockUser(const char *username, SEL_App42CallFuncND pSelector);
     /**
      * Gets the details of all the locked users
      *
      * @return the list containing locked User Objects
      * 
      */
-    void GetLockedUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetLockedUsers( SEL_App42CallFuncND pSelector);
     /**
      * Gets the details of all the locked users By paging.
      *
@@ -174,13 +174,13 @@ public:
      * @return the List containing locked User Objects
      * 
      */
-    void GetLockedUsers(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetLockedUsers(int max, int offset, SEL_App42CallFuncND pSelector);
     /**
      * Gets Total user count
      *
      * @return app42Result - The result of the request.
      */
-    void GetLockedUsersCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetLockedUsersCount( SEL_App42CallFuncND pSelector);
     /**
      * Updates the User's Email Address based on userName. Note: Only email can
      * be updated. Username cannot be updated.
@@ -193,7 +193,7 @@ public:
      * @returns updated User Object
      * 
      */
-    void UpdateEmail(const char *username,const char *emailAddress, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void UpdateEmail(const char *username,const char *emailAddress, SEL_App42CallFuncND pSelector);
     /**
      * Deletes a particular user based on userName.
      *
@@ -203,7 +203,7 @@ public:
      * @returns App42Response Object if user deleted successfully
      * 
      */
-    void DeleteUser(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void DeleteUser(const char *username, SEL_App42CallFuncND pSelector);
     /**
      * Changes the password for user based on the userName.
      *
@@ -217,7 +217,7 @@ public:
      * @returns App42Response Object if updated successfully
      * 
      */
-    void ChangeUserPassword(const char *username,const char *oldPassword,const char *newPassword, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void ChangeUserPassword(const char *username,const char *oldPassword,const char *newPassword, SEL_App42CallFuncND pSelector);
     /**
      * Updates the User password based on userName. Username cannot be updated.
      *
@@ -227,7 +227,7 @@ public:
      * @returns App42Response Object
      *
      */
-    void ResetUserPassword(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void ResetUserPassword(const char *username, SEL_App42CallFuncND pSelector);
     /**
      * Creates or Updates User Profile. First time the Profile for the user is
      * created and in future calls user profile will be updated. This will
@@ -245,7 +245,7 @@ public:
      * 
      * @see Profile
      */
-    void createOrUpdateProfile(App42User *user, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void createOrUpdateProfile(App42User *user, SEL_App42CallFuncND pSelector);
     
     /**
      * Gets the list of Users based on Profile Data
@@ -256,7 +256,7 @@ public:
      * @return List of User Object for the specified profile data
      *
      */
-    void GetUsersByProfileData(App42UserProfile *profileData,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetUsersByProfileData(App42UserProfile *profileData, SEL_App42CallFuncND pSelector);
     
     /**
      * Logout from current session
@@ -266,11 +266,11 @@ public:
      * @throws App42Exception
      */
 
-    void Logout(const char *sessionId,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void Logout(const char *sessionId, SEL_App42CallFuncND pSelector);
     
-    void GetRolesByUser(const char *userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetRolesByUser(const char *userName, SEL_App42CallFuncND pSelector);
     
-    void AssignRoles(const char *uName, vector<string> roleList,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void AssignRoles(const char *uName, vector<string> roleList, SEL_App42CallFuncND pSelector);
 
 };
 #endif /* defined(__App42CPPSDK__UserService__) */

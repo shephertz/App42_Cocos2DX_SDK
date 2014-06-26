@@ -49,7 +49,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void SaveUserScore(const char* gameName,const char* userName, double score, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void SaveUserScore(const char* gameName,const char* userName, double score, SEL_App42CallFuncND pSelector);
     
     /**
      * Edits the User score for a game
@@ -59,7 +59,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-    void EditScoreValueById(const char* scoreId, double gameScore, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void EditScoreValueById(const char* scoreId, double gameScore, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the average game score for the specified user
@@ -69,7 +69,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetAverageScoreByUser(const char* gameName, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAverageScoreByUser(const char* gameName, const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the highest game score for the specified user
@@ -79,7 +79,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetHighestScoreByUser(const char* gameName,const char* userName , App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetHighestScoreByUser(const char* gameName,const char* userName , SEL_App42CallFuncND pSelector);
     
     /**
      * This function returns the top score attained by the specified user in the game.
@@ -89,7 +89,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetLastScoreByUser(const char* gameName,const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetLastScoreByUser(const char* gameName,const char* userName, SEL_App42CallFuncND pSelector);
 	/**
      * Retrieves the Top Rankings for the specified game
      *
@@ -97,7 +97,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetTopRankings(const char* gameName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetTopRankings(const char* gameName, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the Top Rankings for the specified game
@@ -106,7 +106,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetTopRankings(const char* gameName, tm *startDate, tm *endDate,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetTopRankings(const char* gameName, tm *startDate, tm *endDate, SEL_App42CallFuncND pSelector);
     
 	/**
      * Retrieves the User Ranking for the specified game
@@ -116,7 +116,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetUserRanking(const char* gameName, const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetUserRanking(const char* gameName, const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the Top Rankers for the specified game
@@ -126,7 +126,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-    void GetTopNRankers(const char* gameName,int max,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopNRankers(const char* gameName,int max, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the Top Rankers for the specified game
@@ -136,7 +136,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-    void GetTopNRankers(const char* gameName, tm *startDate, tm *endDate, int max, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopNRankers(const char* gameName, tm *startDate, tm *endDate, int max, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the scores for a game for the specified name
@@ -150,7 +150,7 @@ public:
      *
      */
 
-    void GetScoresByUser(const char* gameName,const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetScoresByUser(const char* gameName,const char* userName, SEL_App42CallFuncND pSelector);
 
     /**
      * Retrieves the lowest game score for the specified user
@@ -163,7 +163,7 @@ public:
      * @return the lowest game score for the specified user
      *
      */
-    void GetLowestScoreByUser(const char* gameName,const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetLowestScoreByUser(const char* gameName,const char* userName, SEL_App42CallFuncND pSelector);
 
     /**
      * Retrieves the Top N Rankings for the specified game within the
@@ -176,7 +176,7 @@ public:
      * @return the Top rankers for a game
      *
      */
-    void GetTopRankingsByGroup(const char* gameName,std::vector<std::string>group,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopRankingsByGroup(const char* gameName,std::vector<std::string>group, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the Top Rankers/Scorers for the specified game within the
@@ -189,7 +189,7 @@ public:
      * @return the Top rankers for a game
      *
      */
-    void GetTopRankersByGroup(const char* gameName,std::vector<std::string>group,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopRankersByGroup(const char* gameName,std::vector<std::string>group, SEL_App42CallFuncND pSelector);
 
     /**
      * Retrieves the last score made by the user in all games
@@ -201,7 +201,7 @@ public:
      *
      */
 
-    void GetLastGameScore(const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetLastGameScore(const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      *
@@ -210,7 +210,7 @@ public:
      * @return
      * @throws App42Exception
      */
-    void GetTopNTargetRankers(const char* gameName,int max,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopNTargetRankers(const char* gameName,int max, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the Top Rankings for the specified game
@@ -223,7 +223,7 @@ public:
      * @return void
      *
      */
-    void GetTopNRankings(const char* gameName,int max,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetTopNRankings(const char* gameName,int max, SEL_App42CallFuncND pSelector);
 
     /**
      * Retrieves the Users having scores in given range
@@ -233,7 +233,7 @@ public:
      * @return void
      * @throws App42Exception
      */
-    void GetUsersWithScoreRange(const char* gameName,double minScore, double maxScore,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetUsersWithScoreRange(const char* gameName,double minScore, double maxScore, SEL_App42CallFuncND pSelector);
     
 };
 

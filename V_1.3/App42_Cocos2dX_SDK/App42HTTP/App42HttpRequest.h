@@ -13,6 +13,7 @@
 #include <vector>
 #include "App42CallBack.h"
 #include <map>
+#include <functional>
 
 namespace App42Network {
     
@@ -20,8 +21,7 @@ namespace App42Network {
     class App42HttpResponse;
     //class App42Response;
     
-    typedef void (App42CallBack:: *SEL_App42Response)(App42HttpClient* client, App42HttpResponse* response);
-    #define app42response_selector(_SELECTOR) (App42Network::SEL_App42Response)(&_SELECTOR)
+	typedef std::function<void(App42HttpClient* client, App42HttpResponse* response)> SEL_App42Response;
     
     /**
      @brief defines the object which users must packed for HttpClient::send(HttpRequest*) method.
@@ -57,7 +57,7 @@ namespace App42Network {
             _requestData.clear();
             _tag.clear();
             _pTarget = NULL;
-            _pSelector = NULL;
+            _pSelector = SEL_App42Response();
             _pUserData = NULL;
         };
         
@@ -188,20 +188,9 @@ namespace App42Network {
         }
 
         
-        inline void setResponseCallback(App42CallBack* pTarget, SEL_App42Response pSelector)
+        inline void setResponseCallback(SEL_App42Response pSelector)
         {
-            _pTarget = pTarget;
             _pSelector = pSelector;
-            
-            if (_pTarget)
-            {
-                //_pTarget->retain();
-            }
-        }
-        /** Get the target of callback selector funtion, mainly used by HttpClient */
-        inline App42CallBack* getTarget()
-        {
-            return _pTarget;
         }
         
         inline SEL_App42Response getSelector()

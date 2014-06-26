@@ -155,16 +155,15 @@ string EmailService::buildcreateMailConfigurationBody(string emailHost, string e
 
 
 
-void EmailService::createMailConfiguration(const char* emailHost, int emailPort,const char* emailId, const char* emailPassword, bool isSSL,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void EmailService::createMailConfiguration(const char* emailHost, int emailPort,const char* emailId, const char* emailPassword, bool isSSL,SEL_App42CallFuncND pSelector)
 {
-    App42EmailResponse *response = new App42EmailResponse(pTarget,pSelector);
+    App42EmailResponse *response = new App42EmailResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(emailHost, "Email Host");
         Util::throwExceptionIfStringNullOrBlank(emailPassword, "Email Password");
         Util::throwExceptionIfStringNullOrBlank(emailId, "Email Id");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -174,9 +173,9 @@ void EmailService::createMailConfiguration(const char* emailHost, int emailPort,
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if ( pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)( response);
         }
         delete e;
         e = NULL;
@@ -216,18 +215,17 @@ void EmailService::createMailConfiguration(const char* emailHost, int emailPort,
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, createMailConfigurationbody.c_str(), response, app42response_selector(App42EmailResponse::onComplete));
+    Util::executePost(encodedUrl, headers, createMailConfigurationbody.c_str(), std::bind(&App42EmailResponse::onComplete,response,std::placeholders::_1,std::placeholders::_2));
     
 }
 
-void EmailService::removeEmailConfiguration(const char* emailId,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void EmailService::removeEmailConfiguration(const char* emailId, SEL_App42CallFuncND pSelector)
 {
-    App42EmailResponse *response = new App42EmailResponse(pTarget,pSelector);
+    App42EmailResponse *response = new App42EmailResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(emailId, "Email Id");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -237,9 +235,9 @@ void EmailService::removeEmailConfiguration(const char* emailId,App42CallBack* p
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if ( pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)( response);
         }
         delete e;
         e = NULL;
@@ -279,17 +277,16 @@ void EmailService::removeEmailConfiguration(const char* emailId,App42CallBack* p
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42EmailResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42EmailResponse::onComplete,response,std::placeholders::_1,std::placeholders::_2));
     
 }
 
-void EmailService::getEmailConfigurations(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void EmailService::getEmailConfigurations( SEL_App42CallFuncND pSelector)
 {
-    App42EmailResponse *response = new App42EmailResponse(pTarget,pSelector);
+    App42EmailResponse *response = new App42EmailResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -299,9 +296,9 @@ void EmailService::getEmailConfigurations(App42CallBack* pTarget, SEL_App42CallF
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)( response);
         }
         delete e;
         e = NULL;
@@ -339,14 +336,14 @@ void EmailService::getEmailConfigurations(App42CallBack* pTarget, SEL_App42CallF
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42EmailResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42EmailResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
 
-void EmailService::sendMail(const char* sendTo, const char* sendSubject, const char* sendMsg,const char* fromEmail, EmailMIME emailMIME,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void EmailService::sendMail(const char* sendTo, const char* sendSubject, const char* sendMsg,const char* fromEmail, EmailMIME emailMIME, SEL_App42CallFuncND pSelector)
 {
-    App42EmailResponse *response = new App42EmailResponse(pTarget,pSelector);
+    App42EmailResponse *response = new App42EmailResponse(pSelector);
     
     try
     {
@@ -354,7 +351,6 @@ void EmailService::sendMail(const char* sendTo, const char* sendSubject, const c
         Util::throwExceptionIfStringNullOrBlank(sendSubject, "Send Subject");
         Util::throwExceptionIfStringNullOrBlank(sendMsg, "Message");
         Util::throwExceptionIfStringNullOrBlank(fromEmail, "From Email");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -364,9 +360,9 @@ void EmailService::sendMail(const char* sendTo, const char* sendSubject, const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -405,6 +401,6 @@ void EmailService::sendMail(const char* sendTo, const char* sendSubject, const c
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, sendMailbody.c_str(), response, app42response_selector(App42EmailResponse::onComplete));
+	Util::executePost(encodedUrl, headers, sendMailbody.c_str(), std::bind(&App42EmailResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
