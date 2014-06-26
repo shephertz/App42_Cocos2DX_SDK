@@ -21,7 +21,7 @@ App42RewardResponse::~App42RewardResponse()
     //games.clear();
 }
 
-void App42RewardResponse::onComplete(void *sender, void *data)
+void App42RewardResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();

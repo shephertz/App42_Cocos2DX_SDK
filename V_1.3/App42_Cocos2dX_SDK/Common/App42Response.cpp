@@ -47,7 +47,7 @@ std::string App42Response::getBody()
 }
 
 
-void App42Response::onComplete(void *sender, void *data)
+void App42Response::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42HttpResponse *response = (App42HttpResponse*)data;
     

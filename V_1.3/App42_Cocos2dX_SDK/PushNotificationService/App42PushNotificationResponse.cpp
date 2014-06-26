@@ -22,7 +22,7 @@ App42PushNotificationResponse::~App42PushNotificationResponse()
     
 }
 
-void App42PushNotificationResponse::onComplete(void *sender, void *data)
+void App42PushNotificationResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();

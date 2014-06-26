@@ -21,7 +21,7 @@ App42UploadResponse::~App42UploadResponse()
     
 }
 
-void App42UploadResponse::onComplete(void *sender, void *data)
+void App42UploadResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();

@@ -111,7 +111,7 @@ App42UserProfile App42UserResponse::buildUserProfile(cJSON* ptrProfile)
     return app42UserProfile;
 }
 
-void App42UserResponse::onComplete(void *sender, void *data)
+void App42UserResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();

@@ -51,7 +51,7 @@ public:
     void setTotalRecords();
     // The JSON body of the HTTP response containing details
     std::string getBody();
-    virtual void onComplete(void *sender, void *data);
+	virtual void onComplete(App42HttpClient *sender, App42HttpResponse *data);
 
     void buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet);
     void buildErrorMessage();

@@ -21,7 +21,7 @@ App42StorageResponse::~App42StorageResponse()
     storages.clear();
 }
 
-void App42StorageResponse::onComplete(void *sender, void *data)
+void App42StorageResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();

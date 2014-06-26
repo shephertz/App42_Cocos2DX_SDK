@@ -21,7 +21,7 @@ App42EmailResponse::~App42EmailResponse()
     
 }
 
-void App42EmailResponse::onComplete(void *sender, void *data)
+void App42EmailResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();

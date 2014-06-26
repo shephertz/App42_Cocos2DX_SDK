@@ -24,7 +24,7 @@ public:
     vector<App42PushNotification> notifications;
     App42PushNotificationResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
 	~App42PushNotificationResponse();
-    void onComplete(void *sender, void *data);
+	void onComplete(App42HttpClient *sender, App42HttpResponse *data);
 private:
     void init();
     
