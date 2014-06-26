@@ -120,7 +120,7 @@ namespace App42Network {
             return nullptr;
         }
         /** Get the size of request data back */
-        inline ssize_t getRequestDataSize()
+        inline size_t getRequestDataSize()
         {
             return _requestData.size();
         }
@@ -140,7 +140,7 @@ namespace App42Network {
             return nullptr;
         }
         /** Get the size of file data back */
-        inline ssize_t getFileDataSize()
+        inline size_t getFileDataSize()
         {
             return _fileData.size();
         }

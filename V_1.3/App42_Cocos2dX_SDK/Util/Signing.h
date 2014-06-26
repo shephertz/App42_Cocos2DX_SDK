@@ -12,7 +12,11 @@
 #include <string.h>
 #include <vector>
 #include "app42base64.h"
+#if _WIN32
+#include <time.h>
+#else
 #include <sys/time.h>
+#endif
 #include <algorithm>
 #include <map>
 #include "HMAC_SHA1.h"
