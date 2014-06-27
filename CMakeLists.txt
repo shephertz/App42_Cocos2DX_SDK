@@ -56,9 +56,9 @@ WkAddCXXFlags("-DCC_ENABLE_CHIPMUNK_INTEGRATION=1")
 #WkLibraryBuild( extensions STATIC "V_1.3/App42_Cocos2dX_SDK/libs/extensions")
 
 WkIncludeDir ( "V_1.3/App42_Cocos2dX_SDK" )
+
 #extra includes because App42 doesnt include headers with path...
-include_directories(
-	"V_1.3/App42_Cocos2dX_SDK/App42HTTP"
+set( App42_INCLUDE_DIRS "V_1.3/App42_Cocos2dX_SDK/App42HTTP"
 	"V_1.3/App42_Cocos2dX_SDK/cJSON"
 	"V_1.3/App42_Cocos2dX_SDK/Common"
 	"V_1.3/App42_Cocos2dX_SDK/Common/Exception"
@@ -70,8 +70,11 @@ include_directories(
 	"V_1.3/App42_Cocos2dX_SDK/StorageService"
 	"V_1.3/App42_Cocos2dX_SDK/UploadService"
 	"V_1.3/App42_Cocos2dX_SDK/UserService"
-	"V_1.3/App42_Cocos2dX_SDK/Util"
+	"V_1.3/App42_Cocos2dX_SDK/Util" 
+	CACHE PATH "Headers Directories"
 )
+include_directories( ${App42_INCLUDE_DIRS} )
+
 WkLibraryBuild( App42SDK STATIC "V_1.3/App42_Cocos2dX_SDK")
 
 #Sample Project
