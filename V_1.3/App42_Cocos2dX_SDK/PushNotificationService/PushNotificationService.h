@@ -16,10 +16,10 @@ using namespace std;
 
 typedef enum DeviceType
 {
-    IOS,
-    ANDROID,
-    WP7,
-    NOKIAX,
+    DT_IOS,
+    DT_ANDROID,
+    DT_WP7,
+    DT_NOKIAX,
 }DeviceType;
 
 class PushNotificationService : public App42Service
