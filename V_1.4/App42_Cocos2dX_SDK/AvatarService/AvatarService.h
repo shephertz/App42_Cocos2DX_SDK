@@ -76,7 +76,7 @@ public:
      * @return App42AvatarResponse Object
      * @throws App42Exception
      */
-    void CreateAvatar(const char* avatarName, const char* userName, const char* filePath, const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void CreateAvatar(const char* avatarName, const char* userName, const char* filePath, const char* description, SEL_App42CallFuncND pSelector);
     
     /**
      *kartik.khamesra@sh
@@ -88,7 +88,7 @@ public:
      * @return
      * @throws App42Exception
      */
-    void CreateAvatar(const char* avatarName, const char* userName, unsigned char* fileData, int fileDataSize, const char* description,FileExtension extension, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void CreateAvatar(const char* avatarName, const char* userName, unsigned char* fileData, int fileDataSize, const char* description,FileExtension extension, SEL_App42CallFuncND pSelector);
     
     /**
      * Import your avatar from Facebook based of given access token.
@@ -105,7 +105,7 @@ public:
      * @return App42AvatarResponse Object
      * @throws App42Exception
      */
-    void CreateAvatarFromFacebook(const char* avatarName, const char* userName, const char* accessToken, const char* description, App42CallBack* pTarget,SEL_App42CallFuncND pSelector);
+    void CreateAvatarFromFacebook(const char* avatarName, const char* userName, const char* accessToken, const char* description, SEL_App42CallFuncND pSelector);
 
     /**
      * Create avatar from any web media using URL
@@ -121,7 +121,7 @@ public:
      * @return App42AvatarResponse Object
      * @throws App42Exception
      */
-    void CreateAvatarFromWebURL(const char* avatarName, const char* userName, const char* webUrl, const char* description, App42CallBack* pTarget,SEL_App42CallFuncND pSelector);
+    void CreateAvatarFromWebURL(const char* avatarName, const char* userName, const char* webUrl, const char* description, SEL_App42CallFuncND pSelector);
     
     /**
      * Get detail description of avatar
@@ -133,7 +133,7 @@ public:
      * @return Avatar Object
      * @throws App42Exception
      */
-    void GetAvatarByName(const char* avatarName, const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector);
+    void GetAvatarByName(const char* avatarName, const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * View all avatars.
@@ -143,7 +143,7 @@ public:
      * @return Array of Avatar Objects
      * @throws App42Exception
      */
-    void GetAllAvatars(const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector);
+    void GetAllAvatars(const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * View the latest avatar uploaded by user.
@@ -154,7 +154,7 @@ public:
      * @return Avatar Object
      * @throws App42Exception
      */
-    void GetCurrentAvatar(const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector);
+    void GetCurrentAvatar(const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * Change your current avatar from existing avatars in app.
@@ -166,7 +166,7 @@ public:
      * @return Avatar Object
      * @throws App42Exception
      */
-    void ChangeCurrentAvatar(const char* avatarName, const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector);
+    void ChangeCurrentAvatar(const char* avatarName, const char* userName, SEL_App42CallFuncND pSelector);
     
 
 };

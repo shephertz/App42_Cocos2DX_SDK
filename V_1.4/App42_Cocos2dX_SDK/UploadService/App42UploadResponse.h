@@ -31,7 +31,7 @@ class App42UploadResponse : public App42Response
 {
 public:
     vector<App42Upload> uploadArray;
-    App42UploadResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42UploadResponse(SEL_App42CallFuncND pSelector);
 	~App42UploadResponse();
     void onComplete(void *sender, void *data);
 private:

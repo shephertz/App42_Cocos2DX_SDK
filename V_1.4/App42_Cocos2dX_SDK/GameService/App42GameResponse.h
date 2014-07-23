@@ -25,7 +25,7 @@ public:
     vector<App42Game> games;
     vector<App42Score> scores;
     
-    App42GameResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42GameResponse(SEL_App42CallFuncND pSelector);
 	~App42GameResponse();
     void onComplete(void *sender, void *data);
 private:

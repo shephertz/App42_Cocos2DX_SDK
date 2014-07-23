@@ -50,7 +50,7 @@ public:
      *
      */
     
-	void AddScore(const char* gameName, const char* userName, double score, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void AddScore(const char* gameName, const char* userName, double score, SEL_App42CallFuncND pSelector);
 	/**
      * Deducts the score from users account for a particular Game
      *
@@ -60,7 +60,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void DeductScore(const char* gameName, const char* userName, double score, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void DeductScore(const char* gameName, const char* userName, double score, SEL_App42CallFuncND pSelector);
 
 };
 #endif /* defined(__App42CPPSDK__ScoreService__) */

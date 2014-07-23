@@ -79,14 +79,13 @@ string BuildCreateGameBody(string gameName, string descrption)
 }
 
 
-void GameService::CreateGame(const char* gameName,const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void GameService::CreateGame(const char* gameName,const char* description, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -96,9 +95,9 @@ void GameService::CreateGame(const char* gameName,const char* description, App42
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -125,17 +124,16 @@ void GameService::CreateGame(const char* gameName,const char* description, App42
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
     
-    Util::executePost(baseUrl, headers, createGamebody.c_str(), response, app42response_selector(App42GameResponse::onComplete));
+	Util::executePost(baseUrl, headers, createGamebody.c_str(), std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void GameService::GetGamebyName(const char* gameName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void GameService::GetGamebyName(const char* gameName, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
 
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -145,9 +143,9 @@ void GameService::GetGamebyName(const char* gameName,App42CallBack* pTarget, SEL
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -173,16 +171,15 @@ void GameService::GetGamebyName(const char* gameName,App42CallBack* pTarget, SEL
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void GameService::GetAllGames(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void GameService::GetAllGames(SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
 
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -192,9 +189,9 @@ void GameService::GetAllGames(App42CallBack* pTarget, SEL_App42CallFuncND pSelec
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -219,18 +216,17 @@ void GameService::GetAllGames(App42CallBack* pTarget, SEL_App42CallFuncND pSelec
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void GameService::GetAllGames(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void GameService::GetAllGames(int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -240,9 +236,9 @@ void GameService::GetAllGames(int max, int offset, App42CallBack* pTarget, SEL_A
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -282,17 +278,16 @@ void GameService::GetAllGames(int max, int offset, App42CallBack* pTarget, SEL_A
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void GameService::GetAllGamesCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void GameService::GetAllGamesCount(SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -302,9 +297,9 @@ void GameService::GetAllGamesCount(App42CallBack* pTarget, SEL_App42CallFuncND p
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -340,6 +335,6 @@ void GameService::GetAllGamesCount(App42CallBack* pTarget, SEL_App42CallFuncND p
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }

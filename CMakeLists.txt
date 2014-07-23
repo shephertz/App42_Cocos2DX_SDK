@@ -55,27 +55,29 @@ WkAddCXXFlags("-DCC_ENABLE_CHIPMUNK_INTEGRATION=1")
 #include_directories("V_1.3/App42_Cocos2dX_SDK/libs/extensions")
 #WkLibraryBuild( extensions STATIC "V_1.3/App42_Cocos2dX_SDK/libs/extensions")
 
-WkIncludeDir ( "V_1.3/App42_Cocos2dX_SDK" )
+WkIncludeDir ( "V_1.4/App42_Cocos2dX_SDK" )
 
 #extra includes because App42 doesnt include headers with path...
-set( App42_INCLUDE_DIRS "V_1.3/App42_Cocos2dX_SDK/App42HTTP"
-	"V_1.3/App42_Cocos2dX_SDK/cJSON"
-	"V_1.3/App42_Cocos2dX_SDK/Common"
-	"V_1.3/App42_Cocos2dX_SDK/Common/Exception"
-	"V_1.3/App42_Cocos2dX_SDK/Crypto"
-	"V_1.3/App42_Cocos2dX_SDK/CustomCodeService"
-	"V_1.3/App42_Cocos2dX_SDK/EmailService"
-	"V_1.3/App42_Cocos2dX_SDK/GameService"
-	"V_1.3/App42_Cocos2dX_SDK/PushNotificationService"
-	"V_1.3/App42_Cocos2dX_SDK/StorageService"
-	"V_1.3/App42_Cocos2dX_SDK/UploadService"
-	"V_1.3/App42_Cocos2dX_SDK/UserService"
-	"V_1.3/App42_Cocos2dX_SDK/Util" 
+set( App42_INCLUDE_DIRS "V_1.4/App42_Cocos2dX_SDK/App42HTTP"
+	"V_1.4/App42_Cocos2dX_SDK/AvatarService"
+	"V_1.4/App42_Cocos2dX_SDK/cJSON"
+	"V_1.4/App42_Cocos2dX_SDK/Common"
+	"V_1.4/App42_Cocos2dX_SDK/Common/Exception"
+	"V_1.4/App42_Cocos2dX_SDK/Crypto"
+	"V_1.4/App42_Cocos2dX_SDK/CustomCodeService"
+	"V_1.4/App42_Cocos2dX_SDK/EmailService"
+	"V_1.4/App42_Cocos2dX_SDK/GameService"
+	"V_1.4/App42_Cocos2dX_SDK/PushNotificationService"
+	"V_1.4/App42_Cocos2dX_SDK/SocialService"
+	"V_1.4/App42_Cocos2dX_SDK/StorageService"
+	"V_1.4/App42_Cocos2dX_SDK/UploadService"
+	"V_1.4/App42_Cocos2dX_SDK/UserService"
+	"V_1.4/App42_Cocos2dX_SDK/Util" 
 	CACHE PATH "Headers Directories"
 )
 include_directories( ${App42_INCLUDE_DIRS} )
 
-WkLibraryBuild( App42SDK STATIC "V_1.3/App42_Cocos2dX_SDK")
+WkLibraryBuild( App42SDK STATIC "V_1.4/App42_Cocos2dX_SDK")
 
 #Sample Project
 #WkExecutableBuild( App42Sample "App42_Cocos2DX_Sample/App42CPPSDK/Classes")
