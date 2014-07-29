@@ -8,6 +8,7 @@
 **Release Date:** 29-07-2014
 
 **Release Version:** 1.5
+
 **The following features have been pushed :**
 
 ```
