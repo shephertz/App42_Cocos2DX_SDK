@@ -30,7 +30,7 @@ public:
     void setName(string _name){name=_name;};
     void setPicture(string _picture){ picture=_picture;};
     void setFriendId(string _friendId){ friendId=_friendId;};
-    void setInstalled(double _installed){ installed=_installed;};
+    void setInstalled(bool _installed){ installed=_installed;};
     
 protected:
     std::string name;
