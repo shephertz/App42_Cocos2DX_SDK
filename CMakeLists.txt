@@ -42,23 +42,11 @@ endif()
 
 WkAddCXXFlags("-DCC_ENABLE_CHIPMUNK_INTEGRATION=1")
 
-#include_directories("V_1.3/App42_Cocos2dX_SDK/libs/chipmunk/include")
-#WkLibraryBuild( chipmunk STATIC "V_1.3/App42_Cocos2dX_SDK/libs/chipmunk/src")
-
-#include_directories("V_1.3/App42_Cocos2dX_SDK/libs/cocos2dx")
-#include_directories("V_1.3/App42_Cocos2dX_SDK/libs/cocos2dx/include")
-#WkLibraryBuild( cocos2dx STATIC "V_1.3/App42_Cocos2dX_SDK/libs/cocos2dx")
-
-#include_directories("V_1.3/App42_Cocos2dX_SDK/libs/CocosDenshion/include")
-#WkLibraryBuild( CocosDenshion STATIC "V_1.3/App42_Cocos2dX_SDK/libs/CocosDenshion")
-
-#include_directories("V_1.3/App42_Cocos2dX_SDK/libs/extensions")
-#WkLibraryBuild( extensions STATIC "V_1.3/App42_Cocos2dX_SDK/libs/extensions")
 
 WkIncludeDir ( "V_1.4/App42_Cocos2dX_SDK" )
 
 #extra includes because App42 doesnt include headers with path...
-set( App42_INCLUDE_DIRS "V_1.4/App42_Cocos2dX_SDK/App42HTTP"
+set( ${PROJECT_NAME}_INCLUDE_DIRS "V_1.4/App42_Cocos2dX_SDK/App42HTTP"
 	"V_1.4/App42_Cocos2dX_SDK/AvatarService"
 	"V_1.4/App42_Cocos2dX_SDK/cJSON"
 	"V_1.4/App42_Cocos2dX_SDK/Common"
@@ -75,7 +63,7 @@ set( App42_INCLUDE_DIRS "V_1.4/App42_Cocos2dX_SDK/App42HTTP"
 	"V_1.4/App42_Cocos2dX_SDK/Util" 
 	CACHE PATH "Headers Directories"
 )
-include_directories( ${App42_INCLUDE_DIRS} )
+include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
 
 WkLibraryBuild( App42SDK STATIC "V_1.4/App42_Cocos2dX_SDK")
 
