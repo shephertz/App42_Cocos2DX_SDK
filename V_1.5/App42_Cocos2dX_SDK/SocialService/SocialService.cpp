@@ -269,9 +269,9 @@ string SocialService::buildLinkUserLinkedInAccountRequest(const char* userName, 
 /*****************************            FACEBOOK RELATED APIS            ****************************/
 /******************************************************************************************************/
 
-void SocialService::LinkUserFacebookAccount(const char *userName, const char *accessToken, const char *appId, const char *appSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::LinkUserFacebookAccount(const char *userName, const char *accessToken, const char *appId, const char *appSecret, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
@@ -279,8 +279,6 @@ void SocialService::LinkUserFacebookAccount(const char *userName, const char *ac
         Util::throwExceptionIfStringNullOrBlank(accessToken, "AccessToken");
         Util::throwExceptionIfStringNullOrBlank(appId, "AppId");
         Util::throwExceptionIfStringNullOrBlank(appSecret, "AppSecret");
-
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -290,9 +288,9 @@ void SocialService::LinkUserFacebookAccount(const char *userName, const char *ac
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -333,19 +331,17 @@ void SocialService::LinkUserFacebookAccount(const char *userName, const char *ac
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::LinkUserFacebookAccount(const char *userName, const char *accessToken, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::LinkUserFacebookAccount(const char *userName, const char *accessToken, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(accessToken, "AccessToken");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -355,9 +351,9 @@ void SocialService::LinkUserFacebookAccount(const char *userName, const char *ac
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -398,19 +394,17 @@ void SocialService::LinkUserFacebookAccount(const char *userName, const char *ac
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::UpdateFacebookStatus(const char *userName, const char *status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::UpdateFacebookStatus(const char *userName, const char *status, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(status, "Status");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -420,9 +414,9 @@ void SocialService::UpdateFacebookStatus(const char *userName, const char *statu
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -463,18 +457,16 @@ void SocialService::UpdateFacebookStatus(const char *userName, const char *statu
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::GetFacebookFriendsFromLinkUser(const char *userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::GetFacebookFriendsFromLinkUser(const char *userName, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -484,9 +476,9 @@ void SocialService::GetFacebookFriendsFromLinkUser(const char *userName, App42Ca
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -527,18 +519,16 @@ void SocialService::GetFacebookFriendsFromLinkUser(const char *userName, App42Ca
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::GetFacebookFriendsFromAccessToken(const char *accessToken, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::GetFacebookFriendsFromAccessToken(const char *accessToken, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(accessToken, "AccessToken");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -548,9 +538,9 @@ void SocialService::GetFacebookFriendsFromAccessToken(const char *accessToken, A
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -591,19 +581,18 @@ void SocialService::GetFacebookFriendsFromAccessToken(const char *accessToken, A
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::FacebookPublishStream(const char *accessToken, const char *fileName, const char *filePath, const char *message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::FacebookPublishStream(const char *accessToken, const char *fileName, const char *filePath, const char *message, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(filePath, "File Path");
         Util::throwExceptionIfStringNullOrBlank(accessToken, "AccessToken");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -613,9 +602,9 @@ void SocialService::FacebookPublishStream(const char *accessToken, const char *f
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -665,7 +654,7 @@ void SocialService::FacebookPublishStream(const char *accessToken, const char *f
         /**
          * Initiating Http call
          */
-        Util::executeMultiPartWithFile("uploadFile",fileName, filePath,postParams, encodedUrl, headers, response, app42response_selector(App42SocialResponse::onComplete));
+        Util::executeMultiPartWithFile("uploadFile",fileName, filePath,postParams, encodedUrl, headers, std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -674,17 +663,15 @@ void SocialService::FacebookPublishStream(const char *accessToken, const char *f
     }
 }
 
-void SocialService::FacebookLinkPost(const char* accessToken, const char* link, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::FacebookLinkPost(const char* accessToken, const char* link, const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(accessToken, "Access Token");
         Util::throwExceptionIfStringNullOrBlank(link, "Link");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -694,9 +681,9 @@ void SocialService::FacebookLinkPost(const char* accessToken, const char* link, 
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -737,20 +724,18 @@ void SocialService::FacebookLinkPost(const char* accessToken, const char* link, 
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::FacebookLinkPostWithCustomThumbnail(const char* accessToken, const char* link, const char* message,const char* pictureUrl, const char* fileName, const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::FacebookLinkPostWithCustomThumbnail(const char* accessToken, const char* link, const char* message,const char* pictureUrl, const char* fileName, const char* description, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(accessToken, "Access Token");
         Util::throwExceptionIfStringNullOrBlank(link, "Link");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -760,9 +745,9 @@ void SocialService::FacebookLinkPostWithCustomThumbnail(const char* accessToken,
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -803,18 +788,16 @@ void SocialService::FacebookLinkPostWithCustomThumbnail(const char* accessToken,
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::GetFacebookProfile(const char* accessToken, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::GetFacebookProfile(const char* accessToken, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(accessToken, "Access Token");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -824,9 +807,9 @@ void SocialService::GetFacebookProfile(const char* accessToken, App42CallBack* p
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -867,18 +850,16 @@ void SocialService::GetFacebookProfile(const char* accessToken, App42CallBack* p
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::GetFacebookProfilesFromIds(vector<string> facebookIds, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::GetFacebookProfilesFromIds(vector<string> facebookIds, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfVectorIsNullOrBlank(facebookIds, "FacebookIds");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -888,9 +869,9 @@ void SocialService::GetFacebookProfilesFromIds(vector<string> facebookIds, App42
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -936,16 +917,16 @@ void SocialService::GetFacebookProfilesFromIds(vector<string> facebookIds, App42
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 /******************************************************************************************************/
 /*****************************             TWITTER RELATED APIS            ****************************/
 /******************************************************************************************************/
 
-void SocialService::LinkUserTwitterAccount(const char* userName, const char* consumerKey, const char*consumerSecret, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::LinkUserTwitterAccount(const char* userName, const char* consumerKey, const char*consumerSecret, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
@@ -954,8 +935,6 @@ void SocialService::LinkUserTwitterAccount(const char* userName, const char* con
         Util::throwExceptionIfStringNullOrBlank(accessTokenSecret, "AccessTokenSecret");
         Util::throwExceptionIfStringNullOrBlank(consumerKey, "ConsumerKey");
         Util::throwExceptionIfStringNullOrBlank(consumerSecret, "ConsumerSecret");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -965,9 +944,9 @@ void SocialService::LinkUserTwitterAccount(const char* userName, const char* con
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1008,20 +987,18 @@ void SocialService::LinkUserTwitterAccount(const char* userName, const char* con
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::LinkUserTwitterAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::LinkUserTwitterAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(accessToken, "AccessToken");
         Util::throwExceptionIfStringNullOrBlank(accessTokenSecret, "AccessTokenSecret");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1031,9 +1008,9 @@ void SocialService::LinkUserTwitterAccount(const char* userName, const char* acc
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1074,19 +1051,17 @@ void SocialService::LinkUserTwitterAccount(const char* userName, const char* acc
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::UpdateTwitterStatus(const char* userName, const char* status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::UpdateTwitterStatus(const char* userName, const char* status, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(status, "Status");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1096,9 +1071,9 @@ void SocialService::UpdateTwitterStatus(const char* userName, const char* status
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1139,7 +1114,7 @@ void SocialService::UpdateTwitterStatus(const char* userName, const char* status
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
@@ -1148,9 +1123,9 @@ void SocialService::UpdateTwitterStatus(const char* userName, const char* status
 /******************************************************************************************************/
 
 
-void SocialService::LinkUserLinkedInAccount(const char* userName, const char* linkedInApiKey, const char* linkedInSecretKey, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::LinkUserLinkedInAccount(const char* userName, const char* linkedInApiKey, const char* linkedInSecretKey, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
@@ -1159,8 +1134,6 @@ void SocialService::LinkUserLinkedInAccount(const char* userName, const char* li
         Util::throwExceptionIfStringNullOrBlank(accessTokenSecret, "AccessTokenSecret");
         Util::throwExceptionIfStringNullOrBlank(linkedInApiKey, "LinkedInApiKey");
         Util::throwExceptionIfStringNullOrBlank(linkedInSecretKey, "LinkedInSecretKey");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1170,9 +1143,9 @@ void SocialService::LinkUserLinkedInAccount(const char* userName, const char* li
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1213,20 +1186,18 @@ void SocialService::LinkUserLinkedInAccount(const char* userName, const char* li
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::LinkUserLinkedInAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::LinkUserLinkedInAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(accessToken, "AccessToken");
         Util::throwExceptionIfStringNullOrBlank(accessTokenSecret, "AccessTokenSecret");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1236,9 +1207,9 @@ void SocialService::LinkUserLinkedInAccount(const char* userName, const char* ac
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1279,19 +1250,17 @@ void SocialService::LinkUserLinkedInAccount(const char* userName, const char* ac
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SocialService::UpdateLinkedInStatus(const char* userName, const char* status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::UpdateLinkedInStatus(const char* userName, const char* status, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(status, "Status");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1301,9 +1270,9 @@ void SocialService::UpdateLinkedInStatus(const char* userName, const char* statu
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1344,20 +1313,18 @@ void SocialService::UpdateLinkedInStatus(const char* userName, const char* statu
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void SocialService::UpdateSocialStatusForAll(const char* userName, const char* status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SocialService::UpdateSocialStatusForAll(const char* userName, const char* status, SEL_App42CallFuncND pSelector)
 {
-    App42SocialResponse *response = new App42SocialResponse(pTarget,pSelector);
+    App42SocialResponse *response = new App42SocialResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(status, "Status");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1367,9 +1334,9 @@ void SocialService::UpdateSocialStatusForAll(const char* userName, const char* s
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1410,6 +1377,6 @@ void SocialService::UpdateSocialStatusForAll(const char* userName, const char* s
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestbody.c_str(), response, app42response_selector(App42SocialResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 

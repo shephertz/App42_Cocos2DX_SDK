@@ -21,7 +21,7 @@ struct App42Avatar;
 class App42AvatarResponse : public App42Response
 {
 public:
-    App42AvatarResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42AvatarResponse(SEL_App42CallFuncND pSelector);
     vector<App42Avatar> avatars;
 	~App42AvatarResponse();
     void onComplete(void *sender, void *data);

@@ -30,13 +30,12 @@ protected:
     int totalRecords;
     std::string _body;
     const char *errorBuffer;
-    App42HttpRequest   *_httpRequest;
-    App42CallBack       *_app42Target;
-    SEL_App42CallFuncND  _app42Selector;
+    App42HttpRequest *_httpRequest;
+    SEL_App42CallFuncND _app42Selector;
     
 public:
     
-    App42Response(App42CallBack *app42Target, SEL_App42CallFuncND app42Selector);
+    App42Response(SEL_App42CallFuncND app42Selector);
     
     virtual ~App42Response();
     

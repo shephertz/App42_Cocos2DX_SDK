@@ -55,7 +55,7 @@ public:
      * @return void
      *
      */
-    void GetSession(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetSession(const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * Create User Session based on the isCreate boolean parameter. If isCreate
@@ -75,7 +75,7 @@ public:
      *         This id has to be used for storing or retrieving attributes.
      *
      */
-    void GetSession(const char* userName, bool isCreate, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetSession(const char* userName, bool isCreate, SEL_App42CallFuncND pSelector);
     
     /**
      * Invalidate a session based on the session id. All the attributes store in
@@ -87,7 +87,7 @@ public:
      * @return void
      *
      */
-    void Invalidate(const char* sessionId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void Invalidate(const char* sessionId, SEL_App42CallFuncND pSelector);
     
     /**
      * Sets attribute in a session whose session id is provided. Attributes are
@@ -103,7 +103,7 @@ public:
      * @return void
      *
      */
-    void SetAttribute(const char* sessionId, const char* attributeName, const char* attributeValue, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void SetAttribute(const char* sessionId, const char* attributeName, const char* attributeValue, SEL_App42CallFuncND pSelector);
     
     /**
      * Gets the attribute value in a session whose session id is provided.
@@ -116,7 +116,7 @@ public:
      * @return void
      *
      */
-    void GetAttribute(const char* sessionId, const char* attributeName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAttribute(const char* sessionId, const char* attributeName, SEL_App42CallFuncND pSelector);
     
     /**
      * Get all the attributes for a given session id
@@ -127,7 +127,7 @@ public:
      * @return void
      *
      */
-    void GetAllAttributes(const char* sessionId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAllAttributes(const char* sessionId, SEL_App42CallFuncND pSelector);
     
     /**
      * Removes the attribute from a session whose session id is provided.
@@ -140,7 +140,7 @@ public:
      * @return App42Response if removed successfully
      *
      */
-    void RemoveAttribute(const char* sessionId, const char* attributeName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void RemoveAttribute(const char* sessionId, const char* attributeName, SEL_App42CallFuncND pSelector);
     
     /**
      * Removes all the attributes for a given session id
@@ -151,7 +151,7 @@ public:
      * @return void
      *
      */
-    void RemoveAllAttributes(const char* sessionId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void RemoveAllAttributes(const char* sessionId, SEL_App42CallFuncND pSelector);
 
 };
 #endif /* defined(__App42Cocos2dX3_0Sample__SessionService__) */

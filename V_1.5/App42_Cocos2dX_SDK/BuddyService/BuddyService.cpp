@@ -176,17 +176,15 @@ string BuddyService::buildSendFriendRequest(const char* userName, const char* bu
     return bodyString;
 }
 
-void BuddyService::SendFriendRequest(const char* userName, const char* buddyName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::SendFriendRequest(const char* userName, const char* buddyName, const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
-
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -196,9 +194,9 @@ void BuddyService::SendFriendRequest(const char* userName, const char* buddyName
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -239,18 +237,16 @@ void BuddyService::SendFriendRequest(const char* userName, const char* buddyName
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42BuddyResponse::onComplete));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::GetFriendRequest(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetFriendRequest(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -260,9 +256,9 @@ void BuddyService::GetFriendRequest(const char* userName, App42CallBack* pTarget
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -302,19 +298,19 @@ void BuddyService::GetFriendRequest(const char* userName, App42CallBack* pTarget
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::AcceptFriendRequest(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::AcceptFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -324,9 +320,9 @@ void BuddyService::AcceptFriendRequest(const char* userName, const char* buddyNa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -367,19 +363,19 @@ void BuddyService::AcceptFriendRequest(const char* userName, const char* buddyNa
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePut(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::RejectFriendRequest(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::RejectFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
 
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -389,9 +385,9 @@ void BuddyService::RejectFriendRequest(const char* userName, const char* buddyNa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -436,19 +432,19 @@ void BuddyService::RejectFriendRequest(const char* userName, const char* buddyNa
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::CreateGroupByUser(const char* userName, const char* groupName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::CreateGroupByUser(const char* userName, const char* groupName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(groupName, "Group Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -458,9 +454,9 @@ void BuddyService::CreateGroupByUser(const char* userName, const char* groupName
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -502,18 +498,18 @@ void BuddyService::CreateGroupByUser(const char* userName, const char* groupName
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::GetAllFriends(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetAllFriends(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -523,9 +519,9 @@ void BuddyService::GetAllFriends(const char* userName, App42CallBack* pTarget, S
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -566,20 +562,20 @@ void BuddyService::GetAllFriends(const char* userName, App42CallBack* pTarget, S
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void BuddyService::AddFriendsToGroup(const char* userName, const char* groupName, vector<string>friends, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::AddFriendsToGroup(const char* userName, const char* groupName, vector<string>friends, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(groupName, "Group Name");
         Util::throwExceptionIfVectorIsNullOrBlank(friends, "Friends");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -589,9 +585,9 @@ void BuddyService::AddFriendsToGroup(const char* userName, const char* groupName
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -634,19 +630,19 @@ void BuddyService::AddFriendsToGroup(const char* userName, const char* groupName
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void BuddyService::GetAllGroups(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetAllGroups(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -656,9 +652,9 @@ void BuddyService::GetAllGroups(const char* userName, App42CallBack* pTarget, SE
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -699,12 +695,12 @@ void BuddyService::GetAllGroups(const char* userName, App42CallBack* pTarget, SE
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::GetAllFriendsInGroup(const char* userName, const char* ownerName, const char* groupName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetAllFriendsInGroup(const char* userName, const char* ownerName, const char* groupName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
@@ -712,7 +708,7 @@ void BuddyService::GetAllFriendsInGroup(const char* userName, const char* ownerN
         Util::throwExceptionIfStringNullOrBlank(groupName, "Group Name");
         Util::throwExceptionIfStringNullOrBlank(ownerName, "Owner Name");
 
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -722,9 +718,9 @@ void BuddyService::GetAllFriendsInGroup(const char* userName, const char* ownerN
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -772,19 +768,19 @@ void BuddyService::GetAllFriendsInGroup(const char* userName, const char* ownerN
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::BlockFriendRequest(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::BlockFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -794,9 +790,9 @@ void BuddyService::BlockFriendRequest(const char* userName, const char* buddyNam
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -841,20 +837,20 @@ void BuddyService::BlockFriendRequest(const char* userName, const char* buddyNam
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void BuddyService::BlockUser(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::BlockUser(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -864,9 +860,9 @@ void BuddyService::BlockUser(const char* userName, const char* buddyName, App42C
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -907,19 +903,19 @@ void BuddyService::BlockUser(const char* userName, const char* buddyName, App42C
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::UnblockUser(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::UnblockUser(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -929,9 +925,9 @@ void BuddyService::UnblockUser(const char* userName, const char* buddyName, App4
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -972,12 +968,12 @@ void BuddyService::UnblockUser(const char* userName, const char* buddyName, App4
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, requestBody.c_str(),response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePut(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::SendMessageToGroup(const char* userName, const char* ownerName, const char* groupName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::SendMessageToGroup(const char* userName, const char* ownerName, const char* groupName, const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
@@ -986,7 +982,7 @@ void BuddyService::SendMessageToGroup(const char* userName, const char* ownerNam
         Util::throwExceptionIfStringNullOrBlank(groupName, "Group Name");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
 
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -996,9 +992,9 @@ void BuddyService::SendMessageToGroup(const char* userName, const char* ownerNam
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1039,12 +1035,12 @@ void BuddyService::SendMessageToGroup(const char* userName, const char* ownerNam
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::SendMessageToFriend(const char* userName, const char* buddyName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::SendMessageToFriend(const char* userName, const char* buddyName, const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
@@ -1052,7 +1048,7 @@ void BuddyService::SendMessageToFriend(const char* userName, const char* buddyNa
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1062,9 +1058,9 @@ void BuddyService::SendMessageToFriend(const char* userName, const char* buddyNa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1105,19 +1101,19 @@ void BuddyService::SendMessageToFriend(const char* userName, const char* buddyNa
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::SendMessageToFriends(const char* userName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::SendMessageToFriends(const char* userName, const char* message, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(message, "Message");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1127,9 +1123,9 @@ void BuddyService::SendMessageToFriends(const char* userName, const char* messag
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1170,18 +1166,18 @@ void BuddyService::SendMessageToFriends(const char* userName, const char* messag
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::GetAllMessages(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetAllMessages(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1191,9 +1187,9 @@ void BuddyService::GetAllMessages(const char* userName, App42CallBack* pTarget, 
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1235,19 +1231,19 @@ void BuddyService::GetAllMessages(const char* userName, App42CallBack* pTarget, 
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::GetAllMessagesFromBuddy(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetAllMessagesFromBuddy(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
 
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1257,9 +1253,9 @@ void BuddyService::GetAllMessagesFromBuddy(const char* userName, const char* bud
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1304,12 +1300,12 @@ void BuddyService::GetAllMessagesFromBuddy(const char* userName, const char* bud
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::GetAllMessagesFromGroup(const char* userName, const char* ownerName, const char* groupName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetAllMessagesFromGroup(const char* userName, const char* ownerName, const char* groupName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
@@ -1317,7 +1313,7 @@ void BuddyService::GetAllMessagesFromGroup(const char* userName, const char* own
         Util::throwExceptionIfStringNullOrBlank(ownerName, "Owner Name");
         Util::throwExceptionIfStringNullOrBlank(groupName, "Group Name");
 
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1327,9 +1323,9 @@ void BuddyService::GetAllMessagesFromGroup(const char* userName, const char* own
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1376,19 +1372,19 @@ void BuddyService::GetAllMessagesFromGroup(const char* userName, const char* own
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::UnFriend(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::UnFriend(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(buddyName, "Buddy Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1398,9 +1394,9 @@ void BuddyService::UnFriend(const char* userName, const char* buddyName, App42Ca
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1445,19 +1441,19 @@ void BuddyService::UnFriend(const char* userName, const char* buddyName, App42Ca
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::DeleteMessageById(const char* userName, const char* messageId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::DeleteMessageById(const char* userName, const char* messageId, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(messageId, "MessageId");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1467,9 +1463,9 @@ void BuddyService::DeleteMessageById(const char* userName, const char* messageId
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1530,19 +1526,19 @@ void BuddyService::DeleteMessageById(const char* userName, const char* messageId
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void BuddyService::DeleteMessageByIds(const char* userName, vector<string> messageIds, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::DeleteMessageByIds(const char* userName, vector<string> messageIds, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfVectorIsNullOrBlank(messageIds, "MessageIds");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1552,9 +1548,9 @@ void BuddyService::DeleteMessageByIds(const char* userName, vector<string> messa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1603,21 +1599,21 @@ void BuddyService::DeleteMessageByIds(const char* userName, vector<string> messa
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
 
-void BuddyService::CheckedInGeoLocation(const char* userName, App42GeoPoint* point, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::CheckedInGeoLocation(const char* userName, App42GeoPoint* point, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfObjectIsNull(point, "Point");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1627,9 +1623,9 @@ void BuddyService::CheckedInGeoLocation(const char* userName, App42GeoPoint* poi
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1673,17 +1669,17 @@ void BuddyService::CheckedInGeoLocation(const char* userName, App42GeoPoint* poi
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
-void BuddyService::GetFriendsByLocation(const char* userName,double latitude, double longitude, double maxDistance,int max, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void BuddyService::GetFriendsByLocation(const char* userName,double latitude, double longitude, double maxDistance,int max, SEL_App42CallFuncND pSelector)
 {
-    App42BuddyResponse *response = new App42BuddyResponse(pTarget,pSelector);
+    App42BuddyResponse *response = new App42BuddyResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
+        
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1693,9 +1689,9 @@ void BuddyService::GetFriendsByLocation(const char* userName,double latitude, do
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1751,5 +1747,5 @@ void BuddyService::GetFriendsByLocation(const char* userName,double latitude, do
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42BuddyResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }

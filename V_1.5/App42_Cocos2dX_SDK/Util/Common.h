@@ -11,6 +11,9 @@
 
 #include "cJSON.h"
 #include "Signing.h"
+
+#include <stdarg.h>
+
 using namespace std;
 
 extern bool isTraceEnabled;

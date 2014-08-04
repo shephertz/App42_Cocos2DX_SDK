@@ -134,16 +134,15 @@ string BuildStorageBody(cJSON *json, string queryJson)
 }
 
 
-void StorageService::InsertJsonDocument(const char* dbName, const char* collectionName, const char* json, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::InsertJsonDocument(const char* dbName, const char* collectionName, const char* json, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(json, "Json String");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -153,9 +152,9 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -199,7 +198,7 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
         /**
          * Initiating Http call
          */
-        Util::executePost(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePost(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
     }
     catch (exception *e)
@@ -208,16 +207,15 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
     }
 }
 
-void StorageService::InsertJsonDocument(const char* dbName, const char* collectionName, App42Object *app42Object, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::InsertJsonDocument(const char* dbName, const char* collectionName, App42Object *app42Object, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfObjectIsNull(app42Object, "App42Object");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -227,9 +225,9 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -273,7 +271,7 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
         /**
          * Initiating Http call
          */
-        Util::executePost(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePost(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -283,14 +281,13 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
 }
 
 
-void StorageService::FindAllCollections(const char* dbName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindAllCollections(const char* dbName, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -300,9 +297,9 @@ void StorageService::FindAllCollections(const char* dbName, App42CallBack* pTarg
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -338,18 +335,17 @@ void StorageService::FindAllCollections(const char* dbName, App42CallBack* pTarg
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StorageService::FindAllDocuments(const char* dbName, const char* collectionName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindAllDocuments(const char* dbName, const char* collectionName, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -359,9 +355,9 @@ void StorageService::FindAllDocuments(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -402,19 +398,18 @@ void StorageService::FindAllDocuments(const char* dbName, const char* collection
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void StorageService::FindAllDocuments(const char* dbName, const char* collectionName,int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindAllDocuments(const char* dbName, const char* collectionName, int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -424,9 +419,9 @@ void StorageService::FindAllDocuments(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -469,20 +464,19 @@ void StorageService::FindAllDocuments(const char* dbName, const char* collection
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
 
-void StorageService::FindAllDocumentsCount(const char* dbName, const char* collectionName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindAllDocumentsCount(const char* dbName, const char* collectionName, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -492,9 +486,9 @@ void StorageService::FindAllDocumentsCount(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -534,20 +528,19 @@ void StorageService::FindAllDocumentsCount(const char* dbName, const char* colle
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void StorageService::FindDocumentById(const char* dbName, const char* collectionName, const char* docId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindDocumentById(const char* dbName, const char* collectionName, const char* docId, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     printf("Docid = %s",docId);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(docId, "Doc ID");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -557,9 +550,9 @@ void StorageService::FindDocumentById(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -602,24 +595,23 @@ void StorageService::FindDocumentById(const char* dbName, const char* collection
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void StorageService::FindDocumentByQuery(const char* dbName, const char* collectionName, Query *query, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindDocumentByQuery(const char* dbName, const char* collectionName, Query *query, SEL_App42CallFuncND pSelector)
 {
-    FindDocumentsByQuery(dbName, collectionName, query, pTarget, pSelector);
+    FindDocumentsByQuery(dbName, collectionName, query, pSelector);
 }
 
-void StorageService::FindDocumentsByQuery(const char* dbName, const char* collectionName, Query *query, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindDocumentsByQuery(const char* dbName, const char* collectionName, Query *query, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -629,9 +621,9 @@ void StorageService::FindDocumentsByQuery(const char* dbName, const char* collec
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -681,19 +673,18 @@ void StorageService::FindDocumentsByQuery(const char* dbName, const char* collec
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void StorageService::FindDocumentsByQueryWithPaging(const char* dbName, const char* collectionName, Query *query, int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindDocumentsByQueryWithPaging(const char* dbName, const char* collectionName, Query *query, int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
     }
@@ -704,9 +695,9 @@ void StorageService::FindDocumentsByQueryWithPaging(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -759,20 +750,19 @@ void StorageService::FindDocumentsByQueryWithPaging(const char* dbName, const ch
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
 
-void StorageService::FindDocsWithQueryPagingOrderBy(const char* dbName, const char* collectionName, Query *query, int max, int offset,const char* orderByKey,const char* orderByType, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindDocsWithQueryPagingOrderBy(const char* dbName, const char* collectionName, Query *query, int max, int offset, const char* orderByKey, const char* orderByType, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -782,9 +772,9 @@ void StorageService::FindDocsWithQueryPagingOrderBy(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -846,13 +836,13 @@ void StorageService::FindDocsWithQueryPagingOrderBy(const char* dbName, const ch
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void StorageService::FindDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key,const char* value, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::FindDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key, const char* value, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -860,7 +850,6 @@ void StorageService::FindDocumentByKeyValue(const char* dbName, const char* coll
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(key, "Key");
         Util::throwExceptionIfStringNullOrBlank(value, "Value");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -870,9 +859,9 @@ void StorageService::FindDocumentByKeyValue(const char* dbName, const char* coll
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -918,14 +907,14 @@ void StorageService::FindDocumentByKeyValue(const char* dbName, const char* coll
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeGet(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
 
-void StorageService::UpdateDocumentByDocId(const char* dbName, const char* collectionName, const char* docId,const char* json, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::UpdateDocumentByDocId(const char* dbName, const char* collectionName, const char* docId, const char* json, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -933,7 +922,6 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(docId, "Doc ID");
         Util::throwExceptionIfStringNullOrBlank(json, "Json String");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -943,9 +931,9 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -989,13 +977,13 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void StorageService::UpdateDocumentByDocId(const char* dbName, const char* collectionName, const char* docId,App42Object *app42Object, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::UpdateDocumentByDocId(const char* dbName, const char* collectionName, const char* docId, App42Object *app42Object, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -1003,7 +991,6 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(docId, "Doc ID");
         Util::throwExceptionIfObjectIsNull(app42Object, "App42Object");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1013,9 +1000,9 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1059,12 +1046,12 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key,const char* value,const char* json, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key, const char* value, const char* json, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -1073,7 +1060,6 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
         Util::throwExceptionIfStringNullOrBlank(key, "Key");
         Util::throwExceptionIfStringNullOrBlank(value, "Value");
         Util::throwExceptionIfStringNullOrBlank(json, "Json String");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1083,9 +1069,9 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1133,12 +1119,12 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key,const char* value,App42Object *app42Object, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key, const char* value, App42Object *app42Object, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -1147,7 +1133,6 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
         Util::throwExceptionIfStringNullOrBlank(key, "Key");
         Util::throwExceptionIfStringNullOrBlank(value, "Value");
         Util::throwExceptionIfObjectIsNull(app42Object, "App42Object");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1157,9 +1142,9 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1207,13 +1192,13 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key,const char* value,const char* json, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key, const char* value, const char* json, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -1222,7 +1207,6 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
         Util::throwExceptionIfStringNullOrBlank(key, "Key");
         Util::throwExceptionIfStringNullOrBlank(value, "Value");
         Util::throwExceptionIfStringNullOrBlank(json, "Json String");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1232,9 +1216,9 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1280,12 +1264,12 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key,const char* value,App42Object *app42Object, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const char* collectionName, const char* key, const char* value, App42Object *app42Object, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -1294,7 +1278,6 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
         Util::throwExceptionIfStringNullOrBlank(key, "Key");
         Util::throwExceptionIfStringNullOrBlank(value, "Value");
         Util::throwExceptionIfObjectIsNull(app42Object, "App42Object");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1304,9 +1287,9 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1353,21 +1336,20 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
 
-void StorageService::DeleteDocumentsById(const char* dbName, const char* collectionName, const char* docId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::DeleteDocumentsById(const char* dbName, const char* collectionName, const char* docId, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(docId, "Doc ID");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1377,9 +1359,9 @@ void StorageService::DeleteDocumentsById(const char* dbName, const char* collect
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1422,13 +1404,13 @@ void StorageService::DeleteDocumentsById(const char* dbName, const char* collect
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeDelete(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void StorageService::DeleteDocumentsByKeyValue(const char* dbName, const char* collectionName, const char* key, const char* value, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::DeleteDocumentsByKeyValue(const char* dbName, const char* collectionName, const char* key, const char* value, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
@@ -1436,7 +1418,6 @@ void StorageService::DeleteDocumentsByKeyValue(const char* dbName, const char* c
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(key, "Key");
         Util::throwExceptionIfStringNullOrBlank(value, "Value");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1446,9 +1427,9 @@ void StorageService::DeleteDocumentsByKeyValue(const char* dbName, const char* c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1508,19 +1489,18 @@ void StorageService::DeleteDocumentsByKeyValue(const char* dbName, const char* c
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeDelete(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void StorageService::DeleteAllDocuments(const char* dbName, const char* collectionName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::DeleteAllDocuments(const char* dbName, const char* collectionName, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1530,9 +1510,9 @@ void StorageService::DeleteAllDocuments(const char* dbName, const char* collecti
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1572,20 +1552,19 @@ void StorageService::DeleteAllDocuments(const char* dbName, const char* collecti
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl,headers, response, app42response_selector(App42StorageResponse::onComplete));
+    Util::executeDelete(encodedUrl,headers, std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionName, const char* docId,const char* json, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionName, const char* docId, const char* json, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(json, "Json String");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1595,9 +1574,9 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1643,7 +1622,7 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1652,16 +1631,15 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
     }
 }
 
-void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionName, const char* docId,App42Object *app42Object, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionName, const char* docId, App42Object *app42Object, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfObjectIsNull(app42Object, "App42Object");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1671,9 +1649,9 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1718,7 +1696,7 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1727,16 +1705,15 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
     }
 }
 
-void StorageService::UpdateDocumentByQuery(const char* dbName, const char* collectionName, Query *query,const char* json, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::UpdateDocumentByQuery(const char* dbName, const char* collectionName, Query *query, const char* json, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(json, "Json String");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1746,9 +1723,9 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1791,7 +1768,7 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1800,16 +1777,15 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
     }
 }
 
-void StorageService::UpdateDocumentByQuery(const char* dbName, const char* collectionName, Query *query, App42Object *app42Object, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void StorageService::UpdateDocumentByQuery(const char* dbName, const char* collectionName, Query *query, App42Object *app42Object, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfObjectIsNull(app42Object, "App42Object");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1819,9 +1795,9 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1864,7 +1840,7 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1874,18 +1850,15 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
 }
 
 void StorageService::GrantAccessOnDoc(const char* dbName, const char* collectionName,
-                      const char* docId, vector<ACL> aclList, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+                      const char* docId, vector<ACL> aclList, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(docId, "DocId");
-        //Util::throwExceptionIfVectorIsNullOrBlank(aclList, "aclList");
-
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1895,9 +1868,9 @@ void StorageService::GrantAccessOnDoc(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1945,7 +1918,7 @@ void StorageService::GrantAccessOnDoc(const char* dbName, const char* collection
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1955,18 +1928,15 @@ void StorageService::GrantAccessOnDoc(const char* dbName, const char* collection
 }
 
 void StorageService::RevokeAccessOnDoc(const char* dbName, const char* collectionName,
-                       const char* docId, vector<ACL> aclList, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+                       const char* docId, vector<ACL> aclList, SEL_App42CallFuncND pSelector)
 {
-    App42StorageResponse *response = new App42StorageResponse(pTarget,pSelector);
+    App42StorageResponse *response = new App42StorageResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(dbName, "Database Name");
         Util::throwExceptionIfStringNullOrBlank(collectionName, "Collection Name");
         Util::throwExceptionIfStringNullOrBlank(docId, "DocId");
-        //Util::throwExceptionIfVectorIsNullOrBlank(aclList, "aclList");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1976,9 +1946,9 @@ void StorageService::RevokeAccessOnDoc(const char* dbName, const char* collectio
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector);
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -2026,7 +1996,7 @@ void StorageService::RevokeAccessOnDoc(const char* dbName, const char* collectio
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42StorageResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42StorageResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)

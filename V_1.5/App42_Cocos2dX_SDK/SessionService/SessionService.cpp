@@ -126,15 +126,13 @@ string SessionService::buildSetAttributeRequest(const char* sessionId,const char
 }
 
 
-void SessionService::GetSession(const char* userName,App42CallBack* pTarget,SEL_App42CallFuncND pSelector)
+void SessionService::GetSession(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -144,9 +142,9 @@ void SessionService::GetSession(const char* userName,App42CallBack* pTarget,SEL_
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -187,18 +185,16 @@ void SessionService::GetSession(const char* userName,App42CallBack* pTarget,SEL_
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SessionService::GetSession(const char* userName, bool isCreate, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SessionService::GetSession(const char* userName, bool isCreate, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -208,9 +204,9 @@ void SessionService::GetSession(const char* userName, bool isCreate, App42CallBa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -259,19 +255,17 @@ void SessionService::GetSession(const char* userName, bool isCreate, App42CallBa
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void SessionService::Invalidate(const char* sessionId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SessionService::Invalidate(const char* sessionId, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(sessionId, "SessionId");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -281,9 +275,9 @@ void SessionService::Invalidate(const char* sessionId, App42CallBack* pTarget, S
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -324,21 +318,19 @@ void SessionService::Invalidate(const char* sessionId, App42CallBack* pTarget, S
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executePut(encodedUrl, headers, requestBody.c_str(), std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SessionService::SetAttribute(const char* sessionId, const char* attributeName, const char* attributeValue, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SessionService::SetAttribute(const char* sessionId, const char* attributeName, const char* attributeValue, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(sessionId, "SessionId");
         Util::throwExceptionIfStringNullOrBlank(attributeName, "AttributeName");
         Util::throwExceptionIfStringNullOrBlank(attributeValue, "AttributeValue");
-
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+		Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
@@ -347,9 +339,9 @@ void SessionService::SetAttribute(const char* sessionId, const char* attributeNa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -393,20 +385,18 @@ void SessionService::SetAttribute(const char* sessionId, const char* attributeNa
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void SessionService::GetAttribute(const char* sessionId, const char* attributeName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SessionService::GetAttribute(const char* sessionId, const char* attributeName, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(sessionId, "SessionId");
         Util::throwExceptionIfStringNullOrBlank(attributeName, "AttributeName");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -416,9 +406,9 @@ void SessionService::GetAttribute(const char* sessionId, const char* attributeNa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -463,19 +453,17 @@ void SessionService::GetAttribute(const char* sessionId, const char* attributeNa
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void SessionService::GetAllAttributes (const char* sessionId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SessionService::GetAllAttributes (const char* sessionId, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(sessionId, "SessionId");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -485,9 +473,9 @@ void SessionService::GetAllAttributes (const char* sessionId, App42CallBack* pTa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -529,19 +517,17 @@ void SessionService::GetAllAttributes (const char* sessionId, App42CallBack* pTa
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void SessionService::RemoveAttribute(const char* sessionId, const char* attributeName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SessionService::RemoveAttribute(const char* sessionId, const char* attributeName, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(sessionId, "SessionId");
         Util::throwExceptionIfStringNullOrBlank(attributeName, "AttributeName");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -551,9 +537,9 @@ void SessionService::RemoveAttribute(const char* sessionId, const char* attribut
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -598,19 +584,17 @@ void SessionService::RemoveAttribute(const char* sessionId, const char* attribut
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void SessionService::RemoveAllAttributes(const char* sessionId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void SessionService::RemoveAllAttributes(const char* sessionId, SEL_App42CallFuncND pSelector)
 {
-    App42SessionResponse *response = new App42SessionResponse(pTarget,pSelector);
+    App42SessionResponse *response = new App42SessionResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(sessionId, "SessionId");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -620,9 +604,9 @@ void SessionService::RemoveAllAttributes(const char* sessionId, App42CallBack* p
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -664,7 +648,7 @@ void SessionService::RemoveAllAttributes(const char* sessionId, App42CallBack* p
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, response, app42response_selector(App42SessionResponse::onComplete));
+    Util::executeDelete(encodedUrl, headers, std::bind(&App42SessionResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 

@@ -9,9 +9,8 @@
 #include "App42Response.h"
 #include "Common.h"
 
-App42Response::App42Response(App42CallBack *app42Target, SEL_App42CallFuncND app42Selector)
+App42Response::App42Response(SEL_App42CallFuncND app42Selector)
 {
-    _app42Target = app42Target;
     _app42Selector = app42Selector;
     appErrorCode = 0;
     httpErrorCode = 0;

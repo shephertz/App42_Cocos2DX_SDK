@@ -11,8 +11,8 @@
 #include "ACL.h"
 
 
-App42UserResponse::App42UserResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
-:App42Response(pTarget,pSelector)
+App42UserResponse::App42UserResponse(SEL_App42CallFuncND pSelector)
+:App42Response(pSelector)
 {
     
 }
@@ -146,9 +146,9 @@ void App42UserResponse::onComplete(void *sender, void *data)
     App42Response::onComplete(sender, data);
     init();
     
-    if (_app42Target && _app42Selector)
+    if (_app42Selector)
     {
-        (_app42Target->*_app42Selector)((App42CallBack *)_app42Target, this);
+        _app42Selector(this);
     }
 }
 

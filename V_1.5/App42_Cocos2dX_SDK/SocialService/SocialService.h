@@ -22,7 +22,7 @@ private:
     SocialService();
     static SocialService* _instance;
     string buildLinkFacebookAccountRequest(const char* userName, const char* accessToken, const char* appId, const char* appSecret, const char* status);
-    string buildFacebookLinkPostRequest(const char* accessToken, const char* link, const char* message,const char* pictureUrl="",const char* fileName="",const char* description="");
+    string buildFacebookLinkPostRequest(const char* accessToken, const char* link, const char* message, const char* pictureUrl="", const char* fileName="", const char* description="");
     string buildLinkTwitterAccountRequest(const char* userName, const char* consumerKey, const char*consumerSecret, const char* accessToken, const char* accessTokenSecret);
     string buildLinkUserLinkedInAccountRequest(const char* userName, const char* linkedInApiKey, const char*linkedInSecretKey, const char* accessToken, const char* accessTokenSecret);
 public:
@@ -68,7 +68,7 @@ public:
      * @returns The App42SocialResponse object
      *
      */
-    void LinkUserFacebookAccount(const char *userName, const char *accessToken, const char *appId, const char *appSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void LinkUserFacebookAccount(const char *userName, const char *accessToken, const char *appId, const char *appSecret, SEL_App42CallFuncND pSelector);
     
     /**
      * Links the User Facebook access credentials to the App User account.
@@ -82,7 +82,7 @@ public:
      * @returns The App42SocialResponse object
      *
      */
-    void LinkUserFacebookAccount(const char *userName, const char *accessToken, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void LinkUserFacebookAccount(const char *userName, const char *accessToken, SEL_App42CallFuncND pSelector);
     
     /**
      * Updates the Facebook status of the specified user.
@@ -95,7 +95,7 @@ public:
      * @returns The App42SocialResponse object
      *
      */
-    void UpdateFacebookStatus(const char *userName, const char *status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void UpdateFacebookStatus(const char *userName, const char *status, SEL_App42CallFuncND pSelector);
     
     /**
      * This function returns a list of facebook friends of the specified user by
@@ -107,7 +107,7 @@ public:
      * @return App42SocialResponse Object
      * @throws App42Exception
      */
-    void GetFacebookFriendsFromLinkUser(const char *userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetFacebookFriendsFromLinkUser(const char *userName, SEL_App42CallFuncND pSelector);
     
     /**
      * This function returns a list of facebook friends of the specified user
@@ -119,7 +119,7 @@ public:
      * @return App42SocialResponse Object
      * @throws App42Exception
      */
-    void GetFacebookFriendsFromAccessToken(const char *accessToken, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetFacebookFriendsFromAccessToken(const char *accessToken, SEL_App42CallFuncND pSelector);
     
     /**
      *
@@ -137,7 +137,7 @@ public:
      * @return App42SocialResponse Object
      * @throws App42Exception
      */
-    void FacebookPublishStream(const char *accessToken, const char *fileName, const char *filePath, const char *message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void FacebookPublishStream(const char *accessToken, const char *fileName, const char *filePath, const char *message, SEL_App42CallFuncND pSelector);
     
     /**
      *
@@ -153,7 +153,7 @@ public:
      * @return App42SocialResponse Object
      * @throws App42Exception
      */
-    void FacebookLinkPost(const char* accessToken, const char* link, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void FacebookLinkPost(const char* accessToken, const char* link, const char* message, SEL_App42CallFuncND pSelector);
     
     /**
      *
@@ -176,7 +176,7 @@ public:
      * @return App42SocialResponse Object
      * @throws App42Exception
      */
-    void FacebookLinkPostWithCustomThumbnail(const char* accessToken, const char* link, const char* message,const char* pictureUrl, const char* fileName, const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void FacebookLinkPostWithCustomThumbnail(const char* accessToken, const char* link, const char* message, const char* pictureUrl, const char* fileName, const char* description, SEL_App42CallFuncND pSelector);
     
     /**
      * Fetch the profile info like profile pic ,facebookID and user name based
@@ -188,7 +188,7 @@ public:
      * @return App42SocialResponse Object
      * @throws App42Exception
      */
-    void GetFacebookProfile(const char* accessToken, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetFacebookProfile(const char* accessToken, SEL_App42CallFuncND pSelector);
     
     /**
      * Get the facebook profile info for the gives IDs
@@ -199,7 +199,7 @@ public:
      * @return App42SocialResponse object
      * @throws App42Exception
      */
-    void GetFacebookProfilesFromIds(vector<string> facebookIds, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetFacebookProfilesFromIds(vector<string> facebookIds, SEL_App42CallFuncND pSelector);
     
     /******************************************************************************************************/
     /*****************************             TWITTER RELATED APIS            ****************************/
@@ -223,7 +223,7 @@ public:
      *
      * @returns The App42SocialResponse object
      */
-    void LinkUserTwitterAccount(const char* userName, const char* consumerKey, const char*consumerSecret, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void LinkUserTwitterAccount(const char* userName, const char* consumerKey, const char*consumerSecret, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector);
 
     /**
      * Links the User Twitter access credentials to the App User account.
@@ -240,7 +240,7 @@ public:
      * @returns The App42SocialResponse object
      *
      */
-    void LinkUserTwitterAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void LinkUserTwitterAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector);
     
     /**
      * Updates the Twitter status of the specified user.
@@ -252,7 +252,7 @@ public:
      *
      * @returns The App42SocialResponse object
      */
-    void UpdateTwitterStatus(const char* userName, const char* status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void UpdateTwitterStatus(const char* userName, const char* status, SEL_App42CallFuncND pSelector);
     
     /******************************************************************************************************/
     /*****************************            LINKEDIN RELATED APIS            ****************************/
@@ -277,7 +277,7 @@ public:
      * @returns The App42SocialResponse object
      *
      */
-    void LinkUserLinkedInAccount(const char* userName, const char* linkedInApiKey, const char* linkedInSecretKey, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void LinkUserLinkedInAccount(const char* userName, const char* linkedInApiKey, const char* linkedInSecretKey, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector);
     
     /**
      * Links the User LinkedIn access credentials to the App User account.
@@ -294,7 +294,7 @@ public:
      * @returns The Social object
      *
      */
-    void LinkUserLinkedInAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void LinkUserLinkedInAccount(const char* userName, const char* accessToken, const char* accessTokenSecret, SEL_App42CallFuncND pSelector);
     
     /**
      * Updates the LinkedIn status of the specified user.
@@ -307,7 +307,7 @@ public:
      * @returns The Social object
      *
      */
-    void UpdateLinkedInStatus(const char* userName, const char* status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void UpdateLinkedInStatus(const char* userName, const char* status, SEL_App42CallFuncND pSelector);
     /**
      * Updates the status for all linked social accounts of the specified user.
      *
@@ -319,7 +319,7 @@ public:
      * @returns The Social object
      *
      */
-    void UpdateSocialStatusForAll(const char* userName, const char* status, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void UpdateSocialStatusForAll(const char* userName, const char* status, SEL_App42CallFuncND pSelector);
 
 };
 #endif /* defined(__App42Cocos2dX3_0Sample__SocialService__) */

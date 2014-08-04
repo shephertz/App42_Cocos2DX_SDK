@@ -60,7 +60,7 @@ public:
      * @return - void
      * @throws App42Exception
      */
-    void SendFriendRequest(const char* userName, const char* buddyName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void SendFriendRequest(const char* userName, const char* buddyName, const char* message, SEL_App42CallFuncND pSelector);
     
     /**
      * Fetch all the friend request for the user.
@@ -70,7 +70,7 @@ public:
      * @return void
      * @throws App42Exception
      */
-    void GetFriendRequest(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetFriendRequest(const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * Accept the friend request of the user.
@@ -82,7 +82,7 @@ public:
      * @return - void
      * @throws App42Exception
      */
-    void AcceptFriendRequest(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void AcceptFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector);
     
     /**
      * Reject the friend request of the user
@@ -94,7 +94,7 @@ public:
      * @return void
      * @throws App42Exception
      */
-    void RejectFriendRequest(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void RejectFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector);
     
     /**
      * Creates group for the user
@@ -105,7 +105,7 @@ public:
      * @return void
      * @throws App42Exception
      */
-    void CreateGroupByUser(const char* userName, const char* groupName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void CreateGroupByUser(const char* userName, const char* groupName, SEL_App42CallFuncND pSelector);
 
     /**
      * Fetches all friends of a user
@@ -114,7 +114,7 @@ public:
      * @return void
      * @throws App42Exception
      */
-    void GetAllFriends(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAllFriends(const char* userName, SEL_App42CallFuncND pSelector);
 
     /**
      *
@@ -127,7 +127,7 @@ public:
      * @return Buddy object
      * @throws App42Exception
      */
-    void AddFriendsToGroup(const char* userName, const char* groupName, vector<string>friends, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void AddFriendsToGroup(const char* userName, const char* groupName, vector<string>friends, SEL_App42CallFuncND pSelector);
    
     /**
 	 *
@@ -138,7 +138,7 @@ public:
 	 * @return void
 	 * @throws App42Exception
 	 */
-	void CheckedInGeoLocation(const char* userName, App42GeoPoint* point, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void CheckedInGeoLocation(const char* userName, App42GeoPoint* point, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -150,7 +150,7 @@ public:
 	 * @return
 	 * @throws App42Exception
 	 */
-	void GetFriendsByLocation(const char* userName,double latitude, double longitude, double maxDistance,int max, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetFriendsByLocation(const char* userName, double latitude, double longitude, double maxDistance,int max, SEL_App42CallFuncND pSelector);
     
     
     /**
@@ -161,7 +161,7 @@ public:
      * @return Buddy object
      * @throws App42Exception
      */
-    void GetAllGroups(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAllGroups(const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
      * Get All friends in specific group
@@ -175,7 +175,7 @@ public:
      * @return void
      * @throws App42Exception
      */
-    void GetAllFriendsInGroup(const char* userName, const char* ownerName, const char* groupName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void GetAllFriendsInGroup(const char* userName, const char* ownerName, const char* groupName, SEL_App42CallFuncND pSelector);
     
     /**
      *
@@ -186,7 +186,7 @@ public:
      * @return void
      * @throws App42Exception
      */
-    void BlockFriendRequest(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void BlockFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector);
     
     /**
 	 * Never get any request by this user
@@ -198,7 +198,7 @@ public:
 	 * @return void
 	 * @throws App42Exception
 	 */
-	void BlockUser(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void BlockUser(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector);
     
     /**
 	 * Unblock User
@@ -210,7 +210,7 @@ public:
 	 * @return void
 	 * @throws App42Exception
 	 */
-	void UnblockUser(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void UnblockUser(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector);
     
     /**
 	 * Send the message to the group.
@@ -227,7 +227,7 @@ public:
 	 * @return - void
 	 * @throws App42Exception
 	 */
-	void SendMessageToGroup(const char* userName, const char* ownerName, const char* groupName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void SendMessageToGroup(const char* userName, const char* ownerName, const char* groupName, const char* message, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -239,7 +239,7 @@ public:
 	 * @return void
 	 * @throws App42Exception
 	 */
-	void SendMessageToFriend(const char* userName, const char* buddyName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void SendMessageToFriend(const char* userName, const char* buddyName, const char* message, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -250,7 +250,7 @@ public:
 	 * @return void
 	 * @throws App42Exception
 	 */
-	void SendMessageToFriends(const char* userName, const char* message, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void SendMessageToFriends(const char* userName, const char* message, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -259,7 +259,7 @@ public:
 	 * @return Buddy object
 	 * @throws App42Exception
 	 */
-	void GetAllMessages(const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllMessages(const char* userName, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -271,7 +271,7 @@ public:
 	 * @throws App42Exception
 	 */
     
-	void GetAllMessagesFromBuddy(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllMessagesFromBuddy(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -285,7 +285,7 @@ public:
 	 * @return Buddy object
 	 * @throws App42Exception
 	 */
-	void GetAllMessagesFromGroup(const char* userName, const char* ownerName, const char* groupName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllMessagesFromGroup(const char* userName, const char* ownerName, const char* groupName, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -294,7 +294,7 @@ public:
 	 * @return
 	 * @throws App42Exception
 	 */
-	void UnFriend(const char* userName, const char* buddyName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void UnFriend(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -303,7 +303,7 @@ public:
 	 * @return
 	 * @throws App42Exception
 	 */
-	void DeleteMessageById(const char* userName, const char* messageId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void DeleteMessageById(const char* userName, const char* messageId, SEL_App42CallFuncND pSelector);
     
     /**
 	 *
@@ -313,6 +313,6 @@ public:
 	 * @throws App42Exception
 	 */
 	
-	void DeleteMessageByIds(const char* userName, vector<string> messageIds, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void DeleteMessageByIds(const char* userName, vector<string> messageIds, SEL_App42CallFuncND pSelector);
 };
 #endif /* defined(__App42Cocos2dX3_0Sample__BuddyService__) */

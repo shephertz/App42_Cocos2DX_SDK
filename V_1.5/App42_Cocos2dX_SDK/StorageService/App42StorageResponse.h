@@ -22,7 +22,7 @@ class App42StorageResponse : public App42Response
 {
 public:
     vector<App42Storage> storages;
-    App42StorageResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42StorageResponse(SEL_App42CallFuncND pSelector);
 	~App42StorageResponse();
     void onComplete(void *sender, void *data);
 private:

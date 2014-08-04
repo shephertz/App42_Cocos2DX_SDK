@@ -38,7 +38,7 @@ typedef struct App42Attribute
 class App42SessionResponse : public App42Response
 {
 public:
-    App42SessionResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42SessionResponse(SEL_App42CallFuncND pSelector);
     App42Session app42Session;
 	~App42SessionResponse();
     void onComplete(void *sender, void *data);

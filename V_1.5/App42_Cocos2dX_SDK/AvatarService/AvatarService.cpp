@@ -104,9 +104,9 @@ string AvatarService::buildCreateAvatarFromFacebookRequest(const char* userName,
 }
 
 
-void AvatarService::CreateAvatar(const char* name, const char* userName, const char* filePath, const char* description,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void AvatarService::CreateAvatar(const char* name, const char* userName, const char* filePath, const char* description, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
@@ -114,8 +114,6 @@ void AvatarService::CreateAvatar(const char* name, const char* userName, const c
         Util::throwExceptionIfStringNullOrBlank(name, "Avatar Name");
         Util::throwExceptionIfStringNullOrBlank(filePath, "File Path");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -125,9 +123,9 @@ void AvatarService::CreateAvatar(const char* name, const char* userName, const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -179,12 +177,12 @@ void AvatarService::CreateAvatar(const char* name, const char* userName, const c
      * Initiating Http call
      */
     string fileName = Util::LastPathCompenent(filePath);
-    Util::executeMultiPartWithFile("createAvatar",fileName, filePath,postParams, encodedUrl, headers, response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executeMultiPartWithFile("createAvatar", fileName, filePath, postParams, encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void AvatarService::CreateAvatar(const char* avatarName, const char* userName, unsigned char* fileData, int fileDataSize, const char* description,FileExtension extension, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void AvatarService::CreateAvatar(const char* avatarName, const char* userName, unsigned char* fileData, int fileDataSize, const char* description, FileExtension extension, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
@@ -196,7 +194,6 @@ void AvatarService::CreateAvatar(const char* avatarName, const char* userName, u
 			throw new App42Exception("File Data can not be empty or null ",500,1500);
 		}
         
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -206,9 +203,9 @@ void AvatarService::CreateAvatar(const char* avatarName, const char* userName, u
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -263,13 +260,13 @@ void AvatarService::CreateAvatar(const char* avatarName, const char* userName, u
     fileName.append(".");
     fileName.append(getFileExtension(extension));
     
-    Util::executeMultiPartWithFileData("createAvatar", fileName.c_str(), fileData, fileDataSize, postParams, encodedUrl, headers, response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executeMultiPartWithFileData("createAvatar", fileName.c_str(), fileData, fileDataSize, postParams, encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void AvatarService::CreateAvatarFromFacebook(const char* avatarName, const char* userName, const char* accessToken, const char* description, App42CallBack* pTarget,SEL_App42CallFuncND pSelector)
+void AvatarService::CreateAvatarFromFacebook(const char* avatarName, const char* userName, const char* accessToken, const char* description, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
@@ -277,8 +274,6 @@ void AvatarService::CreateAvatarFromFacebook(const char* avatarName, const char*
         Util::throwExceptionIfStringNullOrBlank(avatarName, "Avatar Name");
         Util::throwExceptionIfStringNullOrBlank(accessToken, "Access Token");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -288,9 +283,9 @@ void AvatarService::CreateAvatarFromFacebook(const char* avatarName, const char*
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -332,12 +327,12 @@ void AvatarService::CreateAvatarFromFacebook(const char* avatarName, const char*
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void AvatarService::CreateAvatarFromWebURL(const char* avatarName, const char* userName, const char* webUrl, const char* description, App42CallBack* pTarget,SEL_App42CallFuncND pSelector)
+void AvatarService::CreateAvatarFromWebURL(const char* avatarName, const char* userName, const char* webUrl, const char* description, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
@@ -345,8 +340,6 @@ void AvatarService::CreateAvatarFromWebURL(const char* avatarName, const char* u
         Util::throwExceptionIfStringNullOrBlank(avatarName, "Avatar Name");
         Util::throwExceptionIfStringNullOrBlank(webUrl, "WebURL");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -356,9 +349,9 @@ void AvatarService::CreateAvatarFromWebURL(const char* avatarName, const char* u
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -399,19 +392,17 @@ void AvatarService::CreateAvatarFromWebURL(const char* avatarName, const char* u
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void AvatarService::GetAvatarByName(const char* avatarName, const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector)
+void AvatarService::GetAvatarByName(const char* avatarName, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(avatarName, "Avatar Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -421,9 +412,9 @@ void AvatarService::GetAvatarByName(const char* avatarName, const char* userName
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -467,18 +458,16 @@ void AvatarService::GetAvatarByName(const char* avatarName, const char* userName
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void AvatarService::GetAllAvatars(const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector)
+void AvatarService::GetAllAvatars(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -488,9 +477,9 @@ void AvatarService::GetAllAvatars(const char* userName, App42CallBack* pTarget,S
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -531,18 +520,16 @@ void AvatarService::GetAllAvatars(const char* userName, App42CallBack* pTarget,S
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void AvatarService::GetCurrentAvatar(const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector)
+void AvatarService::GetCurrentAvatar(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -552,9 +539,9 @@ void AvatarService::GetCurrentAvatar(const char* userName, App42CallBack* pTarge
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -595,19 +582,17 @@ void AvatarService::GetCurrentAvatar(const char* userName, App42CallBack* pTarge
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void AvatarService::ChangeCurrentAvatar(const char* avatarName, const char* userName, App42CallBack* pTarget,SEL_App42CallFuncND pSelector)
+void AvatarService::ChangeCurrentAvatar(const char* avatarName, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42AvatarResponse *response = new App42AvatarResponse(pTarget,pSelector);
+    App42AvatarResponse *response = new App42AvatarResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(avatarName, "Avatar Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -617,9 +602,9 @@ void AvatarService::ChangeCurrentAvatar(const char* avatarName, const char* user
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -660,6 +645,6 @@ void AvatarService::ChangeCurrentAvatar(const char* avatarName, const char* user
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, requestBody.c_str(), response, app42response_selector(App42AvatarResponse::onComplete));
+	Util::executePut(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 

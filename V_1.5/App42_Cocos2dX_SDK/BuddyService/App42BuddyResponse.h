@@ -42,7 +42,7 @@ public:
     
     vector<App42Buddy> buddyList;
 
-    App42BuddyResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42BuddyResponse(SEL_App42CallFuncND pSelector);
 	~App42BuddyResponse();
     void onComplete(void *sender, void *data);
     

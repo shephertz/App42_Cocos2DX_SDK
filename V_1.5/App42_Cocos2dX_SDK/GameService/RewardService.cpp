@@ -109,16 +109,15 @@ string BuildRewardBody(string gameName, string userName, string rewardName, doub
     return bodyString;
 }
 
-void RewardService::CreateReward(const char* rewardName,const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::CreateReward(const char* rewardName, const char* description, SEL_App42CallFuncND pSelector)
 {
     
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -128,9 +127,9 @@ void RewardService::CreateReward(const char* rewardName,const char* description,
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -167,29 +166,28 @@ void RewardService::CreateReward(const char* rewardName,const char* description,
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, rewardbody.c_str(), response, app42response_selector(App42RewardResponse::onComplete));
+	Util::executePost(encodedUrl, headers, rewardbody.c_str(), std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void RewardService::GetAllRewards(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetAllRewards(SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -224,30 +222,29 @@ void RewardService::GetAllRewards(App42CallBack* pTarget, SEL_App42CallFuncND pS
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void RewardService::GetAllRewards(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetAllRewards(int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -288,29 +285,28 @@ void RewardService::GetAllRewards(int max, int offset, App42CallBack* pTarget, S
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void RewardService::GetAllRewardsCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetAllRewardsCount(SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -346,32 +342,31 @@ void RewardService::GetAllRewardsCount(App42CallBack* pTarget, SEL_App42CallFunc
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void RewardService::EarnRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::EarnRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -409,31 +404,30 @@ void RewardService::EarnRewards(const char* gameName, const char* userName, cons
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, rewardbody.c_str(), response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executePost(encodedUrl, headers, rewardbody.c_str(), std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void RewardService::RedeemRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::RedeemRewards(const char* gameName, const char* userName, const char* rewardName, double rewardPoints, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -472,30 +466,29 @@ void RewardService::RedeemRewards(const char* gameName, const char* userName, co
     /**
      * Initiating Http call
      */
-    Util::executePost(baseUrl, headers, rewardbody.c_str(), response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executePost(baseUrl, headers, rewardbody.c_str(), std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void RewardService::GetGameRewardPointsForUser(const char* gameName, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetGameRewardPointsForUser(const char* gameName, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -536,29 +529,28 @@ void RewardService::GetGameRewardPointsForUser(const char* gameName, const char*
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void RewardService::GetRewardByName(const char* rewardName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetRewardByName(const char* rewardName, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -596,31 +588,30 @@ void RewardService::GetRewardByName(const char* rewardName, App42CallBack* pTarg
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void RewardService::GetTopNRewardEarners(const char* gameName, const char* rewardName, int max, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetTopNRewardEarners(const char* gameName, const char* rewardName, int max, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -664,30 +655,29 @@ void RewardService::GetTopNRewardEarners(const char* gameName, const char* rewar
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void RewardService::GetAllRewardsByUser(const char* userName, const char* rewardName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetAllRewardsByUser(const char* userName, const char* rewardName, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -728,30 +718,29 @@ void RewardService::GetAllRewardsByUser(const char* userName, const char* reward
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void RewardService::GetTopNRewardEarnersByGroup(const char* gameName, const char* rewardName, vector<std::string>userList, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetTopNRewardEarnersByGroup(const char* gameName, const char* rewardName, vector<std::string>userList, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -808,31 +797,30 @@ void RewardService::GetTopNRewardEarnersByGroup(const char* gameName, const char
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void RewardService::GetUserRankingOnReward(const char* gameName, const char* rewardName, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void RewardService::GetUserRankingOnReward(const char* gameName, const char* rewardName, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42RewardResponse *response = new App42RewardResponse(pTarget,pSelector);
+    App42RewardResponse *response = new App42RewardResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(rewardName, "Reward Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -876,6 +864,6 @@ void RewardService::GetUserRankingOnReward(const char* gameName, const char* rew
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42RewardResponse::onComplete));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42RewardResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 

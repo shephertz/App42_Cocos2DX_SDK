@@ -59,12 +59,12 @@ public:
      */
 	static EmailService* getInstance();
 
-    void createMailConfiguration(const char* emailHost, int emailPort,const char* mailId, const char* emailPassword, bool isSSL,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void createMailConfiguration(const char* emailHost, int emailPort,const char* mailId, const char* emailPassword, bool isSSL, SEL_App42CallFuncND pSelector);
     
-    void removeEmailConfiguration(const char* emailId,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void removeEmailConfiguration(const char* emailId, SEL_App42CallFuncND pSelector);
     
-    void getEmailConfigurations(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
-    void sendMail(const char* sendTo, const char* sendSubject, const char* sendMsg,const char* fromEmail, EmailMIME emailMIME,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void getEmailConfigurations(SEL_App42CallFuncND pSelector);
+    void sendMail(const char* sendTo, const char* sendSubject, const char* sendMsg,const char* fromEmail, EmailMIME emailMIME, SEL_App42CallFuncND pSelector);
 };
 
 #endif /* defined(__App42Cocos2dX3_0Sample__EmailService__) */
