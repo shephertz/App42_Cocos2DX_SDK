@@ -1,5 +1,46 @@
+* [Release Version 1.5](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-15)
 * [Release Version 1.4](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-14)
 * [Release Version 1.3](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-13)
+
+## Version 1.5
+ 
+
+**Release Date:** 29-07-2014
+
+**Release Version:** 1.5
+
+**The following features have been pushed :**
+
+```
+ACL implementation in User Service, Storage Service and Upload Service
+```
+**The following Services have been pushed :**
+
+```
+Buddy Service
+Session Service
+```
+**The following features have been pushed to the services :**
+
+**UPLOAD SERVICE**
+
+```
+GrantAccess
+RevokeAccess
+```
+
+**STORAGE SERVICE**
+
+```
+GrantAccessOnDoc
+RevokeAccessOnDoc
+```
+
+**This release contains the following bug fix:**
+
+```
+Added parsing for additional info comes with user in UserService
+```
 
 ## Version 1.4
  
