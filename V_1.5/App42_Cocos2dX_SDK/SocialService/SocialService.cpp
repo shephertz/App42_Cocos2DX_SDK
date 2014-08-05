@@ -16,8 +16,9 @@
 #include "App42Constants.h"
 #include "App42SocialResponse.h"
 
-using namespace App42Network;
-
+using namespace App42::Network;
+namespace App42
+{
 // define the static..
 SocialService* SocialService::_instance = NULL;
 
@@ -1380,3 +1381,4 @@ void SocialService::UpdateSocialStatusForAll(const char* userName, const char* s
     Util::executePost(encodedUrl, headers, requestbody.c_str(), std::bind(&App42SocialResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
+}//namespace App42

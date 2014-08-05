@@ -15,7 +15,9 @@
 #include "App42PushNotificationResponse.h"
 #include "Connector.h"
 
-using namespace App42Network;
+using namespace App42::Network;
+namespace App42
+{
 
 // define the static..
 PushNotificationService* PushNotificationService::_instance = NULL;
@@ -1672,3 +1674,4 @@ void PushNotificationService::SendPushMessageToDevice(const char* deviceToken, c
      */
     Util::executePost(encodedUrl, headers, pushBody.c_str(), std::bind(&App42PushNotificationResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
+}//namespace App42

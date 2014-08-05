@@ -14,46 +14,49 @@
 #include <vector>
 using namespace std;
 
-class JSONDocument
+namespace App42
 {
-public:
-/**
- * Getters
- */
-    string getJsonDoc(){return jsonDoc;};
-    string getDocId(){return docId;};
-    string getEvent(){return event;};
-    string getCreatedAt()
-    {
-        return createdAt;
-    };
-    string getUpdatedAt(){return updatedAt;};
-    string getOwner(){return owner;};
-    vector<ACL> getAclList(){return aclList;};
-    
-/**
- * Setters
- */
-    void setJsonDoc(string _jsonDoc){jsonDoc=_jsonDoc;};
-    void setDocId(string _docId){docId=_docId;};
-    void setEvent(string _event){event=_event;};
-    void setCreatedAt(string _createdAt){createdAt=_createdAt;};
-    void setUpdatedAt(string _updatedAt){updatedAt=_updatedAt;};
-    void setOwner(string _owner){owner=_owner;};
-    
+	class JSONDocument
+	{
+	public:
+		/**
+		 * Getters
+		 */
+		string getJsonDoc(){ return jsonDoc; };
+		string getDocId(){ return docId; };
+		string getEvent(){ return event; };
+		string getCreatedAt()
+		{
+			return createdAt;
+		};
+		string getUpdatedAt(){ return updatedAt; };
+		string getOwner(){ return owner; };
+		vector<ACL> getAclList(){ return aclList; };
 
-    void pushToAclList(ACL *acl){ aclList.push_back(*acl);};
-    string toString();
-    
-protected:
-    string jsonDoc;
-    string createdAt;
-    string event;
-    string updatedAt;
-    string docId;
-    vector<ACL> aclList;
-    
-private:
-    string owner;
-};
+		/**
+		 * Setters
+		 */
+		void setJsonDoc(string _jsonDoc){ jsonDoc = _jsonDoc; };
+		void setDocId(string _docId){ docId = _docId; };
+		void setEvent(string _event){ event = _event; };
+		void setCreatedAt(string _createdAt){ createdAt = _createdAt; };
+		void setUpdatedAt(string _updatedAt){ updatedAt = _updatedAt; };
+		void setOwner(string _owner){ owner = _owner; };
+
+
+		void pushToAclList(ACL *acl){ aclList.push_back(*acl); };
+		string toString();
+
+	protected:
+		string jsonDoc;
+		string createdAt;
+		string event;
+		string updatedAt;
+		string docId;
+		vector<ACL> aclList;
+
+	private:
+		string owner;
+	};
+}//namespace App42
 #endif /* defined(__App42CPPSDK__JSONDocument__) */

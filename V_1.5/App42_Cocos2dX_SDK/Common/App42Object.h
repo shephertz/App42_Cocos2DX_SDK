@@ -13,26 +13,27 @@
 #include "cJSON.h"
 
 using namespace std;
-
-class App42Object
+namespace App42
 {
-public:
-    App42Object();
-    ~App42Object();
-    
-    void release();
-    
-    void setObject(const char *key, bool value);
-    void setObject(const char *key, int value);
-    void setObject(const char *key, float value);
-    void setObject(const char *key, double value);
-    void setObject(const char *key, long value);
-    void setObject(const char *key, const char *value);
-    
-    string toString();
-    cJSON* getJson();
-private:
-    cJSON *jsonObject;
-};
+	class App42Object
+	{
+	public:
+		App42Object();
+		~App42Object();
 
+		void release();
+
+		void setObject(const char *key, bool value);
+		void setObject(const char *key, int value);
+		void setObject(const char *key, float value);
+		void setObject(const char *key, double value);
+		void setObject(const char *key, long value);
+		void setObject(const char *key, const char *value);
+
+		string toString();
+		cJSON* getJson();
+	private:
+		cJSON *jsonObject;
+	};
+}//namespace App42
 #endif /* defined(__App42Cocos2dX3_0Sample__App42Object__) */

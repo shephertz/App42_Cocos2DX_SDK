@@ -90,59 +90,61 @@
 /////////////////////////////////////////////////////////////////////////////
 // Declare SHA1 workspace
 
-typedef union
+namespace App42
 {
-	UINT_8  c[64];
-	UINT_32 l[16];
-} SHA1_WORKSPACE_BLOCK;
-
-class CSHA1
-{
-public:
-#ifdef SHA1_UTILITY_FUNCTIONS
-	// Two different formats for ReportHash(...)
-	enum
+	typedef union
 	{
-		REPORT_HEX = 0,
-		REPORT_DIGIT = 1
+		UINT_8  c[64];
+		UINT_32 l[16];
+	} SHA1_WORKSPACE_BLOCK;
+
+	class CSHA1
+	{
+	public:
+	#ifdef SHA1_UTILITY_FUNCTIONS
+		// Two different formats for ReportHash(...)
+		enum
+		{
+			REPORT_HEX = 0,
+			REPORT_DIGIT = 1
+		};
+	#endif
+
+		// Constructor and Destructor
+		CSHA1();
+		~CSHA1();
+
+		UINT_32 m_state[5];
+		UINT_32 m_count[2];
+		UINT_32 __reserved1[1];
+		UINT_8  m_buffer[64];
+		UINT_8  m_digest[20];
+		UINT_32 __reserved2[3];
+
+		void Reset();
+
+		// Update the hash value
+		void Update(UINT_8 *data, UINT_32 len);
+	#ifdef SHA1_UTILITY_FUNCTIONS
+		bool HashFile(char *szFileName);
+	#endif
+
+		// Finalize hash and report
+		void Final();
+
+		// Report functions: as pre-formatted and raw data
+	#ifdef SHA1_UTILITY_FUNCTIONS
+		void ReportHash(char *szReport, unsigned char uReportType = REPORT_HEX);
+	#endif
+		void GetHash(UINT_8 *puDest);
+
+	private:
+		// Private SHA-1 transformation
+		void Transform(UINT_32 *state, UINT_8 *buffer);
+
+		// Member variables
+		UINT_8 m_workspace[64];
+		SHA1_WORKSPACE_BLOCK *m_block; // SHA1 pointer to the byte array above
 	};
-#endif
-
-	// Constructor and Destructor
-	CSHA1();
-	~CSHA1();
-
-	UINT_32 m_state[5];
-	UINT_32 m_count[2];
-	UINT_32 __reserved1[1];
-	UINT_8  m_buffer[64];
-	UINT_8  m_digest[20];
-	UINT_32 __reserved2[3];
-
-	void Reset();
-
-	// Update the hash value
-	void Update(UINT_8 *data, UINT_32 len);
-#ifdef SHA1_UTILITY_FUNCTIONS
-	bool HashFile(char *szFileName);
-#endif
-
-	// Finalize hash and report
-	void Final();
-
-	// Report functions: as pre-formatted and raw data
-#ifdef SHA1_UTILITY_FUNCTIONS
-	void ReportHash(char *szReport, unsigned char uReportType = REPORT_HEX);
-#endif
-	void GetHash(UINT_8 *puDest);
-
-private:
-	// Private SHA-1 transformation
-	void Transform(UINT_32 *state, UINT_8 *buffer);
-
-	// Member variables
-	UINT_8 m_workspace[64];
-	SHA1_WORKSPACE_BLOCK *m_block; // SHA1 pointer to the byte array above
-};
-
+} //namespace App42
 #endif

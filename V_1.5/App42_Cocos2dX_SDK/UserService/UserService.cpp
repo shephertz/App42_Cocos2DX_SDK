@@ -14,8 +14,9 @@
 #include "Connector.h"
 #include "App42API.h"
 
-using namespace App42Network;
-
+using namespace App42::Network;
+namespace App42
+{
 
 // define the static..
 UserService* UserService::_instance = NULL;
@@ -2227,3 +2228,4 @@ void UserService::AddUserInfo(App42Object* app42Object, const char* collectionNa
     this->jsonObject = app42Object->toString();
 }
 
+} //namespace App42

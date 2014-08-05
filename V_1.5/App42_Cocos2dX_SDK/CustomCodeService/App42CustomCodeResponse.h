@@ -14,19 +14,20 @@
 #include "App42Response.h"
 
 using namespace std;
-
-class App42CustomCodeResponse : public App42Response
+namespace App42
 {
-    public:
-    
-        App42CustomCodeResponse(SEL_App42CallFuncND pSelector);
-        ~App42CustomCodeResponse();
-        void onComplete(void *sender, void *data);
-    
-    private:
-    
-        void init();
-    
-};
+	class App42CustomCodeResponse : public App42Response
+	{
+	public:
 
+		App42CustomCodeResponse(SEL_App42CallFuncND pSelector);
+		~App42CustomCodeResponse();
+		void onComplete(void *sender, void *data);
+
+	private:
+
+		void init();
+
+	};
+}//namespace App42
 #endif /* defined(__App42Cocos2dX3_0Sample__App42CustomCodeResponse__) */

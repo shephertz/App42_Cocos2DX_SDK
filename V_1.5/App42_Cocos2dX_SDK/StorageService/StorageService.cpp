@@ -15,7 +15,10 @@
 #include "App42StorageResponse.h"
 #include "Connector.h"
 
-using namespace App42Network;
+using namespace App42::Network;
+
+namespace App42
+{
 
 // define the static..
 StorageService* StorageService::_instance = NULL;
@@ -152,7 +155,7 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -225,7 +228,7 @@ void StorageService::InsertJsonDocument(const char* dbName, const char* collecti
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -297,7 +300,7 @@ void StorageService::FindAllCollections(const char* dbName, SEL_App42CallFuncND 
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -355,7 +358,7 @@ void StorageService::FindAllDocuments(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -419,7 +422,7 @@ void StorageService::FindAllDocuments(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -486,7 +489,7 @@ void StorageService::FindAllDocumentsCount(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -550,7 +553,7 @@ void StorageService::FindDocumentById(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -621,7 +624,7 @@ void StorageService::FindDocumentsByQuery(const char* dbName, const char* collec
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -695,7 +698,7 @@ void StorageService::FindDocumentsByQueryWithPaging(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -772,7 +775,7 @@ void StorageService::FindDocsWithQueryPagingOrderBy(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -859,7 +862,7 @@ void StorageService::FindDocumentByKeyValue(const char* dbName, const char* coll
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -931,7 +934,7 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1000,7 +1003,7 @@ void StorageService::UpdateDocumentByDocId(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1069,7 +1072,7 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1142,7 +1145,7 @@ void StorageService::UpdateDocumentByKeyValue(const char* dbName, const char* co
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1216,7 +1219,7 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1287,7 +1290,7 @@ void StorageService::SaveOrUpdateDocumentByKeyValue(const char* dbName, const ch
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1359,7 +1362,7 @@ void StorageService::DeleteDocumentsById(const char* dbName, const char* collect
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1427,7 +1430,7 @@ void StorageService::DeleteDocumentsByKeyValue(const char* dbName, const char* c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1510,7 +1513,7 @@ void StorageService::DeleteAllDocuments(const char* dbName, const char* collecti
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1574,7 +1577,7 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1649,7 +1652,7 @@ void StorageService::AddOrUpdateKeys(const char* dbName, const char* collectionN
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1723,7 +1726,7 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1795,7 +1798,7 @@ void StorageService::UpdateDocumentByQuery(const char* dbName, const char* colle
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1868,7 +1871,7 @@ void StorageService::GrantAccessOnDoc(const char* dbName, const char* collection
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -1946,7 +1949,7 @@ void StorageService::RevokeAccessOnDoc(const char* dbName, const char* collectio
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pSelector);
+        if (pSelector)
         {
             pSelector(response);
         }
@@ -2004,3 +2007,4 @@ void StorageService::RevokeAccessOnDoc(const char* dbName, const char* collectio
         throw e;
     }
 }
+}//namespace App42

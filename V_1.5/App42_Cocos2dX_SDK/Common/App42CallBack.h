@@ -12,16 +12,18 @@
 #include <iostream>
 #include <functional>
 
-class App42CallBack
+namespace App42
 {
-    
-};
+	class App42CallBack
+	{
+
+	};
 
 
-/***
- * Callback Macro
- **/
+	/***
+	 * Callback Macro
+	 **/
 
-typedef std::function<void(void*)> SEL_App42CallFuncND;
-
+	typedef std::function<void(void*)> SEL_App42CallFuncND;
+}
 #endif

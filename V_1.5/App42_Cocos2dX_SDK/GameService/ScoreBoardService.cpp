@@ -16,7 +16,9 @@
 #include "Connector.h"
 #include "App42API.h"
 
-using namespace App42Network;
+using namespace App42::Network;
+namespace App42
+{
 // define the static..
 ScoreBoardService* ScoreBoardService::_instance = NULL;
 
@@ -1343,3 +1345,4 @@ void ScoreBoardService::AddCustomScore(App42Object *app42Object, const char* col
     this->collectionName = collectionName;
     this->jsonObject = app42Object->toString();
 }
+}//namespace App42

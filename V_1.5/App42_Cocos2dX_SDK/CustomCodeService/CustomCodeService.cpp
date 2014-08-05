@@ -15,94 +15,98 @@
 #include "Connector.h"
 #include "App42CustomCodeResponse.h"
 
-using namespace App42Network;
-// define the static..
-CustomCodeService* CustomCodeService::_instance = NULL;
+using namespace App42::Network;
 
-CustomCodeService* CustomCodeService::Initialize(string apikey, string secretkey)
+namespace App42
 {
-	if(_instance == NULL)
-    {
-		_instance = new CustomCodeService();
+	// define the static..
+	CustomCodeService* CustomCodeService::_instance = NULL;
+
+	CustomCodeService* CustomCodeService::Initialize(string apikey, string secretkey)
+	{
+		if (_instance == NULL)
+		{
+			_instance = new CustomCodeService();
+		}
+		_instance->Init(apikey, secretkey);
+		return _instance;
 	}
-    _instance->Init(apikey, secretkey);
-    return _instance;
-}
 
-CustomCodeService* CustomCodeService::getInstance()
-{
-	return _instance;
-}
-
-void CustomCodeService::Terminate()
-{
-	if(_instance != NULL)
-    {
-		delete _instance;
-		_instance = NULL;
+	CustomCodeService* CustomCodeService::getInstance()
+	{
+		return _instance;
 	}
-}
 
-CustomCodeService::CustomCodeService()
-{
-    
-}
+	void CustomCodeService::Terminate()
+	{
+		if (_instance != NULL)
+		{
+			delete _instance;
+			_instance = NULL;
+		}
+	}
 
-void CustomCodeService::RunJavaCode(const char* name, App42Object *jsonBody, SEL_App42CallFuncND pSelector)
-{
-    App42CustomCodeResponse *response = new App42CustomCodeResponse(pSelector);
-    
-    try
-    {
-        Util::throwExceptionIfStringNullOrBlank(name, "File Name");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
-    }
-    catch (App42Exception *e)
-    {
-        std::string ex = e->what();
-        response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
-        response->isSuccess = false;
-        if (pSelector)
-        {
-            pSelector(response);
-        }
-        delete e;
-        e = NULL;
-        return;
-    }
-    
-    string timestamp = Util::getTimeStamp();
-    /**
-     * Creating SignParams and signature
-     */
-    map<string, string> signParams;
-    populateSignParams(signParams);
-    string signature = Util::signMap(secretKey, signParams);
-    
-    /**
-     * Creating URL
-     */
-    string resource = "run/java/";
-    resource.append(name);
-	string baseUrl = getCustomCodeUrl(resource);
-    baseUrl.append("?");
-    string encodedUrl = url_encode(baseUrl);
-    // Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
-    // Util::app42Trace("\n createUserbody = %s",createUserbody.c_str());
-    
-    /**
-     * Creating Headers
-     */
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    
-    /**
-     * Initiating Http call
-     */
-	Util::executePost(encodedUrl, headers, jsonBody->toString().c_str(), std::bind(&App42Response::onComplete, response, std::placeholders::_1, std::placeholders::_2));
-}
+	CustomCodeService::CustomCodeService()
+	{
+
+	}
+
+	void CustomCodeService::RunJavaCode(const char* name, App42Object *jsonBody, SEL_App42CallFuncND pSelector)
+	{
+		App42CustomCodeResponse *response = new App42CustomCodeResponse(pSelector);
+
+		try
+		{
+			Util::throwExceptionIfStringNullOrBlank(name, "File Name");
+			Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+		}
+		catch (App42Exception *e)
+		{
+			std::string ex = e->what();
+			response->httpErrorCode = e->getHttpErrorCode();
+			response->appErrorCode = e->getAppErrorCode();
+			response->errorDetails = ex;
+			response->isSuccess = false;
+			if (pSelector)
+			{
+				pSelector(response);
+			}
+			delete e;
+			e = NULL;
+			return;
+		}
+
+		string timestamp = Util::getTimeStamp();
+		/**
+		 * Creating SignParams and signature
+		 */
+		map<string, string> signParams;
+		populateSignParams(signParams);
+		string signature = Util::signMap(secretKey, signParams);
+
+		/**
+		 * Creating URL
+		 */
+		string resource = "run/java/";
+		resource.append(name);
+		string baseUrl = getCustomCodeUrl(resource);
+		baseUrl.append("?");
+		string encodedUrl = url_encode(baseUrl);
+		// Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
+		// Util::app42Trace("\n createUserbody = %s",createUserbody.c_str());
+
+		/**
+		 * Creating Headers
+		 */
+		std::vector<std::string> headers;
+		map<string, string> metaHeaders;
+		populateMetaHeaderParams(metaHeaders);
+		Util::BuildHeaders(metaHeaders, headers);
+		Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+
+		/**
+		 * Initiating Http call
+		 */
+		Util::executePost(encodedUrl, headers, jsonBody->toString().c_str(), std::bind(&App42Response::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	}
+}//namespace App42

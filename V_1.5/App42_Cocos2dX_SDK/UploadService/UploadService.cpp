@@ -15,8 +15,9 @@
 #include "App42UploadResponse.h"
 #include "Connector.h"
 
-using namespace App42Network;
-
+using namespace App42::Network;
+namespace App42
+{
 // define the static..
 UploadService* UploadService::_instance = NULL;
 
@@ -1537,3 +1538,4 @@ void UploadService::RevokeAccess(const char * fileName, const char * userName,
         throw e;
     }
 }
+}//namespace App42

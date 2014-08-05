@@ -16,8 +16,10 @@
 #include "App42Constants.h"
 #include "App42BuddyResponse.h"
 
-using namespace App42Network;
+using namespace App42::Network;
 
+namespace App42
+{
 // define the static..
 BuddyService* BuddyService::_instance = NULL;
 
@@ -237,7 +239,7 @@ void BuddyService::SendFriendRequest(const char* userName, const char* buddyName
     /**
      * Initiating Http call
      */
-	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::GetFriendRequest(const char* userName, SEL_App42CallFuncND pSelector)
@@ -298,7 +300,7 @@ void BuddyService::GetFriendRequest(const char* userName, SEL_App42CallFuncND pS
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+    Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::AcceptFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
@@ -363,7 +365,7 @@ void BuddyService::AcceptFriendRequest(const char* userName, const char* buddyNa
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+    Util::executePut(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::RejectFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
@@ -432,7 +434,7 @@ void BuddyService::RejectFriendRequest(const char* userName, const char* buddyNa
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::CreateGroupByUser(const char* userName, const char* groupName, SEL_App42CallFuncND pSelector)
@@ -498,7 +500,7 @@ void BuddyService::CreateGroupByUser(const char* userName, const char* groupName
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::GetAllFriends(const char* userName, SEL_App42CallFuncND pSelector)
@@ -562,7 +564,7 @@ void BuddyService::GetAllFriends(const char* userName, SEL_App42CallFuncND pSele
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
@@ -630,7 +632,7 @@ void BuddyService::AddFriendsToGroup(const char* userName, const char* groupName
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
@@ -695,7 +697,7 @@ void BuddyService::GetAllGroups(const char* userName, SEL_App42CallFuncND pSelec
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::GetAllFriendsInGroup(const char* userName, const char* ownerName, const char* groupName, SEL_App42CallFuncND pSelector)
@@ -768,7 +770,7 @@ void BuddyService::GetAllFriendsInGroup(const char* userName, const char* ownerN
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::BlockFriendRequest(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
@@ -837,7 +839,7 @@ void BuddyService::BlockFriendRequest(const char* userName, const char* buddyNam
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
@@ -903,7 +905,7 @@ void BuddyService::BlockUser(const char* userName, const char* buddyName, SEL_Ap
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::UnblockUser(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
@@ -968,7 +970,7 @@ void BuddyService::UnblockUser(const char* userName, const char* buddyName, SEL_
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePut(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::SendMessageToGroup(const char* userName, const char* ownerName, const char* groupName, const char* message, SEL_App42CallFuncND pSelector)
@@ -1035,7 +1037,7 @@ void BuddyService::SendMessageToGroup(const char* userName, const char* ownerNam
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::SendMessageToFriend(const char* userName, const char* buddyName, const char* message, SEL_App42CallFuncND pSelector)
@@ -1101,7 +1103,7 @@ void BuddyService::SendMessageToFriend(const char* userName, const char* buddyNa
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::SendMessageToFriends(const char* userName, const char* message, SEL_App42CallFuncND pSelector)
@@ -1166,7 +1168,7 @@ void BuddyService::SendMessageToFriends(const char* userName, const char* messag
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::GetAllMessages(const char* userName, SEL_App42CallFuncND pSelector)
@@ -1231,7 +1233,7 @@ void BuddyService::GetAllMessages(const char* userName, SEL_App42CallFuncND pSel
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::GetAllMessagesFromBuddy(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
@@ -1300,7 +1302,7 @@ void BuddyService::GetAllMessagesFromBuddy(const char* userName, const char* bud
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::GetAllMessagesFromGroup(const char* userName, const char* ownerName, const char* groupName, SEL_App42CallFuncND pSelector)
@@ -1372,7 +1374,7 @@ void BuddyService::GetAllMessagesFromGroup(const char* userName, const char* own
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::UnFriend(const char* userName, const char* buddyName, SEL_App42CallFuncND pSelector)
@@ -1441,7 +1443,7 @@ void BuddyService::UnFriend(const char* userName, const char* buddyName, SEL_App
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::DeleteMessageById(const char* userName, const char* messageId, SEL_App42CallFuncND pSelector)
@@ -1526,7 +1528,7 @@ void BuddyService::DeleteMessageById(const char* userName, const char* messageId
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 void BuddyService::DeleteMessageByIds(const char* userName, vector<string> messageIds, SEL_App42CallFuncND pSelector)
@@ -1599,7 +1601,7 @@ void BuddyService::DeleteMessageByIds(const char* userName, vector<string> messa
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
@@ -1669,8 +1671,9 @@ void BuddyService::CheckedInGeoLocation(const char* userName, App42GeoPoint* poi
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, requestBody.c_str(),std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executePost(encodedUrl, headers, requestBody.c_str(), std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
+
 void BuddyService::GetFriendsByLocation(const char* userName,double latitude, double longitude, double maxDistance,int max, SEL_App42CallFuncND pSelector)
 {
     App42BuddyResponse *response = new App42BuddyResponse(pSelector);
@@ -1747,5 +1750,7 @@ void BuddyService::GetFriendsByLocation(const char* userName,double latitude, do
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers, std::bind(&App42AvatarResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42BuddyResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
+
+}//namespace App42

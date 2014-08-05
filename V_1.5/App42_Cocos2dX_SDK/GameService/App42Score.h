@@ -12,40 +12,41 @@
 #include <iostream>
 #include "MetaResponse.h"
 #include "App42FacebookProfile.h"
-
-class App42Score : public MetaResponse
+namespace App42
 {
-    public:
-    
-    App42FacebookProfile facebookProfile;
-    
-    /**
-     * Getters
-     */
-    string getUserName(){return userName;};
-    double getRank(){return rank;};
-    string getCreatedOn(){return createdOn;};
-    string getScoreId(){return scoreId;};
-    double getScoreValue(){return value;};
+	class App42Score : public MetaResponse
+	{
+	public:
 
-    /**
-     * Setters
-     */
-    void setUserName(string _userName){userName=_userName;};
-    void setRank(double _rank){ rank=_rank;};
-    void setCreatedOn(string _createdOn){ createdOn=_createdOn;};
-    void setScoreId(string _scoreId){ scoreId=_scoreId;};
-    void setScoreValue(double _value){ value=_value;};
+		App42FacebookProfile facebookProfile;
 
-    protected:
-    
-    std::string userName;
-    double rank;
-    std::string createdOn;
-    std::string scoreId;
-    double value;
-    
-    private:
-};
+		/**
+		 * Getters
+		 */
+		string getUserName(){ return userName; };
+		double getRank(){ return rank; };
+		string getCreatedOn(){ return createdOn; };
+		string getScoreId(){ return scoreId; };
+		double getScoreValue(){ return value; };
 
+		/**
+		 * Setters
+		 */
+		void setUserName(string _userName){ userName = _userName; };
+		void setRank(double _rank){ rank = _rank; };
+		void setCreatedOn(string _createdOn){ createdOn = _createdOn; };
+		void setScoreId(string _scoreId){ scoreId = _scoreId; };
+		void setScoreValue(double _value){ value = _value; };
+
+	protected:
+
+		std::string userName;
+		double rank;
+		std::string createdOn;
+		std::string scoreId;
+		double value;
+
+	private:
+	};
+}//namespace App42
 #endif /* defined(__App42CPPSDK__App42Score__) */

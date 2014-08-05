@@ -14,30 +14,32 @@
 #include "App42Response.h"
 
 using namespace std;
-
-typedef struct App42Upload
+namespace App42
 {
-    string name;
-    string userName;
-    string type;
-    string url;
-    string tinyUrl;
-    string description;
-    string createdOn;
-}App42Upload;
+	typedef struct App42Upload
+	{
+		string name;
+		string userName;
+		string type;
+		string url;
+		string tinyUrl;
+		string description;
+		string createdOn;
+	}App42Upload;
 
 
-class App42UploadResponse : public App42Response
-{
-public:
-    vector<App42Upload> uploadArray;
-    App42UploadResponse(SEL_App42CallFuncND pSelector);
-	~App42UploadResponse();
-    void onComplete(void *sender, void *data);
-private:
-    void init();
+	class App42UploadResponse : public App42Response
+	{
+	public:
+		vector<App42Upload> uploadArray;
+		App42UploadResponse(SEL_App42CallFuncND pSelector);
+		~App42UploadResponse();
+		void onComplete(void *sender, void *data);
+	private:
+		void init();
 
-};
+	};
 
+}//namespace App42
 
 #endif /* defined(__App42Cocos2dX3_0Sample__App42UploadResponse__) */
