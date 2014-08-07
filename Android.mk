@@ -37,9 +37,10 @@ LOCAL_SRC_FILES :=    \
 	V_1.5/App42_Cocos2dX_SDK/Common/App42Response.cpp \
 	V_1.5/App42_Cocos2dX_SDK/Common/App42Service.cpp \
 	V_1.5/App42_Cocos2dX_SDK/Common/MetaResponse.cpp \
-	V_1.5/App42_Cocos2dX_SDK/Common/Utilities.cpp \
 	V_1.5/App42_Cocos2dX_SDK/Common/App42Object.cpp \
 	V_1.5/App42_Cocos2dX_SDK/Common/App42API.cpp \
+	V_1.5/App42_Cocos2dX_SDK/Common/ACL.cpp \
+	V_1.5/App42_Cocos2dX_SDK/Common/App42GeoPoint.cpp \
 	V_1.5/App42_Cocos2dX_SDK/UserService/App42UserResponse.cpp \
 	V_1.5/App42_Cocos2dX_SDK/UserService/UserService.cpp \
 	V_1.5/App42_Cocos2dX_SDK/App42HTTP/App42HttpClient.cpp \

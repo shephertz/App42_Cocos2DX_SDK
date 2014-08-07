@@ -17,10 +17,10 @@ namespace App42
 {
 	typedef enum DeviceType
 	{
-		IOS,
-		ANDROID,
-		WP7,
-		NOKIAX,
+    	APP42_IOS,
+    	APP42_ANDROID,
+    	APP42_WP7,
+    	APP42_NOKIAX,
 	}DeviceType;
 
 	class PushNotificationService : public App42Service
