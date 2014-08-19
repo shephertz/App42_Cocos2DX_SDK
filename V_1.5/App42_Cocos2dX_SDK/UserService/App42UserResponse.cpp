@@ -54,7 +54,7 @@ namespace App42
 					App42User app42User;
 					app42User.userName = Util::getJSONString("userName", child);
 					app42User.email = Util::getJSONString("email", child);
-					app42User.isAccountLocked = Util::getJSONInt("accountLocked", child);
+					app42User.isAccountLocked = Util::getJSONBool("accountLocked", child);
 					app42User.sessionId = Util::getJSONString("sessionId", child);
 					app42User.createdOn = Util::getJSONString("createdOn", child);
 					app42User.password = Util::getJSONString("password", child);
