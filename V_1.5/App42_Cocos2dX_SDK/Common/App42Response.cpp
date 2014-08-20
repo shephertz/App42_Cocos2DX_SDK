@@ -102,42 +102,42 @@ namespace App42
 	}
 
 
-	void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet)
+	void App42Response::buildJsonDocument(cJSON *json, JSONDocument *jsonDocument)
 	{
 
 		cJSON *docIdJson = Util::getJSONChild("_id", json);
 		if (docIdJson != NULL)
 		{
 
-			jsonDocumnet->setDocId(Util::getJSONString("$oid", docIdJson));
+			jsonDocument->setDocId(Util::getJSONString("$oid", docIdJson));
 			cJSON_DeleteItemFromObject(json, "_id");
 		}
 
 		cJSON *ownerJson = Util::getJSONChild("_$owner", json);
 		if (ownerJson != NULL)
 		{
-			jsonDocumnet->setOwner(Util::getJSONString("owner", ownerJson));
+			jsonDocument->setOwner(Util::getJSONString("owner", ownerJson));
 			cJSON_DeleteItemFromObject(json, "_$owner");
 		}
 
 		string createdAt = Util::getJSONString("_$createdAt", json);
 		if (createdAt.c_str() != NULL)
 		{
-			jsonDocumnet->setCreatedAt(createdAt);
+			jsonDocument->setCreatedAt(createdAt);
 			cJSON_DeleteItemFromObject(json, "_$createdAt");
 		}
 
 		string updatedAt = Util::getJSONString("_$updatedAt", json);
 		if (updatedAt.c_str() != NULL)
 		{
-			jsonDocumnet->setUpdatedAt(updatedAt);
+			jsonDocument->setUpdatedAt(updatedAt);
 			cJSON_DeleteItemFromObject(json, "_$updatedAt");
 		}
 
 		string event = Util::getJSONString("_$event", json);
 		if (event.c_str() != NULL)
 		{
-			jsonDocumnet->setEvent(event);
+			jsonDocument->setEvent(event);
 			cJSON_DeleteItemFromObject(json, "_$event");
 		}
 
@@ -156,7 +156,7 @@ namespace App42
 				ACL *acl = new ACL();
 				acl->setUserName(name);
 				acl->setPermission(value);
-				jsonDocumnet->pushToAclList(acl);
+				jsonDocument->pushToAclList(acl);
 				child = child->next;
 			}
 			cJSON_DeleteItemFromObject(json, "_$acl");
@@ -164,8 +164,8 @@ namespace App42
 
 		char *doc = cJSON_PrintUnformatted(json);
 		//printf("\nJsonDoc=%s",doc);
-		jsonDocumnet->setJsonDoc(doc);
-		printf("\nJsonDoc=%s\n", jsonDocumnet->getJsonDoc().c_str());
+		jsonDocument->setJsonDoc(doc);
+		printf("\nJsonDoc=%s\n", jsonDocument->getJsonDoc().c_str());
 
 		free(doc);
 

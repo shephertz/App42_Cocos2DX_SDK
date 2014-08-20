@@ -54,7 +54,7 @@ namespace App42
 		std::string getBody();
 		virtual void onComplete(void *sender, void *data);
 
-		void buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet);
+		void buildJsonDocument(cJSON *json, JSONDocument *jsonDocument);
 		void buildErrorMessage();
 	};
 
