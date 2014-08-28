@@ -14,31 +14,31 @@
 #include "App42Response.h"
 
 using namespace std;
-
-typedef struct App42Configuration
+namespace App42
 {
-    string emailId;
-    string host;
-    int port;
-    bool ssl;
-}App42Configuration;
+	typedef struct App42Configuration
+	{
+		string emailId;
+		string host;
+		int port;
+		bool ssl;
+	}App42Configuration;
 
 
-class App42EmailResponse : public App42Response
-{
-public:
-    vector<App42Configuration> configurationArray;
-    string from;
-    string to;
-    string subject;
-    string body;
-    
-    App42EmailResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-	~App42EmailResponse();
-    void onComplete(void *sender, void *data);
-private:
-    void init();
-    
-};
+	class App42EmailResponse : public App42Response
+	{
+	public:
+		vector<App42Configuration> configurationArray;
+		string from;
+		string to;
+		string subject;
+		string body;
 
+		App42EmailResponse( SEL_App42CallFuncND pSelector);
+		~App42EmailResponse();
+		void onComplete(void *sender, void *data);
+	private:
+		void init();
+	};
+}
 #endif /* defined(__App42Cocos2dX3_0Sample__App42EmailResponse__) */

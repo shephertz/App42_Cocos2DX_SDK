@@ -7,18 +7,20 @@
 //
 
 #include "JSONDocument.h"
-
-string JSONDocument::toString()
+namespace App42
 {
-    if (docId.c_str()!=NULL && jsonDoc.c_str()!=NULL)
-    {
-        string str = docId;
-        str.append(" : ");
-        str.append(jsonDoc);
-        return str;
-    }
-    else
-    {
-        return jsonDoc;
-    }
+	string JSONDocument::toString()
+	{
+		if (docId.c_str() != NULL && jsonDoc.c_str() != NULL)
+		{
+			string str = docId;
+			str.append(" : ");
+			str.append(jsonDoc);
+			return str;
+		}
+		else
+		{
+			return jsonDoc;
+		}
+	}
 }

@@ -48,63 +48,63 @@
 #include "App42GeoPoint.h"
 #include "App42CallBack.h"
 #include "ACL.h"
-
-extern bool isTraceEnabled;
-
-class App42API
+namespace App42
 {
-public:
-    
-    static vector<ACL> getDefaultACL();
-    static void setDefaultACL(vector<ACL> _defaultACL);
-    
-    static string getLoggedInUser();
-    static void setLoggedInUser(string _loggedInUser);
-    static string getInstallId();
-    static void setInstallId(string _installId);
-    static string getFbAccesToken();
-    static void setFbAccesToken(string _fbAccesToken);
-    static string getUserSessionId();
-    static void setUserSessionId(string _userSessionId);
-    static string getDbName();
-    static void setDbName(string _dbName);
-    static void removeSession();
-    
-    static void setIsTraceEnabled(bool _isTraceEnabled);
-    
-    static void Initialize(string _apiKey, string _secretKey);
-    
-    
-    static UserService* BuildUserService();
+	extern bool isTraceEnabled;
 
-    static StorageService* BuildStorageService();
-    
-    static GameService* BuildGameService();
-    
-    static ScoreBoardService* BuildScoreBoardService();
-    
-    static ScoreService* BuildScoreService();
-    
-    static RewardService* BuildRewardService();
-    
-    static PushNotificationService* BuildPushNotificationService();
-    
-    static EmailService* BuildEmailService();
-    
-    static UploadService* BuildUploadService();
-    
-    static CustomCodeService* BuildCustomCodeService();
-    
-    static SocialService* BuildSocialService();
-    
-    static AvatarService* BuildAvatarService();
-    
-    static SessionService* BuildSessionService();
-    
-    static BuddyService* BuildBuddyService();
+	class App42API
+	{
+	public:
 
-    static TimerService* BuildTimerService();
+		static vector<ACL> getDefaultACL();
+		static void setDefaultACL(vector<ACL> _defaultACL);
+
+		static string getLoggedInUser();
+		static void setLoggedInUser(string _loggedInUser);
+		static string getInstallId();
+		static void setInstallId(string _installId);
+		static string getFbAccesToken();
+		static void setFbAccesToken(string _fbAccesToken);
+		static string getUserSessionId();
+		static void setUserSessionId(string _userSessionId);
+		static string getDbName();
+		static void setDbName(string _dbName);
+		static void removeSession();
+
+		static void setIsTraceEnabled(bool _isTraceEnabled);
+
+		static void Initialize(string _apiKey, string _secretKey);
 
 
-};
+		static UserService* BuildUserService();
+
+		static StorageService* BuildStorageService();
+
+		static GameService* BuildGameService();
+
+		static ScoreBoardService* BuildScoreBoardService();
+
+		static ScoreService* BuildScoreService();
+
+		static RewardService* BuildRewardService();
+
+		static PushNotificationService* BuildPushNotificationService();
+
+		static EmailService* BuildEmailService();
+
+		static UploadService* BuildUploadService();
+
+		static CustomCodeService* BuildCustomCodeService();
+
+		static SocialService* BuildSocialService();
+
+		static AvatarService* BuildAvatarService();
+
+		static SessionService* BuildSessionService();
+
+		static BuddyService* BuildBuddyService();
+
+		static TimerService* BuildTimerService();
+	};
+}
 #endif /* defined(__App42CPPSDK__App42API__) */

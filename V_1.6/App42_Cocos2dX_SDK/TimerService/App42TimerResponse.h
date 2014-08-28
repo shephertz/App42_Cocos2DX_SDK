@@ -14,29 +14,29 @@
 #include "App42Response.h"
 
 using namespace std;
-
-typedef struct App42Timer
+namespace App42
 {
-    string name;
-    string userName;
-    string currentTime;
-    string startTime;
-    string endTime;
-    long timeInSeconds;
-    bool isTimerActive;
-}App42Timer;
+	typedef struct App42Timer
+	{
+		string name;
+		string userName;
+		string currentTime;
+		string startTime;
+		string endTime;
+		long timeInSeconds;
+		bool isTimerActive;
+	}App42Timer;
 
 
-class App42TimerResponse : public App42Response
-{
-public:
-    App42Timer app42Timer;
-    App42TimerResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-	~App42TimerResponse();
-    void onComplete(void *sender, void *data);
-private:
-    void init();
-    
-};
-
+	class App42TimerResponse : public App42Response
+	{
+	public:
+		App42Timer app42Timer;
+		App42TimerResponse( SEL_App42CallFuncND pSelector);
+		~App42TimerResponse();
+		void onComplete(void *sender, void *data);
+	private:
+		void init();
+	};
+}
 #endif /* defined(__App42Cocos2dX3_0Sample__App42TimerResponse__) */

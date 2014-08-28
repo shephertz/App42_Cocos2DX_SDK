@@ -13,46 +13,47 @@
 #include "cJSON.h"
 
 using namespace std;
-
-typedef enum Permission
+namespace App42
 {
-    R,
-    W
-}Permission;
+	typedef enum Permission
+	{
+		R,
+		W
+	}Permission;
 
-class ACL
-{
-public:
-    ACL(const char* _userName, Permission _permission);
-    ACL();
-    ~ACL();
-    
-    /**
-     * Setters
-     */
-    void setUserName(string _userName);
-    void setPermission(Permission _permission);
-    void setPermission(string _permission);
-    /**
-     * Getters
-     */
-    string getUserName();
-    string getPermission();
-    
-    string toString();
-    
-    bool equals(ACL *aclObject);
+	class ACL
+	{
+	public:
+		ACL(const char* _userName, Permission _permission);
+		ACL();
+		~ACL();
 
-private:
-    string userName;
-    string permission;
-    
-    inline const char *getPermission(Permission _permission)
-    {
-        const char *strings[] = {"R","W"};
-        
-        return strings[_permission];
-    }
-};
+		/**
+		 * Setters
+		 */
+		void setUserName(string _userName);
+		void setPermission(Permission _permission);
+		void setPermission(string _permission);
+		/**
+		 * Getters
+		 */
+		string getUserName();
+		string getPermission();
 
+		string toString();
+
+		bool equals(ACL *aclObject);
+
+	private:
+		string userName;
+		string permission;
+
+		inline const char *getPermission(Permission _permission)
+		{
+			const char *strings[] = { "R", "W" };
+
+			return strings[_permission];
+		}
+	};
+}
 #endif /* defined(__App42Cocos2dX3_0Sample__ACL__) */

@@ -43,32 +43,33 @@ endif()
 WkAddCXXFlags("-DCC_ENABLE_CHIPMUNK_INTEGRATION=1")
 
 
-WkIncludeDir ( "V_1.5/App42_Cocos2dX_SDK" )
+WkIncludeDir ( "V_1.6/App42_Cocos2dX_SDK" )
 
 #extra includes because App42 doesnt include headers with path...
 set( ${PROJECT_NAME}_INCLUDE_DIRS
-	"V_1.5/App42_Cocos2dX_SDK/App42HTTP"
-	"V_1.5/App42_Cocos2dX_SDK/AvatarService"
-	"V_1.5/App42_Cocos2dX_SDK/BuddyService"
-	"V_1.5/App42_Cocos2dX_SDK/cJSON"
-	"V_1.5/App42_Cocos2dX_SDK/Common"
-	"V_1.5/App42_Cocos2dX_SDK/Common/Exception"
-	"V_1.5/App42_Cocos2dX_SDK/Crypto"
-	"V_1.5/App42_Cocos2dX_SDK/CustomCodeService"
-	"V_1.5/App42_Cocos2dX_SDK/EmailService"
-	"V_1.5/App42_Cocos2dX_SDK/GameService"
-	"V_1.5/App42_Cocos2dX_SDK/PushNotificationService"
-	"V_1.5/App42_Cocos2dX_SDK/SocialService"
-	"V_1.5/App42_Cocos2dX_SDK/SessionService"
-	"V_1.5/App42_Cocos2dX_SDK/StorageService"
-	"V_1.5/App42_Cocos2dX_SDK/UploadService"
-	"V_1.5/App42_Cocos2dX_SDK/UserService"
-	"V_1.5/App42_Cocos2dX_SDK/Util" 
+	"V_1.6/App42_Cocos2dX_SDK/App42HTTP"
+	"V_1.6/App42_Cocos2dX_SDK/AvatarService"
+	"V_1.6/App42_Cocos2dX_SDK/BuddyService"
+	"V_1.6/App42_Cocos2dX_SDK/cJSON"
+	"V_1.6/App42_Cocos2dX_SDK/Common"
+	"V_1.6/App42_Cocos2dX_SDK/Common/Exception"
+	"V_1.6/App42_Cocos2dX_SDK/Crypto"
+	"V_1.6/App42_Cocos2dX_SDK/CustomCodeService"
+	"V_1.6/App42_Cocos2dX_SDK/EmailService"
+	"V_1.6/App42_Cocos2dX_SDK/GameService"
+	"V_1.6/App42_Cocos2dX_SDK/PushNotificationService"
+	"V_1.6/App42_Cocos2dX_SDK/SocialService"
+	"V_1.6/App42_Cocos2dX_SDK/SessionService"
+	"V_1.6/App42_Cocos2dX_SDK/StorageService"
+	"V_1.6/App42_Cocos2dX_SDK/TimerService"
+	"V_1.6/App42_Cocos2dX_SDK/UploadService"
+	"V_1.6/App42_Cocos2dX_SDK/UserService"
+	"V_1.6/App42_Cocos2dX_SDK/Util" 
 	CACHE PATH "Headers Directories"
 )
 include_directories( ${${PROJECT_NAME}_INCLUDE_DIRS} )
 
-WkLibraryBuild( App42SDK STATIC "V_1.5/App42_Cocos2dX_SDK")
+WkLibraryBuild( App42SDK STATIC "V_1.6/App42_Cocos2dX_SDK")
 
 #Sample Project
 #WkExecutableBuild( App42Sample "App42_Cocos2DX_Sample/App42CPPSDK/Classes")

@@ -15,331 +15,333 @@
 #include "Connector.h"
 #include "Exceptions.h"
 
-using namespace App42Network;
-// define the static..
-GameService* GameService::_instance = NULL;
-
-GameService* GameService::Initialize(string apikey, string secretkey)
+using namespace App42::Network;
+namespace App42
 {
-	if(_instance == NULL)
-    {
-		_instance = new GameService();
+	// define the static..
+	GameService* GameService::_instance = NULL;
+
+	GameService* GameService::Initialize(string apikey, string secretkey)
+	{
+		if(_instance == NULL)
+		{
+			_instance = new GameService();
+		}
+		_instance->Init(apikey, secretkey);
+		return _instance;
 	}
-    _instance->Init(apikey, secretkey);
-    return _instance;
-}
 
-GameService* GameService::getInstance()
-{
-	return _instance;
-}
-
-void GameService::Terminate()
-{
-	if(_instance != NULL)
-    {
-		delete _instance;
-		_instance = NULL;
+	GameService* GameService::getInstance()
+	{
+		return _instance;
 	}
-}
 
-GameService::GameService()
-{
-    
-}
+	void GameService::Terminate()
+	{
+		if(_instance != NULL)
+		{
+			delete _instance;
+			_instance = NULL;
+		}
+	}
 
-string BuildCreateGameBody(string gameName, string descrption)
-{
+	GameService::GameService()
+	{
     
-    cJSON *bodyJSON = cJSON_CreateObject();
-    cJSON *app42JSON = cJSON_CreateObject();
-    cJSON *gameJSON = cJSON_CreateObject();
+	}
+
+	string BuildCreateGameBody(string gameName, string descrption)
+	{
     
-    // first construct the user
-    cJSON_AddStringToObject(gameJSON, "name", gameName.c_str());
-    cJSON_AddStringToObject(gameJSON, "description", descrption.c_str());
+		cJSON *bodyJSON = cJSON_CreateObject();
+		cJSON *app42JSON = cJSON_CreateObject();
+		cJSON *gameJSON = cJSON_CreateObject();
     
-    // add user to app42
-    cJSON_AddItemReferenceToObject(app42JSON, "game", gameJSON);
+		// first construct the user
+		cJSON_AddStringToObject(gameJSON, "name", gameName.c_str());
+		cJSON_AddStringToObject(gameJSON, "description", descrption.c_str());
     
-    // add app42 to body
-    cJSON_AddItemReferenceToObject(bodyJSON, "app42", app42JSON);
+		// add user to app42
+		cJSON_AddItemReferenceToObject(app42JSON, "game", gameJSON);
     
-    char *cptrFormatted = cJSON_PrintUnformatted(bodyJSON);
-    string bodyString = cptrFormatted;
+		// add app42 to body
+		cJSON_AddItemReferenceToObject(bodyJSON, "app42", app42JSON);
     
-    cJSON_Delete(gameJSON);
-    cJSON_Delete(app42JSON);
-    cJSON_Delete(bodyJSON);
+		char *cptrFormatted = cJSON_PrintUnformatted(bodyJSON);
+		string bodyString = cptrFormatted;
     
-    free(cptrFormatted);
+		cJSON_Delete(gameJSON);
+		cJSON_Delete(app42JSON);
+		cJSON_Delete(bodyJSON);
     
-    return bodyString;
+		free(cptrFormatted);
     
-}
+		return bodyString;
+    
+	}
 
 
-void GameService::CreateGame(const char* gameName,const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
-{
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
-    try
-    {
-        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
-    }
-    catch (App42Exception *e)
-    {
-        std::string ex = e->what();
-        response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
-        response->isSuccess = false;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
-        }
-        delete e;
-        e = NULL;
-        return;
-    }
-    map<string, string> postMap;
-    populateSignParams(postMap);
-    string createGamebody = BuildCreateGameBody(gameName, description);
-    postMap["body"] = createGamebody;
-    
-    string signature = Util::signMap(secretKey, postMap);
-    
-    string baseUrl = getBaseUrl("game");
-    baseUrl.append("?");
-    //Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
-    //Util::app42Trace("\n createGamebody = %s",createGamebody.c_str());
-    
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
-    
-    string timestamp = Util::getTimeStamp();
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    
-    
-    Util::executePost(baseUrl, headers, createGamebody.c_str(), response, app42response_selector(App42GameResponse::onComplete));
-}
+	void GameService::CreateGame(const char* gameName,const char* description,  SEL_App42CallFuncND pSelector)
+	{
+		App42GameResponse *response = new App42GameResponse(pSelector);
+		try
+		{
+			Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
+			Util::throwExceptionIfStringNullOrBlank(description, "Description");
 
-void GameService::GetGamebyName(const char* gameName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
-{
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+			Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+		}
+		catch (App42Exception *e)
+		{
+			std::string ex = e->what();
+			response->httpErrorCode = e->getHttpErrorCode();
+			response->appErrorCode  = e->getAppErrorCode();
+			response->errorDetails  = ex;
+			response->isSuccess = false;
+			if (pSelector)
+			{
+				pSelector(response);
+			}
+			delete e;
+			e = NULL;
+			return;
+		}
+		map<string, string> postMap;
+		populateSignParams(postMap);
+		string createGamebody = BuildCreateGameBody(gameName, description);
+		postMap["body"] = createGamebody;
+    
+		string signature = Util::signMap(secretKey, postMap);
+    
+		string baseUrl = getBaseUrl("game");
+		baseUrl.append("?");
+		//Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
+		//Util::app42Trace("\n createGamebody = %s",createGamebody.c_str());
+    
+		std::vector<std::string> headers;
+		map<string, string> metaHeaders;
+		populateMetaHeaderParams(metaHeaders);
+		Util::BuildHeaders(metaHeaders, headers);
+    
+		string timestamp = Util::getTimeStamp();
+		Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+    
+    
+		Util::executePost(baseUrl, headers, createGamebody.c_str(), std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	}
 
-    try
-    {
-        Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
-    }
-    catch (App42Exception *e)
-    {
-        std::string ex = e->what();
-        response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
-        response->isSuccess = false;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
-        }
-        delete e;
-        e = NULL;
-        return;
-    }
-    
-    string resource = "game/";
-	resource.append(gameName);
-    
-	string url = getBaseUrl(resource);
-	string timestamp = Util::getTimeStamp();
-    
-    map<string, string> getMap;
-	Util::BuildGetSigningMap(apiKey, timestamp, VERSION, getMap);
-	getMap["name"] = gameName;
-	string signature = Util::signMap(secretKey, getMap);
-    url.append("?");
-    
-    //Util::app42Trace("\n baseUrl = %s",url.c_str());
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
-}
+	void GameService::GetGamebyName(const char* gameName, SEL_App42CallFuncND pSelector)
+	{
+		App42GameResponse *response = new App42GameResponse(pSelector);
 
-void GameService::GetAllGames(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
-{
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+		try
+		{
+			Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
 
-    try
-    {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
-    }
-    catch (App42Exception *e)
-    {
-        std::string ex = e->what();
-        response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
-        response->isSuccess = false;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
-        }
-        delete e;
-        e = NULL;
-        return;
-    }
+			Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+		}
+		catch (App42Exception *e)
+		{
+			std::string ex = e->what();
+			response->httpErrorCode = e->getHttpErrorCode();
+			response->appErrorCode  = e->getAppErrorCode();
+			response->errorDetails  = ex;
+			response->isSuccess = false;
+			if (pSelector)
+			{
+				pSelector(response);
+			}
+			delete e;
+			e = NULL;
+			return;
+		}
     
-    string resource = "game/";
+		string resource = "game/";
+		resource.append(gameName);
     
-	string url = getBaseUrl(resource);
-	string timestamp = Util::getTimeStamp();
+		string url = getBaseUrl(resource);
+		string timestamp = Util::getTimeStamp();
     
-    map<string, string> getMap;
-	Util::BuildGetSigningMap(apiKey, timestamp, VERSION, getMap);
-	string signature = Util::signMap(secretKey, getMap);
-    url.append("?");
+		map<string, string> getMap;
+		Util::BuildGetSigningMap(apiKey, timestamp, VERSION, getMap);
+		getMap["name"] = gameName;
+		string signature = Util::signMap(secretKey, getMap);
+		url.append("?");
     
-    //Util::app42Trace("\n baseUrl = %s",url.c_str());
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
+		//Util::app42Trace("\n baseUrl = %s",url.c_str());
+		std::vector<std::string> headers;
+		map<string, string> metaHeaders;
+		populateMetaHeaderParams(metaHeaders);
+		Util::BuildHeaders(metaHeaders, headers);
+		Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+		Util::executeGet(url,headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	}
 
-}
+	void GameService::GetAllGames( SEL_App42CallFuncND pSelector)
+	{
+		App42GameResponse *response = new App42GameResponse(pSelector);
 
-void GameService::GetAllGames(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
-{
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
-    
-    try
-    {
-        Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
-    }
-    catch (App42Exception *e)
-    {
-        std::string ex = e->what();
-        response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
-        response->isSuccess = false;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
-        }
-        delete e;
-        e = NULL;
-        return;
-    }
-    
-    string timestamp = Util::getTimeStamp();
+		try
+		{
 
-    /**
-     * Creating SignParams and signature
-     */
-    map<string, string> signParams;
-	Util::BuildGetSigningMap(apiKey, timestamp, VERSION, signParams);
-    signParams["max"] = Util::ItoA(max);
-    signParams["offset"] = Util::ItoA(offset);
-	string signature = Util::signMap(secretKey, signParams);
+			Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+		}
+		catch (App42Exception *e)
+		{
+			std::string ex = e->what();
+			response->httpErrorCode = e->getHttpErrorCode();
+			response->appErrorCode  = e->getAppErrorCode();
+			response->errorDetails  = ex;
+			response->isSuccess = false;
+			if (pSelector)
+			{
+				pSelector(response);
+			}
+			delete e;
+			e = NULL;
+			return;
+		}
     
-    /**
-     * Creating URL
-     */
-    string resource = "game/";
-    resource.append("paging/");
-    resource.append(Util::ItoA(max) + "/");
-    resource.append(Util::ItoA(offset));
-	string url = getBaseUrl(resource);
-    url.append("?");
-    string encodedUrl = url_encode(url);
-    /**
-     * Creating Headers
-     */
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+		string resource = "game/";
     
-    /**
-     * Initiating Http call
-     */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42GameResponse::onComplete));
+		string url = getBaseUrl(resource);
+		string timestamp = Util::getTimeStamp();
     
-}
+		map<string, string> getMap;
+		Util::BuildGetSigningMap(apiKey, timestamp, VERSION, getMap);
+		string signature = Util::signMap(secretKey, getMap);
+		url.append("?");
+    
+		//Util::app42Trace("\n baseUrl = %s",url.c_str());
+		std::vector<std::string> headers;
+		map<string, string> metaHeaders;
+		populateMetaHeaderParams(metaHeaders);
+		Util::BuildHeaders(metaHeaders, headers);
+    
+		Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+    
+		Util::executeGet(url,headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
-void GameService::GetAllGamesCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
-{
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+	}
+
+	void GameService::GetAllGames(int max, int offset,  SEL_App42CallFuncND pSelector)
+	{
+		App42GameResponse *response = new App42GameResponse(pSelector);
     
-    try
-    {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
-    }
-    catch (App42Exception *e)
-    {
-        std::string ex = e->what();
-        response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
-        response->isSuccess = false;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
-        }
-        delete e;
-        e = NULL;
-        return;
-    }
+		try
+		{
+			Util::throwExceptionIfMaxIsNotValid(max, "Max");
+
+			Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+		}
+		catch (App42Exception *e)
+		{
+			std::string ex = e->what();
+			response->httpErrorCode = e->getHttpErrorCode();
+			response->appErrorCode  = e->getAppErrorCode();
+			response->errorDetails  = ex;
+			response->isSuccess = false;
+			if (pSelector)
+			{
+				pSelector(response);
+			}
+			delete e;
+			e = NULL;
+			return;
+		}
     
-    string timestamp = Util::getTimeStamp();
+		string timestamp = Util::getTimeStamp();
+
+		/**
+		 * Creating SignParams and signature
+		 */
+		map<string, string> signParams;
+		Util::BuildGetSigningMap(apiKey, timestamp, VERSION, signParams);
+		signParams["max"] = Util::ItoA(max);
+		signParams["offset"] = Util::ItoA(offset);
+		string signature = Util::signMap(secretKey, signParams);
     
-    /**
-     * Creating SignParams and signature
-     */
-    map<string, string> signParams;
-	Util::BuildGetSigningMap(apiKey, timestamp, VERSION, signParams);
-	string signature = Util::signMap(secretKey, signParams);
+		/**
+		 * Creating URL
+		 */
+		string resource = "game/";
+		resource.append("paging/");
+		resource.append(Util::ItoA(max) + "/");
+		resource.append(Util::ItoA(offset));
+		string url = getBaseUrl(resource);
+		url.append("?");
+		string encodedUrl = url_encode(url);
+		/**
+		 * Creating Headers
+		 */
+		std::vector<std::string> headers;
+		map<string, string> metaHeaders;
+		populateMetaHeaderParams(metaHeaders);
+		Util::BuildHeaders(metaHeaders, headers);
+		Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    /**
-     * Creating URL
-     */
-    string resource = "game/";
-    resource.append("count");
-	string url = getBaseUrl(resource);
-    url.append("?");
-    string encodedUrl = url_encode(url);
-    /**
-     * Creating Headers
-     */
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+		/**
+		 * Initiating Http call
+		 */
+		Util::executeGet(encodedUrl,headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
-    /**
-     * Initiating Http call
-     */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42GameResponse::onComplete));
-    
+	}
+
+	void GameService::GetAllGamesCount( SEL_App42CallFuncND pSelector)
+	{
+		App42GameResponse *response = new App42GameResponse(pSelector);
+
+		try
+		{
+
+			Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
+		}
+		catch (App42Exception *e)
+		{
+			std::string ex = e->what();
+			response->httpErrorCode = e->getHttpErrorCode();
+			response->appErrorCode = e->getAppErrorCode();
+			response->errorDetails = ex;
+			response->isSuccess = false;
+			if (pSelector)
+			{
+				pSelector(response);
+			}
+			delete e;
+			e = NULL;
+			return;
+		}
+
+		string timestamp = Util::getTimeStamp();
+
+		/**
+		 * Creating SignParams and signature
+		 */
+		map<string, string> signParams;
+		Util::BuildGetSigningMap(apiKey, timestamp, VERSION, signParams);
+		string signature = Util::signMap(secretKey, signParams);
+
+		/**
+		 * Creating URL
+		 */
+		string resource = "game/";
+		resource.append("count");
+		string url = getBaseUrl(resource);
+		url.append("?");
+		string encodedUrl = url_encode(url);
+		/**
+		 * Creating Headers
+		 */
+		std::vector<std::string> headers;
+		map<string, string> metaHeaders;
+		populateMetaHeaderParams(metaHeaders);
+		Util::BuildHeaders(metaHeaders, headers);
+		Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+
+		/**
+		 * Initiating Http call
+		 */
+		Util::executeGet(encodedUrl, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	}
 }

@@ -14,38 +14,35 @@
 #include <exception>
 #include <string>
 #include "cJSON.h"
-
-class App42Exception : public std::exception
+namespace App42
 {
-public:
-    
-    App42Exception(std::string exception, int _httpErrorCode, int _appErrorCode);
-    //~App42Exception();
-    
-    
-    int setHttpErrorCode(int _httpErrorCode);
-    int setAppErrorCode(int _appErrorCode);
-    
-    int getHttpErrorCode(){return httpErrorCode;};
-    int getAppErrorCode(){return appErrorCode;};
-    
-    //std::string getExceptionReason();
-    
-    virtual const char* what() const throw()
-    {
-        const char *str = cJSON_PrintUnformatted(exceptionString);
-        printf("\nApp42Exception : %s\n",str);
-        return str;
-    }
-    
-private:
-    int httpErrorCode;
-    int appErrorCode;
-    cJSON *exceptionString;
-};
+	class App42Exception : public std::exception
+	{
+	public:
+
+		App42Exception(std::string exception, int _httpErrorCode, int _appErrorCode);
+		//~App42Exception();
 
 
+		int setHttpErrorCode(int _httpErrorCode);
+		int setAppErrorCode(int _appErrorCode);
 
+		int getHttpErrorCode(){ return httpErrorCode; };
+		int getAppErrorCode(){ return appErrorCode; };
 
+		//std::string getExceptionReason();
 
+		virtual const char* what() const throw()
+		{
+			const char *str = cJSON_PrintUnformatted(exceptionString);
+			printf("\nApp42Exception : %s\n", str);
+			return str;
+		}
+
+	private:
+		int httpErrorCode;
+		int appErrorCode;
+		cJSON *exceptionString;
+	};
+}
 #endif /* defined(__App42CPPSDK__App42Exception__) */
