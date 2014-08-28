@@ -1,6 +1,28 @@
+* [Release Version 1.6](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-16)
 * [Release Version 1.5](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-15)
 * [Release Version 1.4](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-14)
 * [Release Version 1.3](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-13)
+
+
+## Version 1.6
+ 
+
+**Release Date:** 21-08-2014
+
+**Release Version:** 1.6
+
+**The following Services have been pushed :**
+
+```
+Timer Service
+```
+
+**This release contains the following bug fix:**
+
+```
+None
+```
+
 
 ## Version 1.5
  
