@@ -35,6 +35,11 @@ namespace App42
 		}
 
 		/* STEP 3 */
+		//ADDED CHECK TO AVOID BUFFER OVERFLOW
+		if ( ! (text_len + sizeof(m_ipad) < HMAC_BUF_LEN) )
+		{
+			throw std::logic_error("DATA TOO BIG TO SIGN !!!!");
+		}
 		memcpy(AppendBuf1, m_ipad, sizeof(m_ipad));
 		memcpy(AppendBuf1 + sizeof(m_ipad), text, text_len);
 

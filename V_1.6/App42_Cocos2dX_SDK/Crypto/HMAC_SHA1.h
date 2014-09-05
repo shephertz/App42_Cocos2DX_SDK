@@ -29,7 +29,7 @@ namespace App42
 		enum {
 			SHA1_DIGEST_LENGTH = 20,
 			SHA1_BLOCK_SIZE = 64,
-			HMAC_BUF_LEN = 4096
+			HMAC_BUF_LEN = 32768
 		};
 
 		CHMAC_SHA1()
