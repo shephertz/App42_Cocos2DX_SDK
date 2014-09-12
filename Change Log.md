@@ -4,6 +4,34 @@
 * [Release Version 1.3](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-13)
 
 
+## Version 1.7
+ 
+
+**Release Date:** 12-09-2014
+
+**Release Version:** 1.7
+
+__If you are migrating from older SDK versions to this version, please read the [migration note](https://github.com/shephertz/App42_Cocos2DX_SDK/wiki/Migration-Notes).__
+
+**The following features have been pushed :**
+```
+- Changed callback style to make the SDK compatible with Windows Platform
+- Now supporting iOS, Android, Windows Phone 8 and Windows Desktop.
+```
+
+**The following Services have been pushed :**
+
+```
+None
+```
+
+**This release contains the following bug fix:**
+
+```
+None
+```
+
+
 ## Version 1.6
  
 
