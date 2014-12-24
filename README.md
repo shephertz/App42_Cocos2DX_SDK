@@ -10,7 +10,7 @@ The steps below describe the integration points of App42_Cocos2DX_SDK in your Co
 
 [Migration Notes](https://github.com/shephertz/App42_Cocos2DX_SDK/wiki/Migration-Notes)
 
-__Third Party Libraries__
+__Third Party Libraries:__
 
 * [cJSON]( http://sourceforge.net/projects/cjson/)
 ```
