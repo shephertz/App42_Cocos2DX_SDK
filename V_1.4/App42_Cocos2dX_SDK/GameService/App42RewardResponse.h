@@ -21,7 +21,7 @@ class App42RewardResponse : public App42Response
 public:
     
     vector<App42Reward> rewards;
-    App42RewardResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42RewardResponse(SEL_App42CallFuncND pSelector);
 	~App42RewardResponse();
     void onComplete(void *sender, void *data);
 private:

@@ -10,8 +10,8 @@
 #include "Common.h"
 
 
-App42EmailResponse::App42EmailResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
-:App42Response(pTarget,pSelector)
+App42EmailResponse::App42EmailResponse(SEL_App42CallFuncND pSelector)
+:App42Response(pSelector)
 {
     
 }
@@ -26,9 +26,9 @@ void App42EmailResponse::onComplete(void *sender, void *data)
     App42Response::onComplete(sender, data);
     init();
     
-    if (_app42Target && _app42Selector)
+    if (_app42Selector)
     {
-        (_app42Target->*_app42Selector)((App42CallBack *)_app42Target, this);
+        _app42Selector(this);
     }
 }
 

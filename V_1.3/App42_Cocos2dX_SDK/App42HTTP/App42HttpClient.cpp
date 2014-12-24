@@ -13,8 +13,8 @@
 #include <vector>
 #include <errno.h>
 
-#include "CCDirector.h"
-#include "CCScheduler.h"
+#include "base/CCDirector.h"
+#include "base/CCScheduler.h"
 
 #include "curl/curl.h"
 
@@ -610,12 +610,11 @@ namespace App42Network
         if (response)
         {
             App42HttpRequest *request = response->getApp42HttpRequest();
-            App42CallBack* pTarget = request->getTarget();
             SEL_App42Response pSelector = request->getSelector();
             
-            if (pTarget && pSelector) 
+            if (pSelector) 
             {
-                (pTarget->*pSelector)(this, response);
+                (pSelector)(this, response);
             }
             //printf("\nCallBack Sent\n");
             

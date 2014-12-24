@@ -10,8 +10,8 @@
 #include "Common.h"
 #include "JSONDocument.h"
 
-App42GameResponse::App42GameResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
-:App42Response(pTarget,pSelector)
+App42GameResponse::App42GameResponse( SEL_App42CallFuncND pSelector)
+:App42Response(pSelector)
 {
     
 }
@@ -21,15 +21,15 @@ App42GameResponse::~App42GameResponse()
     games.clear();
 }
 
-void App42GameResponse::onComplete(void *sender, void *data)
+void App42GameResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();
     
     
-    if (_app42Target && _app42Selector)
+    if (_app42Selector)
     {
-        (_app42Target->*_app42Selector)((App42CallBack *)_app42Target, this);
+        (_app42Selector)(this);
     }
 }
 

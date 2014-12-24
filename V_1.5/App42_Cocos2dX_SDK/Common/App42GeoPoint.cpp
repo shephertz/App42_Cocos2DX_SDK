@@ -8,42 +8,44 @@
 
 #include "App42GeoPoint.h"
 
-
-App42GeoPoint::App42GeoPoint()
+namespace App42
 {
-    
-}
+	App42GeoPoint::App42GeoPoint()
+	{
 
-App42GeoPoint::~App42GeoPoint()
-{
-    
-}
+	}
+
+	App42GeoPoint::~App42GeoPoint()
+	{
+
+	}
 
 
-cJSON* App42GeoPoint::getJson()
-{
-    cJSON* jsonObject = cJSON_CreateObject();
-    
-    cJSON_AddNumberToObject(jsonObject, "lat", latitude);
-    cJSON_AddNumberToObject(jsonObject, "lng", longitude);
-    cJSON_AddStringToObject(jsonObject, "marker", markerName.c_str());
-    
-    return jsonObject;
-}
+	cJSON* App42GeoPoint::getJson()
+	{
+		cJSON* jsonObject = cJSON_CreateObject();
 
-string App42GeoPoint::toString()
-{
-    cJSON* jsonObject = cJSON_CreateObject();
-    
-    cJSON_AddNumberToObject(jsonObject, "lat", latitude);
-    cJSON_AddNumberToObject(jsonObject, "lng", longitude);
-    cJSON_AddStringToObject(jsonObject, "marker", markerName.c_str());
+		cJSON_AddNumberToObject(jsonObject, "lat", latitude);
+		cJSON_AddNumberToObject(jsonObject, "lng", longitude);
+		cJSON_AddStringToObject(jsonObject, "marker", markerName.c_str());
 
-    char *cptrFormatted = cJSON_PrintUnformatted(jsonObject);
-    string jsonString = cptrFormatted;
-    free(cptrFormatted);
-    
-    cJSON_Delete(jsonObject);
-    
-    return jsonString;
-}
+		return jsonObject;
+	}
+
+	string App42GeoPoint::toString()
+	{
+		cJSON* jsonObject = cJSON_CreateObject();
+
+		cJSON_AddNumberToObject(jsonObject, "lat", latitude);
+		cJSON_AddNumberToObject(jsonObject, "lng", longitude);
+		cJSON_AddStringToObject(jsonObject, "marker", markerName.c_str());
+
+		char *cptrFormatted = cJSON_PrintUnformatted(jsonObject);
+		string jsonString = cptrFormatted;
+		free(cptrFormatted);
+
+		cJSON_Delete(jsonObject);
+
+		return jsonString;
+	}
+}//namespace App42

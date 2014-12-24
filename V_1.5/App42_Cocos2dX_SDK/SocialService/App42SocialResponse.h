@@ -19,21 +19,22 @@
 #include "App42Social.h"
 
 using namespace std;
-
-class App42SocialResponse : public App42Response
+namespace App42
 {
-public:
-    App42Social social;
-    App42FacebookProfile facebookProfile;
-    vector<App42Friend> friendsList;
-    vector<App42PublicProfile> publicProfile;
-    
-    App42SocialResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-	~App42SocialResponse();
-    void onComplete(void *sender, void *data);
-private:
-    void init();
-    
-};
+	class App42SocialResponse : public App42Response
+	{
+	public:
+		App42Social social;
+		App42FacebookProfile facebookProfile;
+		vector<App42Friend> friendsList;
+		vector<App42PublicProfile> publicProfile;
 
+		App42SocialResponse(SEL_App42CallFuncND pSelector);
+		~App42SocialResponse();
+		void onComplete(void *sender, void *data);
+	private:
+		void init();
+
+	};
+}//namespace App42
 #endif /* defined(__App42Cocos2dX3_0Sample__App42SocialResponse__) */

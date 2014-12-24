@@ -13,22 +13,23 @@
 #include "cJSON.h"
 
 using namespace std;
-
-class App42GeoPoint
+namespace App42
 {
-public:
-    App42GeoPoint();
-    ~App42GeoPoint();
-        
-    double latitude;
-    double longitude;
-    string buddyName;
-    string markerName;
-    string createdOn;
-    
-    string toString();
-    cJSON* getJson(); // You need to free the returned cJSON object
-private:
-};
+	class App42GeoPoint
+	{
+	public:
+		App42GeoPoint();
+		~App42GeoPoint();
 
+		double latitude;
+		double longitude;
+		string buddyName;
+		string markerName;
+		string createdOn;
+
+		string toString();
+		cJSON* getJson(); // You need to free the returned cJSON object
+	private:
+	};
+}//namespace App42
 #endif /* defined(__App42Cocos2dX3_0Sample__App42GeoPoint__) */

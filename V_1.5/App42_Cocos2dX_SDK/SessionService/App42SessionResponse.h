@@ -15,38 +15,39 @@
 #include "App42Constants.h"
 
 using namespace std;
-
-struct App42Attribute;
-
-typedef struct App42Session
+namespace App42
 {
-    string userName;
-    string sessionId;
-    string invalidatedOn;
-    string createdOn;
-    vector<App42Attribute> attributeArray;
-    
-}App42Session;
+	struct App42Attribute;
 
-typedef struct App42Attribute
-{
-    string name;
-    string value;
-}App42Attribute;
+	typedef struct App42Session
+	{
+		string userName;
+		string sessionId;
+		string invalidatedOn;
+		string createdOn;
+		vector<App42Attribute> attributeArray;
 
+	}App42Session;
 
-class App42SessionResponse : public App42Response
-{
-public:
-    App42SessionResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-    App42Session app42Session;
-	~App42SessionResponse();
-    void onComplete(void *sender, void *data);
-    
-private:
-    void init();
-};
+	typedef struct App42Attribute
+	{
+		string name;
+		string value;
+	}App42Attribute;
 
 
+	class App42SessionResponse : public App42Response
+	{
+	public:
+		App42SessionResponse(SEL_App42CallFuncND pSelector);
+		App42Session app42Session;
+		~App42SessionResponse();
+		void onComplete(void *sender, void *data);
+
+	private:
+		void init();
+	};
+
+}//namespace App42
 
 #endif /* defined(__App42Cocos2dX3_0Sample__App42SessionResponse__) */

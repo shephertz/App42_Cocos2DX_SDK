@@ -17,37 +17,39 @@
 
 using namespace std;
 
-struct App42BuddyPoint;
-
-typedef struct App42Buddy
+namespace App42
 {
-    string userName;
-    string buddyName;
-    string groupName;
-    string ownerName;
-    string message;
-    string messageId;
-    string sentOn;
-    string acceptedOn;
-    vector<App42Buddy> buddyList;
-    vector<App42GeoPoint> pointList;
-    
-}App42Buddy;
+	struct App42BuddyPoint;
+
+	typedef struct App42Buddy
+	{
+		string userName;
+		string buddyName;
+		string groupName;
+		string ownerName;
+		string message;
+		string messageId;
+		string sentOn;
+		string acceptedOn;
+		vector<App42Buddy> buddyList;
+		vector<App42GeoPoint> pointList;
+
+	}App42Buddy;
 
 
 
-class App42BuddyResponse : public App42Response
-{
-public:
-    
-    vector<App42Buddy> buddyList;
+	class App42BuddyResponse : public App42Response
+	{
+	public:
 
-    App42BuddyResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-	~App42BuddyResponse();
-    void onComplete(void *sender, void *data);
-    
-private:
-    void init();
-};
+		vector<App42Buddy> buddyList;
 
+		App42BuddyResponse(SEL_App42CallFuncND pSelector);
+		~App42BuddyResponse();
+		void onComplete(void *sender, void *data);
+
+	private:
+		void init();
+	};
+}//namespace App42
 #endif /* defined(__App42Cocos2dX3_0Sample__App42BuddyResponse__) */

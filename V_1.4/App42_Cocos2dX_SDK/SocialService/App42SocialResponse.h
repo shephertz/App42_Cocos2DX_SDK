@@ -28,7 +28,7 @@ public:
     vector<App42Friend> friendsList;
     vector<App42PublicProfile> publicProfile;
     
-    App42SocialResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42SocialResponse(SEL_App42CallFuncND pSelector);
 	~App42SocialResponse();
     void onComplete(void *sender, void *data);
 private:

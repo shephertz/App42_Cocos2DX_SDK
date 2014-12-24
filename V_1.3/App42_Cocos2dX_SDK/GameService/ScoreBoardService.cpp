@@ -118,15 +118,14 @@ string BuildEditUserScoreBody(string scoreId, double score)
 }
 
 
-void ScoreBoardService::SaveUserScore(const char* gameName,const char* userName, double score, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::SaveUserScore(const char* gameName,const char* userName, double score, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -136,9 +135,9 @@ void ScoreBoardService::SaveUserScore(const char* gameName,const char* userName,
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)( response);
         }
         delete e;
         e = NULL;
@@ -165,18 +164,17 @@ void ScoreBoardService::SaveUserScore(const char* gameName,const char* userName,
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executePost(baseUrl, headers, saveScoreBody.c_str(), response, app42response_selector(App42GameResponse::onComplete));
+    Util::executePost(baseUrl, headers, saveScoreBody.c_str(), std::bind(&App42GameResponse::onComplete,response,std::placeholders::_1,std::placeholders::_2));
 
 }
 
-void ScoreBoardService::EditScoreValueById(const char* scoreId, double gameScore, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::EditScoreValueById(const char* scoreId, double gameScore, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(scoreId, "Score ID");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -186,9 +184,9 @@ void ScoreBoardService::EditScoreValueById(const char* scoreId, double gameScore
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -213,20 +211,19 @@ void ScoreBoardService::EditScoreValueById(const char* scoreId, double gameScore
     string timestamp = Util::getTimeStamp();
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executePut(baseUrl, headers, saveScoreBody.c_str(), response, app42response_selector(App42GameResponse::onComplete));
+	Util::executePut(baseUrl, headers, saveScoreBody.c_str(), std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void ScoreBoardService::GetAverageScoreByUser(const char* gameName, const char* userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetAverageScoreByUser(const char* gameName, const char* userName, SEL_App42CallFuncND pSelector)
 {
     
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -236,9 +233,9 @@ void ScoreBoardService::GetAverageScoreByUser(const char* gameName, const char* 
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -269,19 +266,18 @@ void ScoreBoardService::GetAverageScoreByUser(const char* gameName, const char* 
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void ScoreBoardService::GetHighestScoreByUser(const char* gameName,const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetHighestScoreByUser(const char* gameName,const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -291,9 +287,9 @@ void ScoreBoardService::GetHighestScoreByUser(const char* gameName,const char* u
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -325,19 +321,18 @@ void ScoreBoardService::GetHighestScoreByUser(const char* gameName,const char* u
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void ScoreBoardService::GetLastScoreByUser(const char* gameName,const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetLastScoreByUser(const char* gameName,const char* userName,SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -347,9 +342,9 @@ void ScoreBoardService::GetLastScoreByUser(const char* gameName,const char* user
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -381,18 +376,17 @@ void ScoreBoardService::GetLastScoreByUser(const char* gameName,const char* user
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void ScoreBoardService::GetTopRankings(const char* gameName, tm *startDate, tm *endDate,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopRankings(const char* gameName, tm *startDate, tm *endDate, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -402,9 +396,9 @@ void ScoreBoardService::GetTopRankings(const char* gameName, tm *startDate, tm *
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -450,18 +444,17 @@ void ScoreBoardService::GetTopRankings(const char* gameName, tm *startDate, tm *
      * Initiating Http call
      */
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void ScoreBoardService::GetTopRankings(const char* gameName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopRankings(const char* gameName, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -471,9 +464,9 @@ void ScoreBoardService::GetTopRankings(const char* gameName,App42CallBack* pTarg
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -500,19 +493,18 @@ void ScoreBoardService::GetTopRankings(const char* gameName,App42CallBack* pTarg
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void ScoreBoardService::GetTopNRankers(const char* gameName, tm *startDate, tm *endDate, int max, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopNRankers(const char* gameName, tm *startDate, tm *endDate, int max, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -522,9 +514,9 @@ void ScoreBoardService::GetTopNRankers(const char* gameName, tm *startDate, tm *
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -574,18 +566,17 @@ void ScoreBoardService::GetTopNRankers(const char* gameName, tm *startDate, tm *
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void ScoreBoardService::GetTopNRankers(const char* gameName,int max,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopNRankers(const char* gameName,int max, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -595,9 +586,9 @@ void ScoreBoardService::GetTopNRankers(const char* gameName,int max,App42CallBac
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -626,19 +617,18 @@ void ScoreBoardService::GetTopNRankers(const char* gameName,int max,App42CallBac
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void ScoreBoardService::GetUserRanking(const char* gameName, const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetUserRanking(const char* gameName, const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -648,9 +638,9 @@ void ScoreBoardService::GetUserRanking(const char* gameName, const char* userNam
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -680,20 +670,19 @@ void ScoreBoardService::GetUserRanking(const char* gameName, const char* userNam
     Util::BuildHeaders(metaHeaders, headers);
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
     
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 
 }
 
-void ScoreBoardService::GetScoresByUser(const char* gameName,const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetScoresByUser(const char* gameName,const char* userName, SEL_App42CallFuncND pSelector)
 {
     
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -703,9 +692,9 @@ void ScoreBoardService::GetScoresByUser(const char* gameName,const char* userNam
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -745,20 +734,19 @@ void ScoreBoardService::GetScoresByUser(const char* gameName,const char* userNam
     /**
      * Initiating Http call
      */
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
 
-void ScoreBoardService::GetLowestScoreByUser(const char* gameName,const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetLowestScoreByUser(const char* gameName,const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -768,9 +756,9 @@ void ScoreBoardService::GetLowestScoreByUser(const char* gameName,const char* us
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -811,18 +799,17 @@ void ScoreBoardService::GetLowestScoreByUser(const char* gameName,const char* us
     /**
      * Initiating Http call
      */
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void ScoreBoardService::GetTopRankingsByGroup(const char* gameName,std::vector<std::string>group,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopRankingsByGroup(const char* gameName,std::vector<std::string>group, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -832,9 +819,9 @@ void ScoreBoardService::GetTopRankingsByGroup(const char* gameName,std::vector<s
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -881,17 +868,16 @@ void ScoreBoardService::GetTopRankingsByGroup(const char* gameName,std::vector<s
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void ScoreBoardService::GetTopRankersByGroup(const char* gameName,std::vector<std::string>group,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopRankersByGroup(const char* gameName,std::vector<std::string>group, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -901,9 +887,9 @@ void ScoreBoardService::GetTopRankersByGroup(const char* gameName,std::vector<st
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -951,18 +937,17 @@ void ScoreBoardService::GetTopRankersByGroup(const char* gameName,std::vector<st
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void ScoreBoardService::GetLastGameScore(const char* userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetLastGameScore(const char* userName, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -972,9 +957,9 @@ void ScoreBoardService::GetLastGameScore(const char* userName,App42CallBack* pTa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1012,19 +997,18 @@ void ScoreBoardService::GetLastGameScore(const char* userName,App42CallBack* pTa
     /**
      * Initiating Http call
      */
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
-void ScoreBoardService::GetTopNTargetRankers(const char* gameName,int max,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopNTargetRankers(const char* gameName,int max, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1034,9 +1018,9 @@ void ScoreBoardService::GetTopNTargetRankers(const char* gameName,int max,App42C
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1076,18 +1060,17 @@ void ScoreBoardService::GetTopNTargetRankers(const char* gameName,int max,App42C
     /**
      * Initiating Http call
      */
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void ScoreBoardService::GetTopNRankings(const char* gameName,int max,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetTopNRankings(const char* gameName,int max, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1097,9 +1080,9 @@ void ScoreBoardService::GetTopNRankings(const char* gameName,int max,App42CallBa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1139,17 +1122,16 @@ void ScoreBoardService::GetTopNRankings(const char* gameName,int max,App42CallBa
     /**
      * Initiating Http call
      */
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void ScoreBoardService::GetUsersWithScoreRange(const char* gameName,double minScore, double maxScore,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void ScoreBoardService::GetUsersWithScoreRange(const char* gameName,double minScore, double maxScore, SEL_App42CallFuncND pSelector)
 {
-    App42GameResponse *response = new App42GameResponse(pTarget,pSelector);
+    App42GameResponse *response = new App42GameResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(gameName, "Game Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1159,9 +1141,9 @@ void ScoreBoardService::GetUsersWithScoreRange(const char* gameName,double minSc
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1203,5 +1185,5 @@ void ScoreBoardService::GetUsersWithScoreRange(const char* gameName,double minSc
     /**
      * Initiating Http call
      */
-    Util::executeGet(url,headers, response, app42response_selector(App42GameResponse::onComplete));
+	Util::executeGet(url, headers, std::bind(&App42GameResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }

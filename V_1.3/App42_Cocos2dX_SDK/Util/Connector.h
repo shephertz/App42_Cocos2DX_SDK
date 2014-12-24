@@ -48,7 +48,7 @@ namespace Util
         }
     }
     
-    static void executePost(string baseUrl,std::vector<std::string> headers, const char* postData, App42CallBack* pTarget, App42Network::SEL_App42Response pSelector)
+    static void executePost(string baseUrl,std::vector<std::string> headers, const char* postData, App42Network::SEL_App42Response pSelector)
     {
         
         App42Network::App42HttpRequest* request = new App42Network::App42HttpRequest();
@@ -65,7 +65,7 @@ namespace Util
         app42Trace("BaseURL=%s",baseUrl.c_str());
         
         request->setHeaders(headers);
-        request->setResponseCallback(pTarget, pSelector);
+		request->setResponseCallback(pSelector);
         
         request->setRequestData(postData, strlen(postData));
         
@@ -74,7 +74,7 @@ namespace Util
         return;
     }
     
-    static void executePut(string baseUrl,std::vector<std::string> headers, const char* postData,App42CallBack* pTarget, App42Network::SEL_App42Response pSelector)
+    static void executePut(string baseUrl,std::vector<std::string> headers, const char* postData, App42Network::SEL_App42Response pSelector)
     {
         App42Network::App42HttpRequest* request = new App42Network::App42HttpRequest();
         request->setUrl(baseUrl.c_str());
@@ -92,7 +92,7 @@ namespace Util
         
         request->setHeaders(headers);
         
-        request->setResponseCallback(pTarget, pSelector);
+		request->setResponseCallback(pSelector);
         
         request->setRequestData(postData, strlen(postData));
         
@@ -101,7 +101,7 @@ namespace Util
         return;
     }
 
-    static void executeGet(string baseUrl,std::vector<std::string> headers,App42CallBack* pTarget, App42Network::SEL_App42Response pSelector)
+    static void executeGet(string baseUrl,std::vector<std::string> headers, App42Network::SEL_App42Response pSelector)
     {
         App42Network::App42HttpRequest* request = new App42Network::App42HttpRequest();
         request->setUrl(baseUrl.c_str());
@@ -117,14 +117,14 @@ namespace Util
 
         
         request->setHeaders(headers);
-        request->setResponseCallback(pTarget, pSelector);
+		request->setResponseCallback(pSelector);
         
         App42Network::App42HttpClient::getInstance()->send(request);
         //request->release();
         return;
     }
     
-    static void executeDelete(string baseUrl,std::vector<std::string> headers,App42CallBack* pTarget, App42Network::SEL_App42Response pSelector)
+    static void executeDelete(string baseUrl,std::vector<std::string> headers, App42Network::SEL_App42Response pSelector)
     {
         App42Network::App42HttpRequest* request = new App42Network::App42HttpRequest();
         request->setUrl(baseUrl.c_str());
@@ -142,14 +142,14 @@ namespace Util
         
         request->setHeaders(headers);
         
-        request->setResponseCallback(pTarget, pSelector);
+		request->setResponseCallback(pSelector);
         
         App42Network::App42HttpClient::getInstance()->send(request);
         //request->release();
         return;
     }
     
-    static void executeMultiPartWithFileData(string requestName,const char* fileName, unsigned char* postData,int fileDataSize,map<string,string>postParams,string baseUrl,std::vector<std::string> headers,App42CallBack* pTarget, App42Network::SEL_App42Response pSelector)
+    static void executeMultiPartWithFileData(string requestName,const char* fileName, unsigned char* postData,int fileDataSize,map<string,string>postParams,string baseUrl,std::vector<std::string> headers, App42Network::SEL_App42Response pSelector)
     {
 
         
@@ -169,7 +169,7 @@ namespace Util
         request->setRequestName(requestName);
         request->setPostParams(postParams);
         request->setHeaders(headers);
-        request->setResponseCallback(pTarget, pSelector);
+		request->setResponseCallback(pSelector);
         request->setFileData(postData, fileDataSize);
         request->setFileName(fileName);
         App42Network::App42HttpClient::getInstance()->send(request);
@@ -177,7 +177,7 @@ namespace Util
         return;
     }
     
-    static void executeMultiPartWithFile(string requestName,string fileName, string filePath, map<string,string>postParams,string baseUrl,std::vector<std::string> headers,App42CallBack* pTarget, App42Network::SEL_App42Response pSelector)
+    static void executeMultiPartWithFile(string requestName,string fileName, string filePath, map<string,string>postParams,string baseUrl,std::vector<std::string> headers, App42Network::SEL_App42Response pSelector)
     {
         
         App42Network::App42HttpRequest* request = new App42Network::App42HttpRequest();
@@ -196,7 +196,7 @@ namespace Util
         request->setRequestName(requestName.c_str());
         request->setPostParams(postParams);
         request->setHeaders(headers);
-        request->setResponseCallback(pTarget, pSelector);
+		request->setResponseCallback(pSelector);
         request->setFileName(fileName);
         request->setFilePath(filePath);
         App42Network::App42HttpClient::getInstance()->send(request);

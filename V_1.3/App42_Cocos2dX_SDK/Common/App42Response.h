@@ -30,12 +30,11 @@ protected:
     std::string _body;
     const char *errorBuffer;
     App42HttpRequest   *_httpRequest;
-    App42CallBack       *_app42Target;
     SEL_App42CallFuncND  _app42Selector;
     
 public:
     
-    App42Response(App42CallBack *app42Target, SEL_App42CallFuncND app42Selector);
+    App42Response(SEL_App42CallFuncND app42Selector);
     
     virtual ~App42Response();
     
@@ -51,7 +50,7 @@ public:
     void setTotalRecords();
     // The JSON body of the HTTP response containing details
     std::string getBody();
-    virtual void onComplete(void *sender, void *data);
+	virtual void onComplete(App42HttpClient *sender, App42HttpResponse *data);
 
     void buildJsonDocument(cJSON *json, JSONDocument *jsonDocumnet);
     void buildErrorMessage();

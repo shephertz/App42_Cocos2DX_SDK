@@ -11,8 +11,8 @@
 #include "Common.h"
 
 
-App42PushNotificationResponse::App42PushNotificationResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
-:App42Response(pTarget,pSelector)
+App42PushNotificationResponse::App42PushNotificationResponse(SEL_App42CallFuncND pSelector)
+:App42Response(pSelector)
 {
     
 }
@@ -22,15 +22,15 @@ App42PushNotificationResponse::~App42PushNotificationResponse()
     
 }
 
-void App42PushNotificationResponse::onComplete(void *sender, void *data)
+void App42PushNotificationResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();
     
     
-    if (_app42Target && _app42Selector)
+    if (_app42Selector)
     {
-        (_app42Target->*_app42Selector)((App42CallBack *)_app42Target, this);
+        (_app42Selector)( this);
     }
     
 }

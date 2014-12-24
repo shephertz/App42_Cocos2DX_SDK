@@ -8,25 +8,25 @@
 
 #ifndef App42CPPSDK_App42Constants_h
 #define App42CPPSDK_App42Constants_h
-
-
+namespace App42
+{
 #define Production 1
 
 #if Production
-    #define PROTOCOL        "https://"
-    #define BASE_URL        "api.shephertz.com"
+#define PROTOCOL        "https://"
+#define BASE_URL        "api.shephertz.com"
 #else
-    #define PROTOCOL        "http://"
-    #define BASE_URL        "192.168.1.39:8082/App42_API_SERVER"
+#define PROTOCOL        "http://"
+#define BASE_URL        "192.168.1.39:8082/App42_API_SERVER"
 #endif
 
 #define CUSTOMCODE_URL  "customcode.shephertz.com/"
 #define RESOURCE_BASE       "/cloud/1.0/"
 #define VERSION             "1.0"
 
-/***
- *  BASIC SERVICE PARAMS
- **/
+	/***
+	 *  BASIC SERVICE PARAMS
+	 **/
 
 #define VERSION_KEY         "version"
 #define TIME_SATMP          "timeStamp"
@@ -41,6 +41,5 @@
 #define FB_ACCESS_TOKEN     "fbAccessToken"
 #define GEO_TAG             "geoTag"
 #define EVENT               "event"
-
-
+}
 #endif

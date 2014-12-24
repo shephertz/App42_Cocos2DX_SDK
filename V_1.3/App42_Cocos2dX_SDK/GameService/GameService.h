@@ -52,7 +52,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void CreateGame(const char* gameName,const char* description, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void CreateGame(const char* gameName,const char* description, SEL_App42CallFuncND pSelector);
     
     /**
      * Retrieves the game by the specified name
@@ -61,7 +61,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetGamebyName(const char* gameName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetGamebyName(const char* gameName, SEL_App42CallFuncND pSelector);
     
 	/**
      * Fetches all games for the App
@@ -69,7 +69,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetAllGames(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllGames( SEL_App42CallFuncND pSelector);
     
     /**
      * Fetches all games for the App by paging
@@ -77,7 +77,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetAllGames(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllGames(int max, int offset, SEL_App42CallFuncND pSelector);
     
     /**
      * Fetches all games count for the App
@@ -85,7 +85,7 @@ public:
      * @return app42Result - The result of the request.
      *
      */
-	void GetAllGamesCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+	void GetAllGamesCount( SEL_App42CallFuncND pSelector);
     
 };
 #endif /* defined(__App42CPPSDK__GameService__) */

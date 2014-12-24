@@ -10,18 +10,20 @@
 #define App42Cocos2dXSDK_3_0Beta2_Sample_App42CallBack_h
 
 #include <iostream>
+#include <functional>
 
-class App42CallBack
+namespace App42
 {
-    
-};
+	class App42CallBack
+	{
+
+	};
 
 
-/***
- * Callback Macro
- **/
+	/***
+	 * Callback Macro
+	 **/
 
-typedef void (App42CallBack::*SEL_App42CallFuncND)(App42CallBack*, void*);
-#define app42callfuncND_selector(_SELECTOR) static_cast<SEL_App42CallFuncND>(&_SELECTOR)
-
+	typedef std::function<void(void*)> SEL_App42CallFuncND;
+}
 #endif

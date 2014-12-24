@@ -7,25 +7,27 @@
 //
 
 #include "App42Social.h"
-
-App42Social::App42Social()
+namespace App42
 {
-    
-}
+	App42Social::App42Social()
+	{
 
-void App42Social::setDefaults()
-{
-    userName = "";
-    status = "";
-    facebookAppId = "";
-    facebookAppSecret = "";
-    facebookAccessToken = "";
-    twitterConsumerKey = "";
-    twitterConsumerSecret = "";
-    twitterAccessToken = "";
-    twitterAccessTokenSecret = "";
-    linkedinApiKey = "";
-    linkedinSecretKey = "";
-    linkedinAccessToken = "";
-    linkedinAccessTokenSecret = "";
-}
+	}
+
+	void App42Social::setDefaults()
+	{
+		userName = "";
+		status = "";
+		facebookAppId = "";
+		facebookAppSecret = "";
+		facebookAccessToken = "";
+		twitterConsumerKey = "";
+		twitterConsumerSecret = "";
+		twitterAccessToken = "";
+		twitterAccessTokenSecret = "";
+		linkedinApiKey = "";
+		linkedinSecretKey = "";
+		linkedinAccessToken = "";
+		linkedinAccessTokenSecret = "";
+	}
+}//namespace App42

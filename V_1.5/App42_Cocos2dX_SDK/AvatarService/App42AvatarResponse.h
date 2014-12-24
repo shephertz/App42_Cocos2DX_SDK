@@ -16,30 +16,34 @@
 
 using namespace std;
 
-struct App42Avatar;
-
-class App42AvatarResponse : public App42Response
+namespace App42
 {
-public:
-    App42AvatarResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-    vector<App42Avatar> avatars;
-	~App42AvatarResponse();
-    void onComplete(void *sender, void *data);
-    
-private:
-    void init();
-};
+	struct App42Avatar;
 
-typedef struct App42Avatar
-{
-    string userName;
-    string name;
-    string url;
-    string tinyUrl;
-    string description;
-    string createdOn;
-    bool isCurrent;
-    
-}App42Avatar;
+	class App42AvatarResponse : public App42Response
+	{
+	public:
+		App42AvatarResponse(SEL_App42CallFuncND pSelector);
+		vector<App42Avatar> avatars;
+		~App42AvatarResponse();
+		void onComplete(void *sender, void *data);
+
+	private:
+		void init();
+	};
+
+	typedef struct App42Avatar
+	{
+		string userName;
+		string name;
+		string url;
+		string tinyUrl;
+		string description;
+		string createdOn;
+		bool isCurrent;
+
+	}App42Avatar;
+
+}//namespace App42
 
 #endif /* defined(__App42Cocos2dX3_0Sample__App42AvatarResponse__) */

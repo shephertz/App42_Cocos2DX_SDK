@@ -48,14 +48,13 @@ CustomCodeService::CustomCodeService()
     
 }
 
-void CustomCodeService::RunJavaCode(const char* name, App42Object *jsonBody,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void CustomCodeService::RunJavaCode(const char* name, App42Object *jsonBody, SEL_App42CallFuncND pSelector)
 {
-    App42CustomCodeResponse *response = new App42CustomCodeResponse(pTarget,pSelector);
+    App42CustomCodeResponse *response = new App42CustomCodeResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(name, "File Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -65,9 +64,9 @@ void CustomCodeService::RunJavaCode(const char* name, App42Object *jsonBody,App4
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -105,6 +104,6 @@ void CustomCodeService::RunJavaCode(const char* name, App42Object *jsonBody,App4
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, jsonBody->toString().c_str(), response, app42response_selector(App42Response::onComplete));
+	Util::executePost(encodedUrl, headers, jsonBody->toString().c_str(), std::bind(&App42Response::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }

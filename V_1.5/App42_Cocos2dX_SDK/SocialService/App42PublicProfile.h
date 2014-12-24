@@ -11,31 +11,32 @@
 
 #include <iostream>
 using namespace std;
-
-class App42PublicProfile
+namespace App42
 {
-public:
-    
-    /**
-     * Getters
-     */
-    string getName(){return name;};
-    string getPicture(){return picture;};
-    string getFbId(){return fbId;};
-    
-    /**
-     * Setters
-     */
-    void setName(string _name){name=_name;};
-    void setPicture(string _picture){ picture=_picture;};
-    void setFbId(string _fbId){ fbId=_fbId;};
-    
-protected:
-    std::string name;
-    std::string picture;
-    std::string fbId;
-    
-private:
-};
+	class App42PublicProfile
+	{
+	public:
 
+		/**
+		 * Getters
+		 */
+		string getName(){ return name; };
+		string getPicture(){ return picture; };
+		string getFbId(){ return fbId; };
+
+		/**
+		 * Setters
+		 */
+		void setName(string _name){ name = _name; };
+		void setPicture(string _picture){ picture = _picture; };
+		void setFbId(string _fbId){ fbId = _fbId; };
+
+	protected:
+		std::string name;
+		std::string picture;
+		std::string fbId;
+
+	private:
+	};
+}//namespace App42
 #endif /* defined(__App42Cocos2dX3_0Sample__App42PublicProfile__) */

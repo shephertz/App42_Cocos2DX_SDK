@@ -10,8 +10,8 @@
 #include "Common.h"
 
 
-App42RewardResponse::App42RewardResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
-:App42Response(pTarget,pSelector)
+App42RewardResponse::App42RewardResponse(SEL_App42CallFuncND pSelector)
+:App42Response(pSelector)
 {
     
 }
@@ -21,15 +21,15 @@ App42RewardResponse::~App42RewardResponse()
     //games.clear();
 }
 
-void App42RewardResponse::onComplete(void *sender, void *data)
+void App42RewardResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();
     
     
-    if (_app42Target && _app42Selector)
+    if ( _app42Selector)
     {
-        (_app42Target->*_app42Selector)((App42CallBack *)_app42Target, this);
+        (_app42Selector)( this);
     }
     
 }

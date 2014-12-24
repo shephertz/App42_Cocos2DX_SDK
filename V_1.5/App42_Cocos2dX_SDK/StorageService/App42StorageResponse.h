@@ -15,29 +15,30 @@
 #include "JSONDocument.h"
 
 using namespace std;
-
-struct App42Storage;
-
-class App42StorageResponse : public App42Response
+namespace App42
 {
-public:
-    vector<App42Storage> storages;
-    App42StorageResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-	~App42StorageResponse();
-    void onComplete(void *sender, void *data);
-private:
-    void init();
-    
-};
+	struct App42Storage;
+
+	class App42StorageResponse : public App42Response
+	{
+	public:
+		vector<App42Storage> storages;
+		App42StorageResponse(SEL_App42CallFuncND pSelector);
+		~App42StorageResponse();
+		void onComplete(void *sender, void *data);
+	private:
+		void init();
+
+	};
 
 
-typedef struct App42Storage
-{
-    string dbName;
-    string collectionName;
-    double recordCount;
-    vector<JSONDocument> jsonDocArray;
-    
-}App42Storage;
+	typedef struct App42Storage
+	{
+		string dbName;
+		string collectionName;
+		double recordCount;
+		vector<JSONDocument> jsonDocArray;
 
+	}App42Storage;
+}//namespace App42
 #endif /* defined(__App42CPPSDK__App42StorageResponse__) */

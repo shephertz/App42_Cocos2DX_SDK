@@ -27,28 +27,28 @@
 
 #define APP42_ORDER_ASCENDING            "ASCENDING"
 #define APP42_ORDER_DESCENDING           "DESCENDING"
-
-class Query
+namespace App42
 {
-public:
-        
-    Query(cJSON *_jsonObject);
-    
-    ~Query();
-    
-    cJSON *jsonObject;
-    cJSON *jsonArray;
+	class Query
+	{
+	public:
 
-    void setJsonObject(cJSON *_jsonObject);
-    void setJsonArray(cJSON *_jsonArray);
-    cJSON* getJsonObject();
-    cJSON* getJsonArray();
-    cJSON* getJson();
-    std::string getString();
-protected:
-    
-private:
-    
-};
+		Query(cJSON *_jsonObject);
 
+		~Query();
+
+		cJSON *jsonObject;
+		cJSON *jsonArray;
+
+		void setJsonObject(cJSON *_jsonObject);
+		void setJsonArray(cJSON *_jsonArray);
+		cJSON* getJsonObject();
+		cJSON* getJsonArray();
+		cJSON* getJson();
+		std::string getString();
+	protected:
+
+	private:
+	};
+}
 #endif /* defined(__App42CPPSDK__Query__) */

@@ -15,29 +15,30 @@
 #include "App42Score.h"
 
 using namespace std;
-
-struct App42Game;
-
-class App42GameResponse : public App42Response
+namespace App42
 {
-public:
-    
-    vector<App42Game> games;
-    vector<App42Score> scores;
-    
-    App42GameResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
-	~App42GameResponse();
-    void onComplete(void *sender, void *data);
-private:
-    void init();
-        
-};
+	struct App42Game;
+
+	class App42GameResponse : public App42Response
+	{
+	public:
+
+		vector<App42Game> games;
+		vector<App42Score> scores;
+
+		App42GameResponse(SEL_App42CallFuncND pSelector);
+		~App42GameResponse();
+		void onComplete(void *sender, void *data);
+	private:
+		void init();
+
+	};
 
 
-typedef struct App42Game
-{
-    string name;
-    string description;
-}App42Game;
-
+	typedef struct App42Game
+	{
+		string name;
+		string description;
+	}App42Game;
+}//namespace App42
 #endif /* defined(__App42CPPSDK__App42GameResponse__) */

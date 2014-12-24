@@ -52,7 +52,7 @@ public:
      * @param jsonBody
      *            - Request Body in JSON format
      */
-    void RunJavaCode(const char* name, App42Object *jsonBody,App42CallBack* pTarget, SEL_App42CallFuncND pSelector);
+    void RunJavaCode(const char* name, App42Object *jsonBody, SEL_App42CallFuncND pSelector);
 
 };
 

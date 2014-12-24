@@ -19,9 +19,9 @@ class App42CustomCodeResponse : public App42Response
 {
     public:
     
-        App42CustomCodeResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+        App42CustomCodeResponse(SEL_App42CallFuncND pSelector);
         ~App42CustomCodeResponse();
-        void onComplete(void *sender, void *data);
+		void onComplete(App42HttpClient *sender, App42HttpResponse *data);
     
     private:
     

@@ -13,21 +13,23 @@
 #include "JSONDocument.h"
 #include <vector>
 using namespace std;
-class MetaResponse
+namespace App42
 {
-public:
-    std::vector<JSONDocument> getJsonDocList()
-    {
-        return jsonDocList;
-    };
-    void setJsonDocList(std::vector<JSONDocument> _jsonDocList)
-    {
-        jsonDocList=_jsonDocList;
-    };
-    
-protected:
-    std::vector<JSONDocument> jsonDocList;
-private:
-    
-};
+	class MetaResponse
+	{
+	public:
+		std::vector<JSONDocument> getJsonDocList()
+		{
+			return jsonDocList;
+		};
+		void setJsonDocList(std::vector<JSONDocument> _jsonDocList)
+		{
+			jsonDocList = _jsonDocList;
+		};
+
+	protected:
+		std::vector<JSONDocument> jsonDocList;
+	private:
+	};
+}
 #endif /* defined(__App42CPPSDK__MetaResponse__) */

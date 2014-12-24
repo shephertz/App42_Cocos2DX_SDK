@@ -11,8 +11,8 @@
 
 
 
-App42UserResponse::App42UserResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
-:App42Response(pTarget,pSelector)
+App42UserResponse::App42UserResponse(SEL_App42CallFuncND pSelector)
+:App42Response(pSelector)
 {
     
 }
@@ -111,14 +111,14 @@ App42UserProfile App42UserResponse::buildUserProfile(cJSON* ptrProfile)
     return app42UserProfile;
 }
 
-void App42UserResponse::onComplete(void *sender, void *data)
+void App42UserResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();
     
-    if (_app42Target && _app42Selector)
+    if (_app42Selector)
     {
-        (_app42Target->*_app42Selector)((App42CallBack *)_app42Target, this);
+        (_app42Selector)(this);
     }
 }
 

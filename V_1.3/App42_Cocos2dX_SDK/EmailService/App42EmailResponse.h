@@ -33,9 +33,9 @@ public:
     string subject;
     string body;
     
-    App42EmailResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42EmailResponse(SEL_App42CallFuncND pSelector);
 	~App42EmailResponse();
-    void onComplete(void *sender, void *data);
+	void onComplete(App42HttpClient *sender, App42HttpResponse *data);
 private:
     void init();
     

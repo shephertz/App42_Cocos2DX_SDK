@@ -8,12 +8,16 @@
 
 #include "App42Exception.h"
 
-App42Exception::App42Exception(std::string exception, int _httpErrorCode, int _appErrorCode)
+namespace App42
 {
-    httpErrorCode = _httpErrorCode;
-    appErrorCode  = _appErrorCode;
-    exceptionString = cJSON_CreateObject();
-    cJSON_AddStringToObject(exceptionString, "reason", exception.c_str());
-    cJSON_AddNumberToObject(exceptionString, "httpErrorCode", _httpErrorCode);
-    cJSON_AddNumberToObject(exceptionString, "appErrorCode", _appErrorCode);
-}
+
+	App42Exception::App42Exception(std::string exception, int _httpErrorCode, int _appErrorCode)
+	{
+		httpErrorCode = _httpErrorCode;
+		appErrorCode = _appErrorCode;
+		exceptionString = cJSON_CreateObject();
+		cJSON_AddStringToObject(exceptionString, "reason", exception.c_str());
+		cJSON_AddNumberToObject(exceptionString, "httpErrorCode", _httpErrorCode);
+		cJSON_AddNumberToObject(exceptionString, "appErrorCode", _appErrorCode);
+	}
+} //namespace App42

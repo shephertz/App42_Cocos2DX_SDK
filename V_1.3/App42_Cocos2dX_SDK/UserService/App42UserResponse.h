@@ -22,10 +22,10 @@ struct App42UserProfile;
 class App42UserResponse : public App42Response
 {
 public:
-    App42UserResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector);
+    App42UserResponse(SEL_App42CallFuncND pSelector);
     vector<App42User> users;
 	~App42UserResponse();
-    void onComplete(void *sender, void *data);
+	void onComplete(App42HttpClient *sender, App42HttpResponse *data);
 private:
     void init();
     App42UserProfile buildUserProfile(cJSON* ptrProfile);

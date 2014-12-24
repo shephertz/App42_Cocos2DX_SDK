@@ -547,16 +547,15 @@ string UserService::buildLogoutBody(string sessionId)
     
 }
 
-void UserService::CreateUser(const char *username, const char *password, const char *email, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::CreateUser(const char *username, const char *password, const char *email, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
         Util::throwExceptionIfStringNullOrBlank(password, "Password");
         Util::throwExceptionIfStringNullOrBlank(email, "Email");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -566,9 +565,9 @@ void UserService::CreateUser(const char *username, const char *password, const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if ( pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -607,21 +606,20 @@ void UserService::CreateUser(const char *username, const char *password, const c
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, createUserbody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePost(encodedUrl, headers, createUserbody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
 
-void UserService::CreateUser(const char *username, const char *password, const char *email,vector<string>roleList,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::CreateUser(const char *username, const char *password, const char *email,vector<string>roleList, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
         Util::throwExceptionIfStringNullOrBlank(password, "Password");
         Util::throwExceptionIfStringNullOrBlank(email, "Email");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -631,9 +629,9 @@ void UserService::CreateUser(const char *username, const char *password, const c
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -672,19 +670,18 @@ void UserService::CreateUser(const char *username, const char *password, const c
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, createUserbody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePost(encodedUrl, headers, createUserbody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
     
 }
 
 
-void UserService::AssignRoles(const char *userName, vector<string> roleList,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::AssignRoles(const char *userName, vector<string> roleList, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -694,9 +691,9 @@ void UserService::AssignRoles(const char *userName, vector<string> roleList,App4
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -735,81 +732,79 @@ void UserService::AssignRoles(const char *userName, vector<string> roleList,App4
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, createUserbody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
-    
+	Util::executePost(encodedUrl, headers, createUserbody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::Authenticate(const char *username, const char *password, App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
+void UserService::Authenticate(const char *username, const char *password, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
-    
-    try
-    {
-        Util::throwExceptionIfStringNullOrBlank(username, "User Name");
-        Util::throwExceptionIfStringNullOrBlank(password, "Password");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
-        Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
-        
-    }
-    catch (App42Exception *e)
-    {
-        std::string ex = e->what();
-        response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
-        response->isSuccess = false;
-        if (pTarget && pSelector)
-        {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
-        }
-        delete e;
-        e = NULL;
-        return;
-    }
-    
-    string timestamp = Util::getTimeStamp();
+	App42UserResponse *response = new App42UserResponse(pSelector);
 
-    /**
-     * Creating SignParams and signature
-     */
-    map<string, string> signParams;
-    populateSignParams(signParams);
-    string postBody = buildCreateUserBody(username, password, "","");
-    //Util::app42Trace("\n createUserbody = %s",postBody.c_str());
-    signParams["body"] = postBody;
-    string signature = Util::signMap(secretKey, signParams);
-    
-    /**
-     * Creating URL
-     */
-    string baseUrl = getBaseUrl("user/authenticate");
-    baseUrl.append("?");
-    string encodedUrl = url_encode(baseUrl);
-    //Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
+	try
+	{
+		Util::throwExceptionIfStringNullOrBlank(username, "User Name");
+		Util::throwExceptionIfStringNullOrBlank(password, "Password");
+		Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
 
-    /**
-     * Creating Headers
-     */
-    std::vector<std::string> headers;
-    map<string, string> metaHeaders;
-    populateMetaHeaderParams(metaHeaders);
-    Util::BuildHeaders(metaHeaders, headers);
-    Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    
-    /**
-     * Initiating Http call
-     */
-    Util::executePost(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	}
+	catch (App42Exception *e)
+	{
+		std::string ex = e->what();
+		response->httpErrorCode = e->getHttpErrorCode();
+		response->appErrorCode = e->getAppErrorCode();
+		response->errorDetails = ex;
+		response->isSuccess = false;
+		if (pSelector)
+		{
+			pSelector(response);
+		}
+		delete e;
+		e = NULL;
+		return;
+	}
+
+	string timestamp = Util::getTimeStamp();
+
+	/**
+	 * Creating SignParams and signature
+	 */
+	map<string, string> signParams;
+	populateSignParams(signParams);
+	string postBody = buildCreateUserBody(username, password, "", "");
+	//Util::app42Trace("\n createUserbody = %s",postBody.c_str());
+	signParams["body"] = postBody;
+	string signature = Util::signMap(secretKey, signParams);
+
+	/**
+	 * Creating URL
+	 */
+	string baseUrl = getBaseUrl("user/authenticate");
+	baseUrl.append("?");
+	string encodedUrl = url_encode(baseUrl);
+	//Util::app42Trace("\n baseUrl = %s",baseUrl.c_str());
+
+	/**
+	 * Creating Headers
+	 */
+	std::vector<std::string> headers;
+	map<string, string> metaHeaders;
+	populateMetaHeaderParams(metaHeaders);
+	Util::BuildHeaders(metaHeaders, headers);
+	Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
+
+	/**
+	 * Initiating Http call
+	 */
+	Util::executePost(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
-void UserService::GetUser(const char *userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetUser(const char *userName, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -819,9 +814,9 @@ void UserService::GetUser(const char *userName, App42CallBack* pTarget, SEL_App4
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -861,17 +856,17 @@ void UserService::GetUser(const char *userName, App42CallBack* pTarget, SEL_App4
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetUserByEmailId(const char *emailId, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetUserByEmailId(const char *emailId, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(emailId, "EmailId");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -881,9 +876,9 @@ void UserService::GetUserByEmailId(const char *emailId, App42CallBack* pTarget, 
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -921,17 +916,16 @@ void UserService::GetUserByEmailId(const char *emailId, App42CallBack* pTarget, 
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
 }
 
 
-void UserService::GetAllUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetAllUsers(SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -941,9 +935,9 @@ void UserService::GetAllUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSelec
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -979,17 +973,17 @@ void UserService::GetAllUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSelec
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetAllUsers(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetAllUsers(int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -999,9 +993,9 @@ void UserService::GetAllUsers(int max, int offset, App42CallBack* pTarget, SEL_A
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1045,16 +1039,16 @@ void UserService::GetAllUsers(int max, int offset, App42CallBack* pTarget, SEL_A
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetAllUsersCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetAllUsersCount( SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1064,9 +1058,9 @@ void UserService::GetAllUsersCount(App42CallBack* pTarget, SEL_App42CallFuncND p
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1105,18 +1099,18 @@ void UserService::GetAllUsersCount(App42CallBack* pTarget, SEL_App42CallFuncND p
     Util::BuildHeaders(metaHeaders, headers);
     
     Util::BuildHeaders(apiKey, timestamp, VERSION, signature, headers);
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	
 }
 
 
-void UserService::LockUser(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::LockUser(const char *username, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1126,9 +1120,9 @@ void UserService::LockUser(const char *username, App42CallBack* pTarget, SEL_App
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -1168,17 +1162,17 @@ void UserService::LockUser(const char *username, App42CallBack* pTarget, SEL_App
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePut(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::UnlockUser(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::UnlockUser(const char *username, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1188,9 +1182,9 @@ void UserService::UnlockUser(const char *username, App42CallBack* pTarget, SEL_A
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1230,16 +1224,16 @@ void UserService::UnlockUser(const char *username, App42CallBack* pTarget, SEL_A
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePut(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetLockedUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetLockedUsers(SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1249,9 +1243,9 @@ void UserService::GetLockedUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSe
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1292,17 +1286,17 @@ void UserService::GetLockedUsers(App42CallBack* pTarget, SEL_App42CallFuncND pSe
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetLockedUsers(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetLockedUsers(int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1312,9 +1306,9 @@ void UserService::GetLockedUsers(int max, int offset, App42CallBack* pTarget, SE
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1359,16 +1353,16 @@ void UserService::GetLockedUsers(int max, int offset, App42CallBack* pTarget, SE
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+	
 }
 
-void UserService::GetLockedUsersCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetLockedUsersCount(SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1378,9 +1372,9 @@ void UserService::GetLockedUsersCount(App42CallBack* pTarget, SEL_App42CallFuncN
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1421,18 +1415,18 @@ void UserService::GetLockedUsersCount(App42CallBack* pTarget, SEL_App42CallFuncN
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::UpdateEmail(const char *username,const char *emailAddress, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::UpdateEmail(const char *username,const char *emailAddress, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
         Util::throwExceptionIfStringNullOrBlank(emailAddress, "Email Address");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1442,9 +1436,9 @@ void UserService::UpdateEmail(const char *username,const char *emailAddress, App
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1483,17 +1477,17 @@ void UserService::UpdateEmail(const char *username,const char *emailAddress, App
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePut(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::DeleteUser(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::DeleteUser(const char *username, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1503,9 +1497,9 @@ void UserService::DeleteUser(const char *username, App42CallBack* pTarget, SEL_A
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1543,19 +1537,19 @@ void UserService::DeleteUser(const char *username, App42CallBack* pTarget, SEL_A
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::ChangeUserPassword(const char *username, const char *oldPassword, const char *newPassword, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::ChangeUserPassword(const char *username, const char *oldPassword, const char *newPassword, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
         Util::throwExceptionIfStringNullOrBlank(oldPassword, "Old Password");
         Util::throwExceptionIfStringNullOrBlank(newPassword, "New Password");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1565,9 +1559,9 @@ void UserService::ChangeUserPassword(const char *username, const char *oldPasswo
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1606,18 +1600,18 @@ void UserService::ChangeUserPassword(const char *username, const char *oldPasswo
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePut(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
 
-void UserService::ResetUserPassword(const char *username, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::ResetUserPassword(const char *username, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(username, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1627,9 +1621,9 @@ void UserService::ResetUserPassword(const char *username, App42CallBack* pTarget
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1669,18 +1663,18 @@ void UserService::ResetUserPassword(const char *username, App42CallBack* pTarget
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePut(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
 
-void UserService::createOrUpdateProfile(App42User *user, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::createOrUpdateProfile(App42User *user, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(user->userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1690,9 +1684,9 @@ void UserService::createOrUpdateProfile(App42User *user, App42CallBack* pTarget,
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1732,17 +1726,17 @@ void UserService::createOrUpdateProfile(App42User *user, App42CallBack* pTarget,
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePut(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetUsersByProfileData(App42UserProfile *profileData,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetUsersByProfileData(App42UserProfile *profileData, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         //Util::throwExceptionIfStringNullOrBlank(user.userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1752,9 +1746,9 @@ void UserService::GetUsersByProfileData(App42UserProfile *profileData,App42CallB
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1793,17 +1787,17 @@ void UserService::GetUsersByProfileData(App42UserProfile *profileData,App42CallB
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::Logout(const char *sessionId,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::Logout(const char *sessionId, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(sessionId, "SessionId");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1813,9 +1807,9 @@ void UserService::Logout(const char *sessionId,App42CallBack* pTarget, SEL_App42
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1855,17 +1849,17 @@ void UserService::Logout(const char *sessionId,App42CallBack* pTarget, SEL_App42
     /**
      * Initiating Http call
      */
-    Util::executePut(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePut(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetRolesByUser(const char *userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetRolesByUser(const char *userName, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1875,9 +1869,9 @@ void UserService::GetRolesByUser(const char *userName,App42CallBack* pTarget, SE
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1916,17 +1910,17 @@ void UserService::GetRolesByUser(const char *userName,App42CallBack* pTarget, SE
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::GetUsersByRole(const char *role, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetUsersByRole(const char *role, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(role, "Role");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1936,9 +1930,9 @@ void UserService::GetUsersByRole(const char *role, App42CallBack* pTarget, SEL_A
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1977,18 +1971,18 @@ void UserService::GetUsersByRole(const char *role, App42CallBack* pTarget, SEL_A
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::RevokeRole(const char *userName, const char *role, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::RevokeRole(const char *userName, const char *role, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(role, "Role");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -1998,9 +1992,9 @@ void UserService::RevokeRole(const char *userName, const char *role, App42CallBa
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -2041,17 +2035,17 @@ void UserService::RevokeRole(const char *userName, const char *role, App42CallBa
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::RevokeAllRoles(const char *userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::RevokeAllRoles(const char *userName, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -2061,9 +2055,9 @@ void UserService::RevokeAllRoles(const char *userName, App42CallBack* pTarget, S
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            (pSelector)(response);
         }
         delete e;
         e = NULL;
@@ -2102,18 +2096,18 @@ void UserService::RevokeAllRoles(const char *userName, App42CallBack* pTarget, S
     /**
      * Initiating Http call
      */
-    Util::executeDelete(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeDelete(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
 
-void UserService::GetUsersByGroup(vector<string> users, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::GetUsersByGroup(vector<string> users, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfVectorIsNullOrBlank(users, "Users");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -2123,9 +2117,9 @@ void UserService::GetUsersByGroup(vector<string> users, App42CallBack* pTarget, 
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -2170,19 +2164,19 @@ void UserService::GetUsersByGroup(vector<string> users, App42CallBack* pTarget, 
     /**
      * Initiating Http call
      */
-    Util::executeGet(encodedUrl,headers, response, app42response_selector(App42UserResponse::onComplete));
+	Util::executeGet(encodedUrl, headers, std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
-void UserService::CreateUserWithProfile(const char *userName, const char *password, const char *emailAddress, App42UserProfile *profile, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UserService::CreateUserWithProfile(const char *userName, const char *password, const char *emailAddress, App42UserProfile *profile, SEL_App42CallFuncND pSelector)
 {
-    App42UserResponse *response = new App42UserResponse(pTarget,pSelector);
+    App42UserResponse *response = new App42UserResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(password, "Password");
         Util::throwExceptionIfStringNullOrBlank(emailAddress, "EmailAddress");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -2192,9 +2186,9 @@ void UserService::CreateUserWithProfile(const char *userName, const char *passwo
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack*)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -2234,7 +2228,8 @@ void UserService::CreateUserWithProfile(const char *userName, const char *passwo
     /**
      * Initiating Http call
      */
-    Util::executePost(encodedUrl, headers, postBody.c_str(), response, app42response_selector(App42UserResponse::onComplete));
+	Util::executePost(encodedUrl, headers, postBody.c_str(), std::bind(&App42UserResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
+
 }
 
 void UserService::AddUserInfo(App42Object* app42Object, const char* collectionName)

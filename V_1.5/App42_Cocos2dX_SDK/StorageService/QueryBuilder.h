@@ -13,25 +13,26 @@
 #include "Query.h"
 #include <vector>
 #include "App42Object.h"
-
-class QueryBuilder
+namespace App42
 {
-public:
-    
-    QueryBuilder();
-    
-    ~QueryBuilder();
-    static Query* BuildQuery(const char* key, const char* value,const char* op);
-    static Query* BuildQuery(const char* key,std::vector<std::string> value,const char* op);
+	class QueryBuilder
+	{
+	public:
 
-    static Query* CompoundOperator(Query *q1,const char* op,Query *q2);
-    static Query* SetLoggedInUser(const char* logged);
+		QueryBuilder();
 
-protected:
-    
-private:
-    
-};
+		~QueryBuilder();
+		static Query* BuildQuery(const char* key, const char* value, const char* op);
+		static Query* BuildQuery(const char* key, std::vector<std::string> value, const char* op);
 
+		static Query* CompoundOperator(Query *q1, const char* op, Query *q2);
+		static Query* SetLoggedInUser(const char* logged);
 
+	protected:
+
+	private:
+
+	};
+
+}//namespace App42
 #endif /* defined(__App42CPPSDK__QueryBuilder__) */

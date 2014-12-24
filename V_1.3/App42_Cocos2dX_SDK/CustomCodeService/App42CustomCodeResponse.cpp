@@ -10,8 +10,8 @@
 #include "Common.h"
 
 
-App42CustomCodeResponse::App42CustomCodeResponse(App42CallBack *pTarget, SEL_App42CallFuncND pSelector)
-:App42Response(pTarget,pSelector)
+App42CustomCodeResponse::App42CustomCodeResponse(SEL_App42CallFuncND pSelector)
+:App42Response(pSelector)
 {
     
 }
@@ -21,14 +21,14 @@ App42CustomCodeResponse::~App42CustomCodeResponse()
     
 }
 
-void App42CustomCodeResponse::onComplete(void *sender, void *data)
+void App42CustomCodeResponse::onComplete(App42HttpClient *sender, App42HttpResponse *data)
 {
     App42Response::onComplete(sender, data);
     init();
     
-    if (_app42Target && _app42Selector)
+    if (_app42Selector)
     {
-        (_app42Target->*_app42Selector)((App42CallBack *)_app42Target, this);
+        (_app42Selector)( this);
     }
 }
 

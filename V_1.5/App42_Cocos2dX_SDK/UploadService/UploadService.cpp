@@ -15,8 +15,9 @@
 #include "App42UploadResponse.h"
 #include "Connector.h"
 
-using namespace App42Network;
-
+using namespace App42::Network;
+namespace App42
+{
 // define the static..
 UploadService* UploadService::_instance = NULL;
 
@@ -70,15 +71,14 @@ string UploadService::BuildGrantAccessBody(string json)
 }
 
 
-void UploadService::UploadFile(const char * fileName, unsigned char* inputStream,int fileDataSize,FileType fileType, const char * description,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::UploadFile(const char * fileName, unsigned char* inputStream, int fileDataSize, FileType fileType, const char * description, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -88,9 +88,9 @@ void UploadService::UploadFile(const char * fileName, unsigned char* inputStream
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -138,7 +138,7 @@ void UploadService::UploadFile(const char * fileName, unsigned char* inputStream
         /**
          * Initiating Http call
          */
-        Util::executeMultiPartWithFileData("uploadFile",fileName, inputStream ,fileDataSize ,postParams, encodedUrl, headers, response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeMultiPartWithFileData("uploadFile", fileName, inputStream, fileDataSize, postParams, encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -148,15 +148,14 @@ void UploadService::UploadFile(const char * fileName, unsigned char* inputStream
 }
 
 
-void UploadService::UploadFile(const char * fileName, const char * filePath,FileType fileType, const char * description,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::UploadFile(const char * fileName, const char * filePath, FileType fileType, const char * description, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(filePath, "File Path");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -166,9 +165,9 @@ void UploadService::UploadFile(const char * fileName, const char * filePath,File
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -217,7 +216,7 @@ void UploadService::UploadFile(const char * fileName, const char * filePath,File
         /**
          * Initiating Http call
          */
-        Util::executeMultiPartWithFile("uploadFile",fileName, filePath,postParams, encodedUrl, headers, response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeMultiPartWithFile("uploadFile", fileName, filePath, postParams, encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -226,12 +225,11 @@ void UploadService::UploadFile(const char * fileName, const char * filePath,File
     }
 }
 
-void UploadService::GetAllFiles(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetAllFiles(SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
@@ -241,9 +239,9 @@ void UploadService::GetAllFiles(App42CallBack* pTarget, SEL_App42CallFuncND pSel
         response->appErrorCode  = e->getAppErrorCode();
         response->errorDetails  = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -280,7 +278,7 @@ void UploadService::GetAllFiles(App42CallBack* pTarget, SEL_App42CallFuncND pSel
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -289,24 +287,23 @@ void UploadService::GetAllFiles(App42CallBack* pTarget, SEL_App42CallFuncND pSel
     }
 }
 
-void UploadService::GetAllFilesCount(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetAllFilesCount(SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -344,7 +341,7 @@ void UploadService::GetAllFilesCount(App42CallBack* pTarget, SEL_App42CallFuncND
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -353,25 +350,24 @@ void UploadService::GetAllFilesCount(App42CallBack* pTarget, SEL_App42CallFuncND
     }
 }
 
-void UploadService::GetAllFiles(int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetAllFiles(int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -414,7 +410,7 @@ void UploadService::GetAllFiles(int max, int offset, App42CallBack* pTarget, SEL
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -423,26 +419,25 @@ void UploadService::GetAllFiles(int max, int offset, App42CallBack* pTarget, SEL
     }
 }
 
-void UploadService::GetFileByUser(const char * fileName, const char * userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetFileByUser(const char * fileName, const char * userName, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -485,7 +480,7 @@ void UploadService::GetFileByUser(const char * fileName, const char * userName, 
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -494,25 +489,24 @@ void UploadService::GetFileByUser(const char * fileName, const char * userName, 
     }
 }
 
-void UploadService::GetAllFilesByUser(const char * userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetAllFilesByUser(const char * userName, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -553,7 +547,7 @@ void UploadService::GetAllFilesByUser(const char * userName, App42CallBack* pTar
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -562,26 +556,25 @@ void UploadService::GetAllFilesByUser(const char * userName, App42CallBack* pTar
     }
 }
 
-void UploadService::GetAllFilesByUser(const char * userName, int max, int offset, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetAllFilesByUser(const char * userName, int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfMaxIsNotValid(max, "Max");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -626,7 +619,7 @@ void UploadService::GetAllFilesByUser(const char * userName, int max, int offset
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers,std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -636,25 +629,24 @@ void UploadService::GetAllFilesByUser(const char * userName, int max, int offset
 }
 
 
-void UploadService::GetAllFilesCountByUser(const char * userName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetAllFilesCountByUser(const char * userName, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -696,7 +688,7 @@ void UploadService::GetAllFilesCountByUser(const char * userName,App42CallBack* 
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -705,25 +697,24 @@ void UploadService::GetAllFilesCountByUser(const char * userName,App42CallBack* 
     }
 }
 
-void UploadService::GetFileByName(const char * fileName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetFileByName(const char * fileName, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -763,7 +754,7 @@ void UploadService::GetFileByName(const char * fileName,App42CallBack* pTarget, 
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -772,26 +763,25 @@ void UploadService::GetFileByName(const char * fileName,App42CallBack* pTarget, 
     }
 }
 
-void UploadService::RemoveFileByUser(const char * fileName, const char * userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::RemoveFileByUser(const char * fileName, const char * userName, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -834,7 +824,7 @@ void UploadService::RemoveFileByUser(const char * fileName, const char * userNam
         /**
          * Initiating Http call
          */
-        Util::executeDelete(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeDelete(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -843,25 +833,24 @@ void UploadService::RemoveFileByUser(const char * fileName, const char * userNam
     }
 }
 
-void UploadService::RemoveAllFilesByUser(const char * userName, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::RemoveAllFilesByUser(const char * userName, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -902,7 +891,7 @@ void UploadService::RemoveAllFilesByUser(const char * userName, App42CallBack* p
         /**
          * Initiating Http call
          */
-        Util::executeDelete(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeDelete(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -911,25 +900,24 @@ void UploadService::RemoveAllFilesByUser(const char * userName, App42CallBack* p
     }
 }
 
-void UploadService::RemoveFileByName(const char * fileName,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::RemoveFileByName(const char * fileName, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -969,7 +957,7 @@ void UploadService::RemoveFileByName(const char * fileName,App42CallBack* pTarge
         /**
          * Initiating Http call
          */
-        Util::executeDelete(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeDelete(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -978,24 +966,23 @@ void UploadService::RemoveFileByName(const char * fileName,App42CallBack* pTarge
     }
 }
 
-void UploadService::RemoveAllFiles(App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::RemoveAllFiles(SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1032,7 +1019,7 @@ void UploadService::RemoveAllFiles(App42CallBack* pTarget, SEL_App42CallFuncND p
         /**
          * Initiating Http call
          */
-        Util::executeDelete(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeDelete(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1042,25 +1029,23 @@ void UploadService::RemoveAllFiles(App42CallBack* pTarget, SEL_App42CallFuncND p
 }
 
 
-void UploadService::GetFilesCountByType(FileType fileType,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetFilesCountByType(FileType fileType, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
-        //Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1101,7 +1086,7 @@ void UploadService::GetFilesCountByType(FileType fileType,App42CallBack* pTarget
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1110,25 +1095,23 @@ void UploadService::GetFilesCountByType(FileType fileType,App42CallBack* pTarget
     }
 }
 
-void UploadService::GetFilesByType(FileType fileType,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetFilesByType(FileType fileType, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
-        //Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1168,7 +1151,7 @@ void UploadService::GetFilesByType(FileType fileType,App42CallBack* pTarget, SEL
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1177,25 +1160,23 @@ void UploadService::GetFilesByType(FileType fileType,App42CallBack* pTarget, SEL
     }
 }
 
-void UploadService::GetFilesByType(FileType fileType, int max, int offset,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GetFilesByType(FileType fileType, int max, int offset, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
-        //Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1239,7 +1220,7 @@ void UploadService::GetFilesByType(FileType fileType, int max, int offset,App42C
         /**
          * Initiating Http call
          */
-        Util::executeGet(encodedUrl, headers,response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeGet(encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1248,28 +1229,27 @@ void UploadService::GetFilesByType(FileType fileType, int max, int offset,App42C
     }
 }
 
-void UploadService::UploadFileForUser(const char * fileName, const char * userName, unsigned char* inputStream,int fileDataSize,FileType fileType, const char * description,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::UploadFileForUser(const char * fileName, const char * userName, unsigned char * inputStream, int fileDataSize, FileType fileType, const char * description, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1320,7 +1300,7 @@ void UploadService::UploadFileForUser(const char * fileName, const char * userNa
         /**
          * Initiating Http call
          */
-        Util::executeMultiPartWithFileData("uploadFile",fileName, inputStream ,fileDataSize ,postParams, encodedUrl, headers, response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeMultiPartWithFileData("uploadFile", fileName, inputStream, fileDataSize, postParams, encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1329,28 +1309,27 @@ void UploadService::UploadFileForUser(const char * fileName, const char * userNa
     }
 }
 
-void UploadService::UploadFileForUser(const char * fileName, const char * userName, const char * filePath,FileType fileType, const char * description,App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::UploadFileForUser(const char * fileName, const char * userName, const char * filePath, FileType fileType, const char * description, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(filePath, "File Path");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
         Util::throwExceptionIfStringNullOrBlank(description, "Description");
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1402,7 +1381,7 @@ void UploadService::UploadFileForUser(const char * fileName, const char * userNa
         /**
          * Initiating Http call
          */
-        Util::executeMultiPartWithFile("uploadFile",fileName, filePath,postParams, encodedUrl, headers, response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executeMultiPartWithFile("uploadFile", fileName, filePath, postParams, encodedUrl, headers, std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1413,28 +1392,26 @@ void UploadService::UploadFileForUser(const char * fileName, const char * userNa
 
 
 
-void UploadService::GrantAccess(const char* fileName, const char* userName,vector<ACL> aclList, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::GrantAccess(const char* fileName, const char* userName,vector<ACL> aclList, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1479,7 +1456,7 @@ void UploadService::GrantAccess(const char* fileName, const char* userName,vecto
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1488,29 +1465,27 @@ void UploadService::GrantAccess(const char* fileName, const char* userName,vecto
     }
 }
 
-void UploadService::RevokeAccess(const char* fileName, const char* userName,
-                                 vector<ACL> aclList, App42CallBack* pTarget, SEL_App42CallFuncND pSelector)
+void UploadService::RevokeAccess(const char * fileName, const char * userName,
+                                 vector<ACL> aclList, SEL_App42CallFuncND pSelector)
 {
-    App42UploadResponse *response = new App42UploadResponse(pTarget,pSelector);
+    App42UploadResponse *response = new App42UploadResponse(pSelector);
     
     try
     {
         Util::throwExceptionIfStringNullOrBlank(fileName, "File Name");
         Util::throwExceptionIfStringNullOrBlank(userName, "User Name");
-        
-        Util::throwExceptionIfTargetIsNull(pTarget, "Callback's Target");
         Util::throwExceptionIfCallBackIsNull(pSelector, "Callback");
     }
     catch (App42Exception *e)
     {
         std::string ex = e->what();
         response->httpErrorCode = e->getHttpErrorCode();
-        response->appErrorCode  = e->getAppErrorCode();
-        response->errorDetails  = ex;
+        response->appErrorCode = e->getAppErrorCode();
+        response->errorDetails = ex;
         response->isSuccess = false;
-        if (pTarget && pSelector)
+        if (pSelector)
         {
-            (pTarget->*pSelector)((App42CallBack *)pTarget, response);
+            pSelector(response);
         }
         delete e;
         e = NULL;
@@ -1555,7 +1530,7 @@ void UploadService::RevokeAccess(const char* fileName, const char* userName,
         /**
          * Initiating Http call
          */
-        Util::executePut(encodedUrl, headers, storageBody.c_str(), response, app42response_selector(App42UploadResponse::onComplete));
+        Util::executePut(encodedUrl, headers, storageBody.c_str(), std::bind(&App42UploadResponse::onComplete, response, std::placeholders::_1, std::placeholders::_2));
         
     }
     catch (exception *e)
@@ -1563,3 +1538,4 @@ void UploadService::RevokeAccess(const char* fileName, const char* userName,
         throw e;
     }
 }
+}//namespace App42

@@ -11,8 +11,16 @@
 
 #include <string>
 #include <vector>
-#include "App42CallBack.h"
 #include <map>
+#include <functional>
+
+#if defined(WIN32) && defined(_WINDOWS)
+#include <BaseTsd.h>
+#ifndef __SSIZE_T
+#define __SSIZE_T
+typedef SSIZE_T ssize_t;
+#endif
+#endif
 
 namespace App42Network {
     
@@ -20,8 +28,7 @@ namespace App42Network {
     class App42HttpResponse;
     //class App42Response;
     
-    typedef void (App42CallBack:: *SEL_App42Response)(App42HttpClient* client, App42HttpResponse* response);
-    #define app42response_selector(_SELECTOR) (App42Network::SEL_App42Response)(&_SELECTOR)
+	typedef std::function<void(App42HttpClient* client, App42HttpResponse* response)> SEL_App42Response;
     
     /**
      @brief defines the object which users must packed for HttpClient::send(HttpRequest*) method.
@@ -56,8 +63,7 @@ namespace App42Network {
             _url.clear();
             _requestData.clear();
             _tag.clear();
-            _pTarget = NULL;
-            _pSelector = NULL;
+            _pSelector = SEL_App42Response();
             _pUserData = NULL;
         };
         
@@ -188,20 +194,9 @@ namespace App42Network {
         }
 
         
-        inline void setResponseCallback(App42CallBack* pTarget, SEL_App42Response pSelector)
+        inline void setResponseCallback(SEL_App42Response pSelector)
         {
-            _pTarget = pTarget;
             _pSelector = pSelector;
-            
-            if (_pTarget)
-            {
-                //_pTarget->retain();
-            }
-        }
-        /** Get the target of callback selector funtion, mainly used by HttpClient */
-        inline App42CallBack* getTarget()
-        {
-            return _pTarget;
         }
         
         inline SEL_App42Response getSelector()
@@ -261,7 +256,6 @@ namespace App42Network {
         std::vector<char>           _requestData;    /// used for POST
         std::vector<char>           _fileData;       /// used for POST
         std::string                 _tag;            /// user defined tag, to identify different requests in response callback
-        App42CallBack*              _pTarget;        /// callback target of pSelector function
         SEL_App42Response           _pSelector;      /// callback function, e.g. MyLayer::onHttpResponse(HttpClient *sender, HttpResponse *                                     response)
         void*                       _pUserData;      /// You can add your customed data here 
         std::vector<std::string>    _headers;		 /// custom http headers
