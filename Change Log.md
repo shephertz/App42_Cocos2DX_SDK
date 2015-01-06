@@ -1,9 +1,38 @@
+* [Release Version 1.8](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-18)
 * [Release Version 1.7.1](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-171)
 * [Release Version 1.7](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-17)
 * [Release Version 1.6](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-16)
 * [Release Version 1.5](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-15)
 * [Release Version 1.4](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-14)
 * [Release Version 1.3](https://github.com/shephertz/App42_Cocos2DX_SDK/blob/master/Change%20Log.md#version-13)
+
+
+## Version 1.8
+
+
+**Release Date:** 06-01-2015
+
+**Release Version:** 1.8
+
+__If you are migrating from older SDK versions(<=V_1.6) to this version, please read the [migration note](https://github.com/shephertz/App42_Cocos2DX_SDK/wiki/Migration-Notes).__
+
+**The following features have been pushed to the services :**
+
+**TIMER SERVICE**
+
+```
+IsTimerActive
+CancelTimer
+DeleteTimer
+GetCurrentTime
+```
+
+**This release contains the following bug fix:**
+
+```
+None
+```
+
 
 ## Version 1.7.1
  
