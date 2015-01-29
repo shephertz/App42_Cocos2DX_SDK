@@ -1,0 +1,505 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="..\..\Classes\AppDelegate.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Classes\HelloWorldScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Cocos2dRenderer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Direct3DContentProvider.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Direct3DInterop.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DirectXBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EditBoxEvent.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Classes\ResponseScene.cpp">
+      <Filter>Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\App42HTTP\App42HttpClient.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\AvatarService\App42AvatarResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\AvatarService\AvatarService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\BuddyService\App42BuddyResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\BuddyService\BuddyService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\cJSON\cJSON.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\ACL.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\App42API.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\App42Exception.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\App42GeoPoint.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\App42Object.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\App42Response.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\App42Service.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\JSONDocument.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Common\MetaResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Crypto\app42base64.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Crypto\HMAC_SHA1.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Crypto\SHA1.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\Crypto\urlencode.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\CustomCodeService\App42CustomCodeResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\CustomCodeService\CustomCodeService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\EmailService\App42EmailResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\EmailService\EmailService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\GameService\App42GameResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\GameService\App42RewardResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\GameService\App42Score.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\GameService\GameService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\GameService\RewardService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\GameService\ScoreBoardService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\GameService\ScoreService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\PushNotificationService\App42PushNotificationResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\PushNotificationService\PushNotificationService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SessionService\App42SessionResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SessionService\SessionService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SocialService\App42FacebookProfile.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SocialService\App42Friend.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SocialService\App42PublicProfile.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SocialService\App42Social.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SocialService\App42SocialResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\SocialService\SocialService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\StorageService\App42StorageResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\StorageService\Query.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\StorageService\QueryBuilder.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\StorageService\StorageService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\TimerService\App42TimerResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\TimerService\TimerService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\UploadService\App42UploadResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\UploadService\UploadService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\UserService\App42UserResponse.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\App42\UserService\UserService.cpp">
+      <Filter>Classes\App42</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestAvatarService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestBuddyService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestCustomCodeService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestEmailService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestGameService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestHome.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestPushNotificationService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestRewardService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestScoreboardService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestSessionService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestSocialService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestStorageService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestTimerService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestUploadService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\TestUserService.cpp">
+      <Filter>Classes\Tests</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="..\..\Classes\AppDelegate.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Classes\HelloWorldScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Cocos2dRenderer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Direct3DContentProvider.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Direct3DInterop.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DirectXBase.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DirectXHelper.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EditBoxEvent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Classes\ResponseScene.h">
+      <Filter>Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\App42HTTP\App42HttpClient.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\App42HTTP\App42HttpRequest.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\App42HTTP\App42HttpResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\AvatarService\App42AvatarResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\AvatarService\AvatarService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\BuddyService\App42BuddyResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\BuddyService\BuddyService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\cJSON\cJSON.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\ACL.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42API.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42CallBack.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42Constants.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42Exception.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42GeoPoint.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42Object.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42Response.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\App42Service.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\JSONDocument.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Common\MetaResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Crypto\app42base64.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Crypto\HMAC_SHA1.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Crypto\SHA1.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Crypto\urlencode.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\CustomCodeService\App42CustomCodeResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\CustomCodeService\CustomCodeService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\EmailService\App42EmailResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\EmailService\EmailService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\GameService\App42GameResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\GameService\App42RewardResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\GameService\App42Score.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\GameService\GameService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\GameService\RewardService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\GameService\ScoreBoardService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\GameService\ScoreService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\PushNotificationService\App42PushNotificationResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\PushNotificationService\PushNotificationService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SessionService\App42SessionResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SessionService\SessionService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SocialService\App42FacebookProfile.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SocialService\App42Friend.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SocialService\App42PublicProfile.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SocialService\App42Social.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SocialService\App42SocialResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\SocialService\SocialService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\StorageService\App42StorageResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\StorageService\Query.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\StorageService\QueryBuilder.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\StorageService\StorageService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\TimerService\App42TimerResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\TimerService\TimerService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\UploadService\App42UploadResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\UploadService\UploadService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\UserService\App42UserResponse.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\UserService\UserService.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Util\BodyBuilder.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Util\Common.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Util\Connector.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Util\Exceptions.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\App42\Util\Signing.h">
+      <Filter>Classes\App42</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestAvatarService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestBuddyService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestCustomCodeService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestEmailService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestGameService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestHome.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestPushNotificationService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestRewardService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestScoreboardService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestSessionService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestSocialService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestStorageService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestTimerService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestUploadService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\TestUserService.h">
+      <Filter>Classes\Tests</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Classes">
+      <UniqueIdentifier>{facbd0ff-d271-46ef-8324-beff0cbcb424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{6fcff44b-bb9f-4ed9-8553-558855bc91e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\App42">
+      <UniqueIdentifier>{b96a2e17-b3e8-4eda-859c-ee747a8de758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Tests">
+      <UniqueIdentifier>{97946e61-ab9a-481b-9c05-45dc8cb0da7d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\cocos2d\external\wp8-specific\angle\prebuilt\Win32\libEGL_phone.dll" />
+    <None Include="..\..\cocos2d\external\wp8-specific\angle\prebuilt\Win32\libGLESv2_phone.dll" />
+    <None Include="..\..\cocos2d\external\wp8-specific\angle\prebuilt\ARM\libEGL_phone.dll" />
+    <None Include="..\..\cocos2d\external\wp8-specific\angle\prebuilt\ARM\libGLESv2_phone.dll" />
+    <None Include="..\..\cocos2d\external\curl\prebuilt\wp8\win32\libcurl.dll" />
+    <None Include="..\..\cocos2d\external\curl\prebuilt\wp8\win32\libeay32.dll" />
+    <None Include="..\..\cocos2d\external\curl\prebuilt\wp8\win32\ssleay32.dll" />
+    <None Include="..\..\cocos2d\external\curl\prebuilt\wp8\arm\libcurl.dll" />
+    <None Include="..\..\cocos2d\external\curl\prebuilt\wp8\arm\libeay32.dll" />
+    <None Include="..\..\cocos2d\external\curl\prebuilt\wp8\arm\ssleay32.dll" />
+    <None Include="..\..\cocos2d\external\websockets\prebuilt\wp8\win32\libwebsockets.dll" />
+    <None Include="..\..\cocos2d\external\websockets\prebuilt\wp8\arm\libwebsockets.dll" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{76A39BB2-9B84-4C65-98A5-654D86B86F2A}</ProjectGuid>
+    <RootNamespace>test_win32</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '10.0'">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0'">v110</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v110_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '10.0'">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0'">v110</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '11.0' and exists('$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A')">v110_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2dx.props" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2d_headers.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2dx.props" />
+    <Import Project="..\cocos2d\cocos\2d\cocos2d_headers.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration).win32\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration).win32\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration).win32\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>$(MSBuildProgramFiles32)\Microsoft SDKs\Windows\v7.1A\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\Tests;..\App42\UserService;..\App42\UploadService;..\App42\TimerService;..\App42\SocialService;..\App42\SessionService;..\App42\PushNotificationService;..\App42\GameService;..\App42\EmailService;..\App42\CustomCodeService;..\App42\BuddyService;..\App42\AvatarService;..\App42\Util;..\App42\StorageService;..\App42\Crypto;..\App42\Exception;..\App42\Common;..\App42\cJSON;..\App42\App42HTTP;$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\curl\include\win32;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libcurl_imp.lib;websockets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(EngineRoot)external\curl\prebuilt\win32;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
+xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\Tests;..\App42\UserService;..\App42\UploadService;..\App42\TimerService;..\App42\SocialService;..\App42\SessionService;..\App42\PushNotificationService;..\App42\GameService;..\App42\EmailService;..\App42\CustomCodeService;..\App42\BuddyService;..\App42\AvatarService;..\App42\Util;..\App42\StorageService;..\App42\Crypto;..\App42\Exception;..\App42\Common;..\App42\cJSON;..\App42\App42HTTP;$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\curl\include\win32;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;4251;4244;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>libcurl_imp.lib;websockets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>$(EngineRoot)external\curl\prebuilt\win32;$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreLinkEvent>
+      <Command>if not exist "$(OutDir)" mkdir "$(OutDir)"
+xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\App42\App42HTTP\App42HttpClient.cpp" />
+    <ClCompile Include="..\App42\AvatarService\App42AvatarResponse.cpp" />
+    <ClCompile Include="..\App42\AvatarService\AvatarService.cpp" />
+    <ClCompile Include="..\App42\BuddyService\App42BuddyResponse.cpp" />
+    <ClCompile Include="..\App42\BuddyService\BuddyService.cpp" />
+    <ClCompile Include="..\App42\cJSON\cJSON.cpp" />
+    <ClCompile Include="..\App42\Common\ACL.cpp" />
+    <ClCompile Include="..\App42\Common\App42API.cpp" />
+    <ClCompile Include="..\App42\Common\App42Exception.cpp" />
+    <ClCompile Include="..\App42\Common\App42GeoPoint.cpp" />
+    <ClCompile Include="..\App42\Common\App42Object.cpp" />
+    <ClCompile Include="..\App42\Common\App42Response.cpp" />
+    <ClCompile Include="..\App42\Common\App42Service.cpp" />
+    <ClCompile Include="..\App42\Common\JSONDocument.cpp" />
+    <ClCompile Include="..\App42\Common\MetaResponse.cpp" />
+    <ClCompile Include="..\App42\Crypto\app42base64.cpp" />
+    <ClCompile Include="..\App42\Crypto\HMAC_SHA1.cpp" />
+    <ClCompile Include="..\App42\Crypto\SHA1.cpp" />
+    <ClCompile Include="..\App42\Crypto\urlencode.cpp" />
+    <ClCompile Include="..\App42\CustomCodeService\App42CustomCodeResponse.cpp" />
+    <ClCompile Include="..\App42\CustomCodeService\CustomCodeService.cpp" />
+    <ClCompile Include="..\App42\EmailService\App42EmailResponse.cpp" />
+    <ClCompile Include="..\App42\EmailService\EmailService.cpp" />
+    <ClCompile Include="..\App42\GameService\App42GameResponse.cpp" />
+    <ClCompile Include="..\App42\GameService\App42RewardResponse.cpp" />
+    <ClCompile Include="..\App42\GameService\App42Score.cpp" />
+    <ClCompile Include="..\App42\GameService\GameService.cpp" />
+    <ClCompile Include="..\App42\GameService\RewardService.cpp" />
+    <ClCompile Include="..\App42\GameService\ScoreBoardService.cpp" />
+    <ClCompile Include="..\App42\GameService\ScoreService.cpp" />
+    <ClCompile Include="..\App42\PushNotificationService\App42PushNotificationResponse.cpp" />
+    <ClCompile Include="..\App42\PushNotificationService\PushNotificationService.cpp" />
+    <ClCompile Include="..\App42\SessionService\App42SessionResponse.cpp" />
+    <ClCompile Include="..\App42\SessionService\SessionService.cpp" />
+    <ClCompile Include="..\App42\SocialService\App42FacebookProfile.cpp" />
+    <ClCompile Include="..\App42\SocialService\App42Friend.cpp" />
+    <ClCompile Include="..\App42\SocialService\App42PublicProfile.cpp" />
+    <ClCompile Include="..\App42\SocialService\App42Social.cpp" />
+    <ClCompile Include="..\App42\SocialService\App42SocialResponse.cpp" />
+    <ClCompile Include="..\App42\SocialService\SocialService.cpp" />
+    <ClCompile Include="..\App42\StorageService\App42StorageResponse.cpp" />
+    <ClCompile Include="..\App42\StorageService\Query.cpp" />
+    <ClCompile Include="..\App42\StorageService\QueryBuilder.cpp" />
+    <ClCompile Include="..\App42\StorageService\StorageService.cpp" />
+    <ClCompile Include="..\App42\TimerService\App42TimerResponse.cpp" />
+    <ClCompile Include="..\App42\TimerService\TimerService.cpp" />
+    <ClCompile Include="..\App42\UploadService\App42UploadResponse.cpp" />
+    <ClCompile Include="..\App42\UploadService\UploadService.cpp" />
+    <ClCompile Include="..\App42\UserService\App42UserResponse.cpp" />
+    <ClCompile Include="..\App42\UserService\UserService.cpp" />
+    <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\ResponseScene.cpp" />
+    <ClCompile Include="..\Tests\TestAvatarService.cpp" />
+    <ClCompile Include="..\Tests\TestBuddyService.cpp" />
+    <ClCompile Include="..\Tests\TestCustomCodeService.cpp" />
+    <ClCompile Include="..\Tests\TestEmailService.cpp" />
+    <ClCompile Include="..\Tests\TestGameService.cpp" />
+    <ClCompile Include="..\Tests\TestHome.cpp" />
+    <ClCompile Include="..\Tests\TestPushNotificationService.cpp" />
+    <ClCompile Include="..\Tests\TestRewardService.cpp" />
+    <ClCompile Include="..\Tests\TestScoreboardService.cpp" />
+    <ClCompile Include="..\Tests\TestSessionService.cpp" />
+    <ClCompile Include="..\Tests\TestSocialService.cpp" />
+    <ClCompile Include="..\Tests\TestStorageService.cpp" />
+    <ClCompile Include="..\Tests\TestTimerService.cpp" />
+    <ClCompile Include="..\Tests\TestUploadService.cpp" />
+    <ClCompile Include="..\Tests\TestUserService.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\App42\App42HTTP\App42HttpClient.h" />
+    <ClInclude Include="..\App42\App42HTTP\App42HttpRequest.h" />
+    <ClInclude Include="..\App42\App42HTTP\App42HttpResponse.h" />
+    <ClInclude Include="..\App42\AvatarService\App42AvatarResponse.h" />
+    <ClInclude Include="..\App42\AvatarService\AvatarService.h" />
+    <ClInclude Include="..\App42\BuddyService\App42BuddyResponse.h" />
+    <ClInclude Include="..\App42\BuddyService\BuddyService.h" />
+    <ClInclude Include="..\App42\cJSON\cJSON.h" />
+    <ClInclude Include="..\App42\Common\ACL.h" />
+    <ClInclude Include="..\App42\Common\App42API.h" />
+    <ClInclude Include="..\App42\Common\App42CallBack.h" />
+    <ClInclude Include="..\App42\Common\App42Constants.h" />
+    <ClInclude Include="..\App42\Common\App42Exception.h" />
+    <ClInclude Include="..\App42\Common\App42GeoPoint.h" />
+    <ClInclude Include="..\App42\Common\App42Object.h" />
+    <ClInclude Include="..\App42\Common\App42Response.h" />
+    <ClInclude Include="..\App42\Common\App42Service.h" />
+    <ClInclude Include="..\App42\Common\JSONDocument.h" />
+    <ClInclude Include="..\App42\Common\MetaResponse.h" />
+    <ClInclude Include="..\App42\Crypto\app42base64.h" />
+    <ClInclude Include="..\App42\Crypto\HMAC_SHA1.h" />
+    <ClInclude Include="..\App42\Crypto\SHA1.h" />
+    <ClInclude Include="..\App42\Crypto\urlencode.h" />
+    <ClInclude Include="..\App42\CustomCodeService\App42CustomCodeResponse.h" />
+    <ClInclude Include="..\App42\CustomCodeService\CustomCodeService.h" />
+    <ClInclude Include="..\App42\EmailService\App42EmailResponse.h" />
+    <ClInclude Include="..\App42\EmailService\EmailService.h" />
+    <ClInclude Include="..\App42\GameService\App42GameResponse.h" />
+    <ClInclude Include="..\App42\GameService\App42RewardResponse.h" />
+    <ClInclude Include="..\App42\GameService\App42Score.h" />
+    <ClInclude Include="..\App42\GameService\GameService.h" />
+    <ClInclude Include="..\App42\GameService\RewardService.h" />
+    <ClInclude Include="..\App42\GameService\ScoreBoardService.h" />
+    <ClInclude Include="..\App42\GameService\ScoreService.h" />
+    <ClInclude Include="..\App42\PushNotificationService\App42PushNotificationResponse.h" />
+    <ClInclude Include="..\App42\PushNotificationService\PushNotificationService.h" />
+    <ClInclude Include="..\App42\SessionService\App42SessionResponse.h" />
+    <ClInclude Include="..\App42\SessionService\SessionService.h" />
+    <ClInclude Include="..\App42\SocialService\App42FacebookProfile.h" />
+    <ClInclude Include="..\App42\SocialService\App42Friend.h" />
+    <ClInclude Include="..\App42\SocialService\App42PublicProfile.h" />
+    <ClInclude Include="..\App42\SocialService\App42Social.h" />
+    <ClInclude Include="..\App42\SocialService\App42SocialResponse.h" />
+    <ClInclude Include="..\App42\SocialService\SocialService.h" />
+    <ClInclude Include="..\App42\StorageService\App42StorageResponse.h" />
+    <ClInclude Include="..\App42\StorageService\Query.h" />
+    <ClInclude Include="..\App42\StorageService\QueryBuilder.h" />
+    <ClInclude Include="..\App42\StorageService\StorageService.h" />
+    <ClInclude Include="..\App42\TimerService\App42TimerResponse.h" />
+    <ClInclude Include="..\App42\TimerService\TimerService.h" />
+    <ClInclude Include="..\App42\UploadService\App42UploadResponse.h" />
+    <ClInclude Include="..\App42\UploadService\UploadService.h" />
+    <ClInclude Include="..\App42\UserService\App42UserResponse.h" />
+    <ClInclude Include="..\App42\UserService\UserService.h" />
+    <ClInclude Include="..\App42\Util\BodyBuilder.h" />
+    <ClInclude Include="..\App42\Util\Common.h" />
+    <ClInclude Include="..\App42\Util\Connector.h" />
+    <ClInclude Include="..\App42\Util\Exceptions.h" />
+    <ClInclude Include="..\App42\Util\Signing.h" />
+    <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\ResponseScene.h" />
+    <ClInclude Include="..\Tests\TestAvatarService.h" />
+    <ClInclude Include="..\Tests\TestBuddyService.h" />
+    <ClInclude Include="..\Tests\TestCustomCodeService.h" />
+    <ClInclude Include="..\Tests\TestEmailService.h" />
+    <ClInclude Include="..\Tests\TestGameService.h" />
+    <ClInclude Include="..\Tests\TestHome.h" />
+    <ClInclude Include="..\Tests\TestPushNotificationService.h" />
+    <ClInclude Include="..\Tests\TestRewardService.h" />
+    <ClInclude Include="..\Tests\TestScoreboardService.h" />
+    <ClInclude Include="..\Tests\TestSessionService.h" />
+    <ClInclude Include="..\Tests\TestSocialService.h" />
+    <ClInclude Include="..\Tests\TestStorageService.h" />
+    <ClInclude Include="..\Tests\TestTimerService.h" />
+    <ClInclude Include="..\Tests\TestUploadService.h" />
+    <ClInclude Include="..\Tests\TestUserService.h" />
+    <ClInclude Include="main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cocos2d\cocos\2d\cocos2d.vcxproj">
+      <Project>{98a51ba8-fc3a-415b-ac8f-8c7bd464e93e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\cocos2d\cocos\audio\proj.win32\CocosDenshion.vcxproj">
+      <Project>{f8edd7fa-9a51-4e80-baeb-860825d2eac6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\cocos2d\external\chipmunk\proj.win32\chipmunk.vcxproj">
+      <Project>{207bc7a9-ccf1-4f2f-a04d-45f72242ae25}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
