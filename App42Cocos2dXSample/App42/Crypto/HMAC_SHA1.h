@@ -8,6 +8,7 @@
 #define __HMAC_SHA1_H__
 
 #include "SHA1.h"
+#include "App42Exception.h"
 
 typedef unsigned char BYTE ;
 
@@ -40,13 +41,50 @@ class CHMAC_SHA1 : public CSHA1
 
         ~CHMAC_SHA1()
         {
-            delete[] szReport ;
-            delete[] AppendBuf1 ;
-            delete[] AppendBuf2 ;
-            delete[] SHA1_Key ;
+            
+            try
+            {
+                delete[] szReport ;
+            }
+            catch (App42Exception *e)
+            {
+                
+            }
+            
+            try
+            {
+                if (AppendBuf1) {
+                    delete[] AppendBuf1 ;
+                }
+            }
+            catch (App42Exception *e)
+            {
+                
+            }
+            
+            try
+            {
+                if (AppendBuf2) {
+                    delete[] AppendBuf2 ;
+                }
+            }
+            catch (App42Exception *e)
+            {
+                
+            }
+            
+            try
+            {
+                delete[] SHA1_Key ;
+            }
+            catch (App42Exception *e)
+            {
+                
+            }
+            
         }
 
-        void HMAC_SHA1(BYTE *text, int text_len, BYTE *key, int key_len, BYTE *digest);
+        void HMAC_SHA1(BYTE *text, unsigned int text_len, BYTE *key, unsigned int key_len, BYTE *digest);
 };
 
 

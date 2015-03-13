@@ -49,6 +49,9 @@ public:
     void sendPushMessageToTargetUsers(Ref *sender);
     void scheduleMessageToUser(Ref *sender);
     void sendMessageToDevice(Ref *sender);
+    void updatePushBadgeForDevice(Ref *sender);
+    void updatePushBadgeForUser(Ref *sender);
+    void clearAllBadgeCountForDevice(Ref *sender);
     
     // a selector callback
     void onPushRequestCompleted( void *response);

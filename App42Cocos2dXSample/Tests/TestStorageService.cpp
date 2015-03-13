@@ -9,6 +9,7 @@
 #include "TestStorageService.h"
 #include "TestHome.h"
 #include "ResponseScene.h"
+#include <fstream>
 
 #define GO_HOME 103
 
@@ -30,6 +31,50 @@ Scene* TestStorageService::createScene()
 }
 
 
+long textLength;
+
+unsigned char* copy_Txtfile( const char* srcfilename)
+{
+    long  len;
+    unsigned char* buf = NULL;
+    FILE* fp  = NULL;
+    
+    // Open the source file
+    fp = fopen( srcfilename, "rb" );
+    if (!fp) return NULL;
+    
+    // Get its length (in bytes)
+    if (fseek( fp, 0, SEEK_END ) != 0)  // This should typically succeed
+    {                                 // (beware the 2Gb limitation, though)
+        fclose( fp );
+        return NULL;
+    }
+    
+    len = ftell( fp );
+    rewind( fp );
+    
+    // Get a buffer big enough to hold it entirely
+    buf = (unsigned char*)malloc( len );
+    if (!buf)
+    {
+        fclose( fp );
+        return NULL;
+    }
+    
+    // Read the entire file into the buffer
+    if (!fread( buf, len, 1, fp ))
+    {
+        free( buf );
+        fclose( fp );
+        return NULL;
+    }
+    
+    textLength = len;
+    fclose( fp );
+    
+    //free( buf );
+    return buf;
+}
 
 
 bool TestStorageService::init()
@@ -383,6 +428,11 @@ string getJsonString(string key1, string value1,string key2,string value2)
 
 void TestStorageService::insertJsonDocument(Ref *sender)
 {
+    
+    std::string jsonData = "{\"dataBarn\":[{\"kolom\":28,\"baris\":25}],\"dataBarn10\":[{\"kolom\":28,\"baris\":25}],\"dataBarn9\":[{\"kolom\":28,\"baris\":25}],\"dataBarn8\":[{\"kolom\":28,\"baris\":25}],\"dataBarn7\":[{\"kolom\":28,\"baris\":25}],\"dataBarn6\":[{\"kolom\":28,\"baris\":25}],\"dataBarn5\":[{\"kolom\":28,\"baris\":25}],\"dataBarn4\":[{\"kolom\":28,\"baris\":25}],\"dataBarn3\":[{\"kolom\":28,\"baris\":25}],\"dataBarn2\":[{\"kolom\":28,\"baris\":25}],\"dataBarn1\":[{\"kolom\":28,\"baris\":25}],\"dataBuilderHouse\":[{\"kolom\":34,\"baris\":29}],\"dataSilo\":[{\"kolom\":27,\"baris\":34}],\"soilSize\":3,\"dataSoil\":[{\"id\":1,\"kolom\":33,\"baris\":26 },{\"id\":2,\"kolom\":32,\"baris\":25 },{\"id\":3,\"kolom\":31,\"baris\":24 }],\"smallStoneSize\":17,\"smallStoneTotalSize\":18,\"smallStoneData\":[{\"id\":100,\"kolom\":54,\"baris\":49, \"exist\":1 },{\"id\":101,\"kolom\":49,\"baris\":42, \"exist\":1 },{\"id\":102,\"kolom\":43,\"baris\":52, \"exist\":1 },{\"id\":103,\"kolom\":37,\"baris\":2, \"exist\":1 },{\"id\":104,\"kolom\":34,\"baris\":5, \"exist\":1 },{\"id\":105,\"kolom\":30,\"baris\":11, \"exist\":1 },{\"id\":106,\"kolom\":34,\"baris\":23, \"exist\":0 },{\"id\":107,\"kolom\":33,\"baris\":36, \"exist\":1 },{\"id\":108,\"kolom\":36,\"baris\":57, \"exist\":1 },{\"id\":109,\"kolom\":34,\"baris\":49, \"exist\":1 },{\"id\":110,\"kolom\":21,\"baris\":54, \"exist\":1 },{\"id\":111,\"kolom\":28,\"baris\":49, \"exist\":1 },{\"id\":112,\"kolom\":24,\"baris\":43, \"exist\":1 },{\"id\":113,\"kolom\":17,\"baris\":38, \"exist\":1 },{\"id\":114,\"kolom\":14,\"baris\":33, \"exist\":1 },{\"id\":115,\"kolom\":10,\"baris\":33, \"exist\":1 },{\"id\":116,\"kolom\":8,\"baris\":27, \"exist\":1 },{\"id\":117,\"kolom\":4,\"baris\":33, \"exist\":1 }],\"mediumStoneSize\":21,\"mediumStoneTotalSize\":21,\"mediumStoneData\":[{\"id\":200,\"kolom\":48,\"baris\":65, \"exist\":1 },{\"id\":201,\"kolom\":45,\"baris\":64, \"exist\":1 },{\"id\":202,\"kolom\":46,\"baris\":55, \"exist\":1 },{\"id\":203,\"kolom\":49,\"baris\":46, \"exist\":1 },{\"id\":204,\"kolom\":62,\"baris\":45, \"exist\":1 },{\"id\":205,\"kolom\":65,\"baris\":46, \"exist\":1 },{\"id\":206,\"kolom\":54,\"baris\":21, \"exist\":1 },{\"id\":207,\"kolom\":60,\"baris\":13, \"exist\":1 },{\"id\":208,\"kolom\":59,\"baris\":8, \"exist\":1 },{\"id\":209,\"kolom\":43,\"baris\":28, \"exist\":1 },{\"id\":210,\"kolom\":37,\"baris\":8, \"exist\":1 },{\"id\":211,\"kolom\":35,\"baris\":34, \"exist\":1 },{\"id\":212,\"kolom\":34,\"baris\":43, \"exist\":1 },{\"id\":213,\"kolom\":36,\"baris\":51, \"exist\":1 },{\"id\":214,\"kolom\":39,\"baris\":66, \"exist\":1 },{\"id\":215,\"kolom\":31,\"baris\":66, \"exist\":1 },{\"id\":216,\"kolom\":30,\"baris\":57, \"exist\":1 },{\"id\":217,\"kolom\":15,\"baris\":50, \"exist\":1 },{\"id\":218,\"kolom\":14,\"baris\":41, \"exist\":1 },{\"id\":219,\"kolom\":7,\"baris\":42, \"exist\":1 },{\"id\":220,\"kolom\":9,\"baris\":28, \"exist\":1 }],\"bigStoneSize\":9,\"bigStoneTotalSize\":9,\"bigStoneData\":[{\"id\":300,\"kolom\":59,\"baris\":18, \"exist\":1 },{\"id\":301,\"kolom\":50,\"baris\":11, \"exist\":1 },{\"id\":302,\"kolom\":77,\"baris\":24, \"exist\":1 },{\"id\":303,\"kolom\":70,\"baris\":29, \"exist\":1 },{\"id\":304,\"kolom\":64,\"baris\":25, \"exist\":1 },{\"id\":305,\"kolom\":66,\"baris\":51, \"exist\":1 },{\"id\":306,\"kolom\":53,\"baris\":50, \"exist\":1 },{\"id\":307,\"kolom\":46,\"baris\":67, \"exist\":1 },{\"id\":308,\"kolom\":31,\"baris\":48, \"exist\":1 }],\"dataStorage\":[{\"kolom\":23,\"baris\":30}],\"smallTreeSize\":26,\"smallTreeTotalSize\":28,\"smallTreeData\":[{\"id\":100,\"kolom\":49,\"baris\":70, \"exist\":1 },{\"id\":101,\"kolom\":44,\"baris\":59, \"exist\":1 },{\"id\":102,\"kolom\":42,\"baris\":45, \"exist\":1 },{\"id\":103,\"kolom\":36,\"baris\":61, \"exist\":1 },{\"id\":104,\"kolom\":62,\"baris\":53, \"exist\":1 },{\"id\":105,\"kolom\":70,\"baris\":41, \"exist\":1 },{\"id\":106,\"kolom\":67,\"baris\":28, \"exist\":1 },{\"id\":107,\"kolom\":67,\"baris\":20, \"exist\":1 },{\"id\":108,\"kolom\":47,\"baris\":16, \"exist\":1 },{\"id\":109,\"kolom\":39,\"baris\":20, \"exist\":1 },{\"id\":110,\"kolom\":39,\"baris\":6, \"exist\":1 },{\"id\":111,\"kolom\":31,\"baris\":4, \"exist\":1 },{\"id\":112,\"kolom\":36,\"baris\":3, \"exist\":1 },{\"id\":113,\"kolom\":33,\"baris\":8, \"exist\":1 },{\"id\":114,\"kolom\":33,\"baris\":14, \"exist\":0 },{\"id\":115,\"kolom\":30,\"baris\":15, \"exist\":0 },{\"id\":116,\"kolom\":34,\"baris\":37, \"exist\":1 },{\"id\":117,\"kolom\":29,\"baris\":42, \"exist\":1 },{\"id\":118,\"kolom\":28,\"baris\":53, \"exist\":1 },{\"id\":119,\"kolom\":24,\"baris\":57, \"exist\":1 },{\"id\":120,\"kolom\":23,\"baris\":50, \"exist\":1 },{\"id\":121,\"kolom\":22,\"baris\":43, \"exist\":1 },{\"id\":122,\"kolom\":17,\"baris\":42, \"exist\":1 },{\"id\":123,\"kolom\":5,\"baris\":34, \"exist\":1 },{\"id\":124,\"kolom\":12,\"baris\":35, \"exist\":1 },{\"id\":125,\"kolom\":12,\"baris\":29, \"exist\":1 },{\"id\":126,\"kolom\":8,\"baris\":31, \"exist\":1 },{\"id\":127,\"kolom\":6,\"baris\":27, \"exist\":1 }],\"mediumTreeSize\":26,\"mediumTreeTotalSize\":26,\"mediumTreeData\":[{\"id\":200,\"kolom\":50,\"baris\":49, \"exist\":1 },{\"id\":201,\"kolom\":68,\"baris\":45, \"exist\":1 },{\"id\":202,\"kolom\":68,\"baris\":35, \"exist\":1 },{\"id\":203,\"kolom\":63,\"baris\":18, \"exist\":1 },{\"id\":204,\"kolom\":51,\"baris\":16, \"exist\":1 },{\"id\":205,\"kolom\":51,\"baris\":32, \"exist\":1 },{\"id\":206,\"kolom\":52,\"baris\":41, \"exist\":1 },{\"id\":207,\"kolom\":53,\"baris\":56, \"exist\":1 },{\"id\":208,\"kolom\":49,\"baris\":58, \"exist\":1 },{\"id\":209,\"kolom\":44,\"baris\":73, \"exist\":1 },{\"id\":210,\"kolom\":42,\"baris\":63, \"exist\":1 },{\"id\":211,\"kolom\":34,\"baris\":53, \"exist\":1 },{\"id\":212,\"kolom\":37,\"baris\":42, \"exist\":1 },{\"id\":213,\"kolom\":40,\"baris\":31, \"exist\":1 },{\"id\":214,\"kolom\":45,\"baris\":20, \"exist\":1 },{\"id\":215,\"kolom\":43,\"baris\":12, \"exist\":1 },{\"id\":216,\"kolom\":42,\"baris\":1, \"exist\":1 },{\"id\":217,\"kolom\":38,\"baris\":11, \"exist\":1 },{\"id\":218,\"kolom\":27,\"baris\":8, \"exist\":1 },{\"id\":219,\"kolom\":35,\"baris\":66, \"exist\":1 },{\"id\":220,\"kolom\":32,\"baris\":59, \"exist\":1 },{\"id\":221,\"kolom\":27,\"baris\":58, \"exist\":1 },{\"id\":222,\"kolom\":21,\"baris\":56, \"exist\":1 },{\"id\":223,\"kolom\":18,\"baris\":47, \"exist\":1 },{\"id\":224,\"kolom\":9,\"baris\":34, \"exist\":1 },{\"id\":225,\"kolom\":2,\"baris\":31, \"exist\":1 }],\"bigTreeSize\":17,\"bigTreeTotalSize\":17,\"bigTreeData\":[{\"id\":300,\"kolom\":58,\"baris\":51, \"exist\":1 },{\"id\":301,\"kolom\":59,\"baris\":40, \"exist\":1 },{\"id\":302,\"kolom\":55,\"baris\":30, \"exist\":1 },{\"id\":303,\"kolom\":62,\"baris\":31, \"exist\":1 },{\"id\":304,\"kolom\":74,\"baris\":33, \"exist\":1 },{\"id\":305,\"kolom\":78,\"baris\":29, \"exist\":1 },{\"id\":306,\"kolom\":72,\"baris\":19, \"exist\":1 },{\"id\":307,\"kolom\":57,\"baris\":22, \"exist\":1 },{\"id\":308,\"kolom\":55,\"baris\":8, \"exist\":1 },{\"id\":309,\"kolom\":50,\"baris\":1, \"exist\":1 },{\"id\":310,\"kolom\":50,\"baris\":21, \"exist\":1 },{\"id\":311,\"kolom\":47,\"baris\":42, \"exist\":1 },{\"id\":312,\"kolom\":45,\"baris\":2, \"exist\":1 },{\"id\":313,\"kolom\":45,\"baris\":32, \"exist\":1 },{\"id\":314,\"kolom\":39,\"baris\":52, \"exist\":1 },{\"id\":315,\"kolom\":38,\"baris\":69, \"exist\":1 },{\"id\":316,\"kolom\":12,\"baris\":43, \"exist\":1 }],\"dataWoodCutterHouse\":[{\"kolom\":38,\"baris\":27}]}";
+    
+    //printf("length = %lu",jsonData.length());
+    
 /*
   case1: Insert with admin key:
             -use setAdminKey
@@ -396,6 +446,10 @@ void TestStorageService::insertJsonDocument(Ref *sender)
             - To grant permission user need to setFBAccessToken
   case4: User can grant permission while inserting the doc by setting defaultApp42ACL.
 */
+    
+    //string filePath = FileUtils::getInstance()->fullPathForFilename("data.txt");
+    //const char* imageData = (const char*)copy_Txtfile(filePath.c_str());
+    //printf("\n\n|||||||\n   %s  \n|||||||\n\n",imageData);
     //App42API::setIsTraceEnabled(true);
     StorageService *storageService = App42API::BuildStorageService();
 //    const char* dbName = "<Your_DataBase_Name>";
@@ -403,9 +457,9 @@ void TestStorageService::insertJsonDocument(Ref *sender)
     //const char* jsonDoc ="{\"name\":\"Nick\",\"age\":30,\"phone\":\"xxx-xxx-xxx\"}";
     App42API::setLoggedInUser("RajeevDevice");
     //storageService->setAdminKey(APP_ADMIN_KEY);
-    string jsonDoc = "{\"ach_params\":{\"a\":{\"30\":\"1\",\"31\":\"1\",\"32\":\"1\",\"33\":\"1\",\"34\":\"1\",\"35\":\"1\",\"45\":\"1\",\"46\":\"1\",\"47\":\"1\"},\"rep\":false},\"ach_values\":{\"a\":{\"30\":\"1\",\"31\":\"1\",\"32\":\"1\",\"33\":\"2\",\"34\":\"2\",\"35\":\"2\",\"45\":\"1\",\"46\":\"1\",\"47\":\"1\"},\"rep\":false},\"boss\":{\"rep\":false},\"character\":{\"a\":{\"1\":\"124\"},\"rep\":false},\"chieftain\":{\"rep\":false},\"enemy\":{\"a\":{\"4\":\"1\",\"7\":\"1\"},\"rep\":false},\"facebookId\":\"1375652327\",\"inventory\":{\"a\":{\"-1\":\"1\",\"0\":\"8947\",\"10\":\"1\",\"101\":\"1\",\"131\":\"1\",\"161\":\"1\",\"300\":\"1\"},\"rep\":true},\"outfit\":{\"a\":{\"1\":\"131\"},\"rep\":true},\"stats_max\":{\"a\":{\"0\":\"67\",\"2\":\"189\",\"3\":\"197\",\"4\":\"1\"},\"rep\":false},\"stats_total\":{\"a\":{\"0\":\"67\",\"1\":\"1\",\"2\":\"189\",\"3\":\"197\",\"4\":\"1\"},\"rep\":false},\"timestamp\":1408639836,\"version\":1}";//getJsonString("name", "Rajeev Ranjan", "role", "Developer");
+    //string jsonData = "{\"ach_params\":{\"a\":{\"30\":\"1\",\"31\":\"1\",\"32\":\"1\",\"33\":\"1\",\"34\":\"1\",\"35\":\"1\",\"45\":\"1\",\"46\":\"1\",\"47\":\"1\"},\"rep\":false},\"ach_values\":{\"a\":{\"30\":\"1\",\"31\":\"1\",\"32\":\"1\",\"33\":\"2\",\"34\":\"2\",\"35\":\"2\",\"45\":\"1\",\"46\":\"1\",\"47\":\"1\"},\"rep\":false},\"boss\":{\"rep\":false},\"character\":{\"a\":{\"1\":\"124\"},\"rep\":false},\"chieftain\":{\"rep\":false},\"enemy\":{\"a\":{\"4\":\"1\",\"7\":\"1\"},\"rep\":false},\"facebookId\":\"1375652327\",\"inventory\":{\"a\":{\"-1\":\"1\",\"0\":\"8947\",\"10\":\"1\",\"101\":\"1\",\"131\":\"1\",\"161\":\"1\",\"300\":\"1\"},\"rep\":true},\"outfit\":{\"a\":{\"1\":\"131\"},\"rep\":true},\"stats_max\":{\"a\":{\"0\":\"67\",\"2\":\"189\",\"3\":\"197\",\"4\":\"1\"},\"rep\":false},\"stats_total\":{\"a\":{\"0\":\"67\",\"1\":\"1\",\"2\":\"189\",\"3\":\"197\",\"4\":\"1\"},\"rep\":false},\"timestamp\":1408639836,\"version\":1}";//getJsonString("name", "Rajeev Ranjan", "role", "Developer");
     //storageService->InsertJsonDocument(dbName, collectionName, jsonDoc.c_str(), app42callback(TestStorageService::onStorageRequestCompleted, this));
-    storageService->InsertJsonDocument(dbName, collectionName, jsonDoc.c_str(), app42callback(TestStorageService::onStorageRequestCompleted, this));
+    storageService->InsertJsonDocument(dbName, collectionName,jsonData.c_str(), app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
 
 void TestStorageService::insertJsonDocumentWithApp42Object(Ref *sender)
@@ -434,6 +488,9 @@ void TestStorageService::findAllDocuments(Ref *sender)
 {
     //App42API::setIsTraceEnabled(true);
     StorageService *storageService = App42API::BuildStorageService();
+    map<string,string>otherMetaHeaders;
+    otherMetaHeaders["orderByDescending"] = "_$createdAt";
+    storageService->setOtherMetaHeaders(otherMetaHeaders);
     storageService->FindAllDocuments(dbName, collectionName,app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
 
@@ -465,16 +522,21 @@ void TestStorageService::findDocumentByQuery(Ref *sender)
 {
     //App42API::setIsTraceEnabled(true);
     StorageService *storageService = App42API::BuildStorageService();
-    const char* key1 = "name";
-    const char* value1 = "Nick";
-    const char* key2 = "age";
-    const char* value2 = "30";
-
-    Query *query1 = QueryBuilder::BuildQuery(key1, value1, APP42_OP_EQUALS);
-    Query *query2 = QueryBuilder::BuildQuery(key2, value2, APP42_OP_GREATER_THAN_EQUALTO);
-    Query *query3 = QueryBuilder::CompoundOperator(query1, APP42_OP_OR, query2);
+    //const char* key1 = "name";
+    //const char* value1 = "Nick";
+    const char* key2 = "key2";
+    const char* value2 = "value2";
     
-    storageService->FindDocumentsByQuery(dbName, collectionName,query3,app42callback(TestStorageService::onStorageRequestCompleted, this));
+
+    //Query *query1 = QueryBuilder::BuildQuery(key1, value1, APP42_OP_EQUALS);
+    Query *query2 = QueryBuilder::BuildQuery(key2, value2, APP42_OP_EQUALS);
+    //Query *query3 = QueryBuilder::CompoundOperator(query1, APP42_OP_OR, query2);
+    
+    map<string,string>otherMetaHeaders;
+    otherMetaHeaders["orderByDescending"] = "createdAt";
+    storageService->setOtherMetaHeaders(otherMetaHeaders);
+    
+    storageService->FindDocumentsByQuery(dbName, collectionName,query2,app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
 void TestStorageService::findDocumentByQueryWithPaging(Ref *sender)
 {
@@ -498,16 +560,14 @@ void TestStorageService::findDocumentByQueryWithPagingOrderBy(Ref *sender)
     StorageService *storageService = App42API::BuildStorageService();
     const char* key1 = "name";
     const char* value1 = "Nick";
-    const char* key2 = "age";
-    const char* value2 = "30";
     
-    Query *query1 = QueryBuilder::BuildQuery(key1, value1, APP42_OP_EQUALS);
-    Query *query2 = QueryBuilder::BuildQuery(key2, value2, APP42_OP_GREATER_THAN_EQUALTO);
-    Query *query3 = QueryBuilder::CompoundOperator(query1, APP42_OP_OR, query2);
+    const char* orderByKey = "_$createdAt";
+    
+    Query *query = QueryBuilder::BuildQuery(key1, value1, APP42_OP_EQUALS);
     int max =2;
     int offset = 0;
 
-    storageService->FindDocsWithQueryPagingOrderBy(dbName, collectionName,query3,max,offset,key1,APP42_ORDER_ASCENDING,app42callback(TestStorageService::onStorageRequestCompleted, this));
+    storageService->FindDocsWithQueryPagingOrderBy(dbName, collectionName,query,max,offset,orderByKey,APP42_ORDER_DESCENDING,app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
 
 void TestStorageService::findDocumentsByKeyValue(Ref *sender)
@@ -525,7 +585,7 @@ void TestStorageService::findDocsByKeyValueByOrder(Ref *sender)
     StorageService *storageService = App42API::BuildStorageService();
     
     map<string,string>otherMetaHeaders;
-    otherMetaHeaders["orderByAscending"] = "age";
+    otherMetaHeaders["orderByAscending"] = "createdAt";
     const char* key="name";
     const char* value = "Nick";
     storageService->FindDocumentByKeyValue(dbName, collectionName,key,value,app42callback(TestStorageService::onStorageRequestCompleted, this));

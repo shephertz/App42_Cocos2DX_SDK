@@ -8,8 +8,10 @@
 #include <memory>
 
 
-void CHMAC_SHA1::HMAC_SHA1(BYTE *text, int text_len, BYTE *key, int key_len, BYTE *digest)
+
+void CHMAC_SHA1::HMAC_SHA1(BYTE *text, unsigned int text_len, BYTE *key, unsigned int key_len, BYTE *digest)
 {
+    printf("\nHMAC_SHA1 .... START\n");
 	memset(SHA1_Key, 0, SHA1_BLOCK_SIZE);
 
 	/* repeated 64 times for values in ipad and opad */
@@ -61,4 +63,5 @@ void CHMAC_SHA1::HMAC_SHA1(BYTE *text, int text_len, BYTE *key, int key_len, BYT
 	CSHA1::Final();
 
 	CSHA1::GetHash((UINT_8 *)digest);
+    printf("\nHMAC_SHA1 .... END\n");
 }

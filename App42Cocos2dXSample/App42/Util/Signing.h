@@ -30,9 +30,9 @@ namespace Util
         unsigned char hmac_digest[20];
         memset(hmac_digest, 0, 20);
         CHMAC_SHA1 hmac_sha1;
-        hmac_sha1.HMAC_SHA1((unsigned char *)data.c_str(),data.length(), (unsigned char *)key.c_str(), key.length(),hmac_digest);
+        hmac_sha1.HMAC_SHA1((unsigned char *)data.c_str(),(unsigned int)data.length(), (unsigned char *)key.c_str(), (unsigned int)key.length(),hmac_digest);
         std::string hmac = urlencode(base64_encode(hmac_digest, 20));
-
+        printf("\n hmac = %s",hmac.c_str());
         return hmac;
     }
     

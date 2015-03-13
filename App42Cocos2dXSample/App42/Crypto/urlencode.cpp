@@ -19,7 +19,8 @@ std::string urlencode( const std::string &c )
 {
 
     std::string escaped;
-	int max = c.length();
+	int max = (int)c.length();
+    printf("%s",c.c_str());
 	for(int i=0; i<max; i++)
 	{
 		if ( (48 <= c[i] && c[i] <= 57) ||//0-9

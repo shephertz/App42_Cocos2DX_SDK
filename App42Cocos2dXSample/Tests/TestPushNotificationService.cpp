@@ -51,7 +51,7 @@ bool TestPushNotificationService::init()
     
     float button_y_Offset =30;
     float y_pos = visibleSize.height-button_y_Offset;
-    float x_pos = origin.x + visibleSize.width/2;
+    float x_pos = origin.x + visibleSize.width/4;
     
     /**
      * Back Button
@@ -208,6 +208,9 @@ bool TestPushNotificationService::init()
     y_pos -= button_y_Offset;
     sendPushToTargetUsersItem->setPosition(Point(x_pos,y_pos));
     
+    y_pos = visibleSize.height-button_y_Offset;
+    x_pos = origin.x + 3*visibleSize.width/4;
+    
     /**
      *  ScheduleMessageToUser
      */
@@ -235,6 +238,37 @@ bool TestPushNotificationService::init()
     y_pos -= button_y_Offset;
     sendPushMeassageToDeviceItem->setPosition(Point(x_pos,y_pos));
 
+    /*
+     updatePushBadgeForUser
+     clearAllBadgeCountForDevice
+     */
+    
+    /**
+     *  UpdatePushBadgeForDevice
+     */
+    auto updatePushBadgeForDeviceLabel = LabelTTF::create("UpdatePushBadgeForDevice", "Marker Felt", 24);
+    updatePushBadgeForDeviceLabel->setColor(Color3B::WHITE);
+    auto updatePushBadgeForDeviceItem  = MenuItemLabel::create(updatePushBadgeForDeviceLabel, CC_CALLBACK_1(TestPushNotificationService::updatePushBadgeForDevice, this));
+    y_pos -= button_y_Offset;
+    updatePushBadgeForDeviceItem->setPosition(Point(x_pos,y_pos));
+    
+    /**
+     *  UpdatePushBadgeForDevice
+     */
+    auto updatePushBadgeForUserLabel = LabelTTF::create("UpdatePushBadgeForUser", "Marker Felt", 24);
+    updatePushBadgeForUserLabel->setColor(Color3B::WHITE);
+    auto updatePushBadgeForUserItem  = MenuItemLabel::create(updatePushBadgeForUserLabel, CC_CALLBACK_1(TestPushNotificationService::updatePushBadgeForUser, this));
+    y_pos -= button_y_Offset;
+    updatePushBadgeForUserItem->setPosition(Point(x_pos,y_pos));
+    
+    /**
+     *  ClearAllBadgeCount
+     */
+    auto clearAllBadgeCountLabel = LabelTTF::create("ClearAllBadgeCount", "Marker Felt", 24);
+    clearAllBadgeCountLabel->setColor(Color3B::WHITE);
+    auto clearAllBadgeCountItem  = MenuItemLabel::create(clearAllBadgeCountLabel, CC_CALLBACK_1(TestPushNotificationService::clearAllBadgeCountForDevice, this));
+    y_pos -= button_y_Offset;
+    clearAllBadgeCountItem->setPosition(Point(x_pos,y_pos));
  	
     /**
      * Create menu, it's an autorelease object
@@ -262,7 +296,10 @@ bool TestPushNotificationService::init()
                              sendPushToTargetUsersItem,
                              scheduleMessageToUserItem,
                              sendPushMeassageToChannelItem,
-                             sendPushMeassageToDeviceItem, NULL);
+                             sendPushMeassageToDeviceItem,
+                             updatePushBadgeForDeviceItem,
+                             updatePushBadgeForUserItem,
+                             clearAllBadgeCountItem, NULL);
     
     menu->setPosition(Point::ZERO);
     this->addChild(menu, 1);
@@ -443,6 +480,26 @@ void TestPushNotificationService::sendMessageToDevice(Ref *sender)
     PushNotificationService *pushService = App42API::BuildPushNotificationService();
     pushService->SendPushMessageToDevice(deviceToken.c_str(), userName.c_str(), message.c_str(), app42callback(TestPushNotificationService::onPushRequestCompleted, this));
 }
+
+
+void TestPushNotificationService::updatePushBadgeForDevice(Ref *sender)
+{
+    PushNotificationService *pushService = App42API::BuildPushNotificationService();
+    pushService->UpdatePushBadgeforDevice(userName.c_str(),deviceToken.c_str(), 2,app42callback(TestPushNotificationService::onPushRequestCompleted, this));
+}
+
+void TestPushNotificationService::updatePushBadgeForUser(Ref *sender)
+{
+    PushNotificationService *pushService = App42API::BuildPushNotificationService();
+    pushService->UpdatePushBadgeforUser(userName.c_str(), 2,app42callback(TestPushNotificationService::onPushRequestCompleted, this));
+}
+
+void TestPushNotificationService::clearAllBadgeCountForDevice(Ref *sender)
+{
+    PushNotificationService *pushService = App42API::BuildPushNotificationService();
+    pushService->ClearAllBadgeCount(userName.c_str(),deviceToken.c_str(),app42callback(TestPushNotificationService::onPushRequestCompleted, this));
+}
+
 
 
 /**
