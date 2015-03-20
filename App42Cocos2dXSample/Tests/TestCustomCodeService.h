@@ -34,7 +34,6 @@ public:
      */
     void runJavaCode(Ref *sender);
     
-    
     // a selector callback
     void menuCloseCallback(Ref* pSender);
     void onCustomCodeServiceRequestCompleted( void *response);

@@ -623,7 +623,7 @@ void TestUserService::updateEmail(Ref* pSender)
     UserService *userService = App42API::BuildUserService();
     const char* userName = "Nick";
     const char* emailId = "nick@shephertz.com";
-    userService->setAdminKey(APP_ADMIN_KEY);
+    //userService->setAdminKey(APP_ADMIN_KEY);
     userService->UpdateEmail(userName,emailId, app42callback(TestUserService::onUserRequestCompleted, this));
 }
 

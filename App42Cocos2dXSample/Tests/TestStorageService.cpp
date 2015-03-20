@@ -404,8 +404,8 @@ bool TestStorageService::init()
     this->addChild(menu3, 1);
     
     
-    dbName = "jsonDocument2";
-    collectionName = "TestingScore";
+    dbName = "DBNAME";
+    collectionName = "Debug_Scores";
     docId = "";
     
     App42API::setDbName(dbName);
@@ -524,17 +524,24 @@ void TestStorageService::findDocumentByQuery(Ref *sender)
     StorageService *storageService = App42API::BuildStorageService();
     //const char* key1 = "name";
     //const char* value1 = "Nick";
-    const char* key2 = "key2";
-    const char* value2 = "value2";
-    
+    const char* key = "UserId";
+    string value1 = "100004971962878";
+    string value2 = "John";
+
+    std::vector<string> userIds;
+    userIds.push_back(value1);
+    userIds.push_back(value2);
+    cJSON *jsonArr = cJSON_CreateArray();
+    cJSON *jsonObj = cJSON_CreateString(value1.c_str());
+    cJSON_AddItemToArray(jsonArr, jsonObj);
 
     //Query *query1 = QueryBuilder::BuildQuery(key1, value1, APP42_OP_EQUALS);
-    Query *query2 = QueryBuilder::BuildQuery(key2, value2, APP42_OP_EQUALS);
+    Query *query2 = QueryBuilder::BuildQuery(key, userIds, APP42_OP_INLIST);
     //Query *query3 = QueryBuilder::CompoundOperator(query1, APP42_OP_OR, query2);
     
-    map<string,string>otherMetaHeaders;
+    /*map<string,string>otherMetaHeaders;
     otherMetaHeaders["orderByDescending"] = "createdAt";
-    storageService->setOtherMetaHeaders(otherMetaHeaders);
+    storageService->setOtherMetaHeaders(otherMetaHeaders);*/
     
     storageService->FindDocumentsByQuery(dbName, collectionName,query2,app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
@@ -780,7 +787,7 @@ void TestStorageService::grantAccessOnDoc(Ref* sender)
     
     App42ACL *App42ACL2 = new App42ACL("Ranjan",W);
     //App42ACLList.push_back(*App42ACL2);
-    storageService->setAdminKey(APP_ADMIN_KEY);
+    //storageService->setAdminKey(APP_ADMIN_KEY);
     App42API::setLoggedInUser("RajeevDevice");
     storageService->GrantAccessOnDoc(dbName, collectionName, docId, App42ACLList, app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
@@ -867,16 +874,14 @@ void TestStorageService::onStorageRequestCompleted( void *response)
         responseArray.push_back(errorMsg);
     }
     
-    
     auto scheduler = Director::getInstance()->getScheduler();
-    
     scheduler->performFunctionInCocosThread(CC_CALLBACK_0(TestStorageService::loadResponseScene, this));
-    
 }
 
 void TestStorageService::loadResponseScene()
 {
-    // 'scene' is an autorelease object
+    printf("loadResponseScene");
+    /*// 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
@@ -891,7 +896,7 @@ void TestStorageService::loadResponseScene()
     }
     scene->addChild(layer);
     // run
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->replaceScene(scene);*/
 }
 
 
