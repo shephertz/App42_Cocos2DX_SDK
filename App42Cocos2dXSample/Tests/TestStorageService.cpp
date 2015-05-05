@@ -489,7 +489,7 @@ void TestStorageService::findAllDocuments(Ref *sender)
     //App42API::setIsTraceEnabled(true);
     StorageService *storageService = App42API::BuildStorageService();
     map<string,string>otherMetaHeaders;
-    otherMetaHeaders["orderByDescending"] = "_$createdAt";
+    otherMetaHeaders["orderByAscending"] = "Score";
     storageService->setOtherMetaHeaders(otherMetaHeaders);
     storageService->FindAllDocuments(dbName, collectionName,app42callback(TestStorageService::onStorageRequestCompleted, this));
 }

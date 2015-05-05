@@ -41,6 +41,8 @@ bool TestUserService::init()
         return false;
     }
     
+    userServiceTemp = App42API::BuildUserService();
+    
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
     
@@ -556,17 +558,23 @@ void TestUserService::getUserWithEmailId(Ref* pSender)
 void TestUserService::getAllUser(Ref* pSender)
 {
     //App42API::setIsTraceEnabled(true)(false);
-    UserService *userService = App42API::BuildUserService();
-    userService->GetAllUsers(app42callback(TestUserService::onUserRequestCompleted, this));
+    //UserService *userService = App42API::BuildUserService();
+    std::map<string,string> otherMetaHeaders1;
+    otherMetaHeaders1["orderByDescending"] = "name";
+    userServiceTemp->setOtherMetaHeaders(otherMetaHeaders1);
+    userServiceTemp->GetAllUsers(app42callback(TestUserService::onUserRequestCompleted, this));
 }
 
 void TestUserService::getAllUsersByPaging(Ref* pSender)
 {
     ////App42API::setIsTraceEnabled(true);
-    UserService *userService = App42API::BuildUserService();
-    int max = 1;
+    //UserService *userService = App42API::BuildUserService();
+    int max = 10;
     int offset = 0;
-    userService->GetAllUsers(max,offset,app42callback(TestUserService::onUserRequestCompleted, this));
+    
+    std::map<string,string> otherMetaHeaders2;
+    userServiceTemp->setOtherMetaHeaders(otherMetaHeaders2);    
+    userServiceTemp->GetAllUsers(max,offset,app42callback(TestUserService::onUserRequestCompleted, this));
 }
 
 

@@ -21,6 +21,7 @@
 #include "TestSessionService.h"
 #include "TestBuddyService.h"
 #include "TestTimerService.h"
+#include "TestGeoService.h"
 
 USING_NS_CC;
 
@@ -39,6 +40,7 @@ USING_NS_CC;
 #define SESSION_SERVICE     113
 #define BUDDY_SERVICE       114
 #define TIMER_SERVICE       115
+#define GEO_SERVICE         116
 
 Scene* ResponseScene::createScene()
 {
@@ -271,6 +273,16 @@ void ResponseScene::menuCloseCallback(Ref* pSender)
         {
             // create a scene. it's an autorelease object
             auto scene = TestTimerService::createScene();
+            
+            // run
+            Director::getInstance()->replaceScene(scene);
+            
+            break;
+        }
+        case GEO_SERVICE:
+        {
+            // create a scene. it's an autorelease object
+            auto scene = TestGeoService::createScene();
             
             // run
             Director::getInstance()->replaceScene(scene);

@@ -33,6 +33,7 @@ public:
      * APIs Tests
      */
     void runJavaCode(Ref *sender);
+    void runJavaCodeWithJsonBody(Ref *sender);
     
     // a selector callback
     void menuCloseCallback(Ref* pSender);

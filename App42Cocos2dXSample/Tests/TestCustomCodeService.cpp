@@ -69,15 +69,21 @@ bool TestCustomCodeService::init()
     runJavaCodeItem->setPosition(Point(x_pos,y_pos));
     
     
-
+    /**
+     * Run Java Code with json string
+     */
+    auto runJavaCodeWithStringLabel = LabelTTF::create("RunJavaCodeWithJsonString", "Marker Felt", 24);
+    runJavaCodeWithStringLabel->setColor(Color3B::WHITE);
+    auto runJavaCodeWithStringItem  = MenuItemLabel::create(runJavaCodeWithStringLabel, CC_CALLBACK_1(TestCustomCodeService::runJavaCodeWithJsonBody, this));
+    y_pos -= button_y_Offset;
+    runJavaCodeWithStringItem->setPosition(Point(x_pos,y_pos));
  	
-
-    
     
     // create menu, it's an autorelease object
     auto menu = Menu::create(backButtonItem,
                              runJavaCodeItem,
-                              NULL);
+                             runJavaCodeWithStringItem,
+                             NULL);
     
     menu->setPosition(Point::ZERO);
     this->addChild(menu, 1);
@@ -90,8 +96,6 @@ bool TestCustomCodeService::init()
 void TestCustomCodeService::runJavaCode(Ref *sender)
 {
     CustomCodeService *customCodeService = App42API::BuildCustomCodeService();
-
-    //App42API::setIsTraceEnabled(true);
     
     const char* name = "DEPLOYED_CUSTOM_CODE_NAME";
     App42Object *object = new App42Object();
@@ -108,6 +112,16 @@ void TestCustomCodeService::runJavaCode(Ref *sender)
     object = nullptr;
 }
 
+
+void TestCustomCodeService::runJavaCodeWithJsonBody(Ref *sender)
+{
+    CustomCodeService *customCodeService = App42API::BuildCustomCodeService();
+    
+    const char* name = "Cocos2dxtest";
+    const char* jsonBody = "{\"name\":\"Nick\",\"age\":30,\"phone\":\"xxx-xxx-xxx\"}";
+    printf("\n%s",jsonBody);
+    customCodeService->RunJavaCode(name, jsonBody, app42callback(TestCustomCodeService::onCustomCodeServiceRequestCompleted, this));
+}
 
 /**
  * Callback Methods

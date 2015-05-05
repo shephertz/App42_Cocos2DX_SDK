@@ -17,6 +17,8 @@ class TestUserService : public cocos2d::Layer, public App42CallBack
 {
 public:
    
+    UserService *userServiceTemp;
+    
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
     static cocos2d::Scene* createScene();
     

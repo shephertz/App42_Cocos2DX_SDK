@@ -21,6 +21,7 @@
 #include "TestSessionService.h"
 #include "TestBuddyService.h"
 #include "TestTimerService.h"
+#include "TestGeoService.h"
 
 USING_NS_CC;
 
@@ -39,6 +40,7 @@ USING_NS_CC;
 #define SESSION_SERVICE     113
 #define BUDDY_SERVICE       114
 #define TIMER_SERVICE       115
+#define GEO_SERVICE         116
 
 const time_t sec_per_day = 24*60*60;
 
@@ -261,6 +263,16 @@ bool TestHome::init()
     timerServiceItem->setTag(TIMER_SERVICE);
     y_pos -= button_y_Offset;
     timerServiceItem->setPosition(Point(x_pos,y_pos));
+    
+    /**
+     * Geo Service Test
+     */
+    auto geoServiceLabel = LabelTTF::create("Geo Service", "Marker Felt", 24);
+    geoServiceLabel->setColor(Color3B::WHITE);
+    auto geoServiceItem  = MenuItemLabel::create(geoServiceLabel, CC_CALLBACK_1(TestHome::menuCloseCallback, this));
+    geoServiceItem->setTag(GEO_SERVICE);
+    y_pos -= button_y_Offset;
+    geoServiceItem->setPosition(Point(x_pos,y_pos));
 
     // create menu, it's an autorelease object
     auto menu = Menu::create(userServiceItem,
@@ -278,7 +290,8 @@ bool TestHome::init()
                              avatarItem,
                              sessionServiceItem,
                              buddyServiceItem,
-                             timerServiceItem,NULL);
+                             timerServiceItem,
+                             geoServiceItem,NULL);
     
     menu->setPosition(Point::ZERO);
     this->addChild(menu, 1);
@@ -288,6 +301,7 @@ bool TestHome::init()
     
     
     App42API::Initialize(API_KEY, SECRET_KEY);
+
     App42API::setIsTraceEnabled(true);
     return true;
 }
@@ -443,6 +457,16 @@ void TestHome::menuCloseCallback(Ref* pSender)
         {
             // create a scene. it's an autorelease object
             auto scene = TestTimerService::createScene();
+            
+            // run
+            Director::getInstance()->replaceScene(scene);
+            
+            break;
+        }
+        case GEO_SERVICE:
+        {
+            // create a scene. it's an autorelease object
+            auto scene = TestGeoService::createScene();
             
             // run
             Director::getInstance()->replaceScene(scene);
