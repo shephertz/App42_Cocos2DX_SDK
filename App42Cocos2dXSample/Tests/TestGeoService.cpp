@@ -171,46 +171,8 @@ bool TestGeoService::init()
                              getAllPointsByPagingItem,
                              NULL);
     
-    /*auto menu1 = Menu::create(
-                              getAllUsersCountItem,
-                              lockUserItem,
-                              unlockUserItem,
-                              getAllLockedUsersItem,
-                              getLockedUsersPagingItem,
-                              getAllLockedUsersCountItem,
-                              updateEmailItem,
-                              deleteUserItem,
-                              deleteUserPermanentItem,NULL);
-    
-    auto menu2 = Menu::create(
-                              changePwdItem,
-                              resetPwdItem,
-                              profileItem,
-                              getUsersByProfileItem,
-                              logoutItem,
-                              getRolesByUserItem,
-                              getUsersByRoleItem,
-                              revokeRoleItem,
-                              revokeAllRolesItem, NULL);
-    
-    auto menu3 = Menu::create(
-                              getUsersByGroupItem,
-                              createUserWithProfileItem,
-                              createUserWithCustomDataItem,
-                              getUserWithCustomDataItem,
-                              getAllUsersWithCustomDataItem,NULL);*/
-    
     menu->setPosition(Point::ZERO);
     this->addChild(menu, 1);
-    
-    /*menu1->setPosition(Point::ZERO);
-    this->addChild(menu1, 1);
-    
-    menu2->setPosition(Point::ZERO);
-    this->addChild(menu2, 1);
-    
-    menu3->setPosition(Point::ZERO);
-    this->addChild(menu3, 1);*/
     
     return true;
 }
@@ -219,15 +181,13 @@ bool TestGeoService::init()
 void TestGeoService::createGeoPoints(Ref* pSender)
 {
     GeoService *geoService = App42API::BuildGeoService();
-    const char* geoStorageName = "markerstorage";
-    
+    const char* geoStorageName = "geolist";
     vector<App42GeoPoint> geoPointsList;
     App42GeoPoint geoPoint;
-    geoPoint.latitude = 50.0;
-    geoPoint.longitude = 100.0;
+    geoPoint.latitude = -74.26213;
+    geoPoint.longitude = 40.77313;
     geoPoint.markerName = "New Delhi";
     geoPointsList.push_back(geoPoint);
-    
     geoService->CreateGeoPoints(geoStorageName, geoPointsList,app42callback(TestGeoService::onGeoRequestCompleted, this));
 }
 
@@ -235,21 +195,31 @@ void TestGeoService::getNearByPointsByMaxDistance(Ref* pSender)
 {
     GeoService *geoService = App42API::BuildGeoService();
     const char* geoStorageName = "geolist";
-    geoService->GetNearByPointsByMaxDistance(geoStorageName, 22.777777, 55.265865, 22.777777, app42callback(TestGeoService::onGeoRequestCompleted, this));
+    double   lat = -73.99171;
+    double  lng = 40.738868;
+    double distanceInKM = 2;
+    geoService->GetNearByPointsByMaxDistance(geoStorageName, lat, lng, distanceInKM, app42callback(TestGeoService::onGeoRequestCompleted, this));
 }
 
 void TestGeoService::getNearByPoint(Ref* pSender)
 {
     GeoService *geoService = App42API::BuildGeoService();
     const char* geoStorageName = "geolist";
-    geoService->GetNearByPoint(geoStorageName, 22.77777, 55.26586, 10, app42callback(TestGeoService::onGeoRequestCompleted, this));
+    double   lat = -73.99171;
+    double  lng = 40.738868;
+    int resultLimit	= 2;
+    geoService->GetNearByPoint(geoStorageName, lat, lng, resultLimit, app42callback(TestGeoService::onGeoRequestCompleted, this));
 }
 
 void TestGeoService::getPointsWithInCircle(Ref* pSender)
 {
     GeoService *geoService = App42API::BuildGeoService();
     const char* geoStorageName = "geolist";
-    geoService->GetPointsWithInCircle(geoStorageName, 22.77777, 55.26586, 100, 10, app42callback(TestGeoService::onGeoRequestCompleted, this));
+    double   lat = -73.99171;
+    double  lng = 40.738868;
+    int resultLimit	= 1;
+    double radiusInKM = 2;
+    geoService->GetPointsWithInCircle(geoStorageName, lat, lng, radiusInKM, resultLimit, app42callback(TestGeoService::onGeoRequestCompleted, this));
 }
 
 void TestGeoService::getAllStorage(Ref* pSender)
@@ -261,21 +231,21 @@ void TestGeoService::getAllStorage(Ref* pSender)
 void TestGeoService::getAllStorageByPaging(Ref* pSender)
 {
     GeoService *geoService = App42API::BuildGeoService();
-    geoService->GetAllStorageByPaging(5, 0, app42callback(TestGeoService::onGeoRequestCompleted, this));
+    int max = 5;
+    int offset = 0;
+    geoService->GetAllStorageByPaging(max, offset, app42callback(TestGeoService::onGeoRequestCompleted, this));
 }
 
 void TestGeoService::deleteGeoPoints(Ref* pSender)
 {
     GeoService *geoService = App42API::BuildGeoService();
-    const char* geoStorageName = "geolist";
-    
+    const char* geoStorageName = "<Your_storage_name>";
     vector<App42GeoPoint> geoPointsList;
     App42GeoPoint geoPoint;
-    geoPoint.latitude = 50.0;
-    geoPoint.longitude = 100.0;
-    geoPoint.markerName = "New Delhi";
+    geoPoint.latitude = -73.99171;
+    geoPoint.longitude = 40.738868;
+    geoPoint.markerName = "Maplewood, NJ";
     geoPointsList.push_back(geoPoint);
-    
     geoService->DeleteGeoPoints(geoStorageName, geoPointsList, app42callback(TestGeoService::onGeoRequestCompleted, this));
 }
 
@@ -297,7 +267,9 @@ void TestGeoService::getAllPointsByPaging(Ref* pSender)
 {
     GeoService *geoService = App42API::BuildGeoService();
     const char* geoStorageName = "geolist";
-    geoService->GetAllPointsByPaging(geoStorageName, 5, 0, app42callback(TestGeoService::onGeoRequestCompleted, this));
+    int max = 5;
+    int offset = 0;
+    geoService->GetAllPointsByPaging(geoStorageName, max, offset, app42callback(TestGeoService::onGeoRequestCompleted, this));
 }
 
 /**
@@ -321,6 +293,14 @@ void TestGeoService::onGeoRequestCompleted( void *response)
             printf("\n StorageName=%s",it->storageName.c_str());
             printf("\n SourceLat=%lf",it->sourceLat);
             printf("\n SourceLng=%lf",it->sourceLng);
+            
+            vector<App42GeoPoint>app42GeoPointList = it->pointList;
+            for(std::vector<App42GeoPoint>::iterator geoPoint = app42GeoPointList.begin(); geoPoint != app42GeoPointList.end(); ++geoPoint)
+            {
+                printf("\n Latitude=%lf",geoPoint->latitude);
+                printf("\n Longitude=%lf",geoPoint->longitude);
+                printf("\n MarkerName = %s",geoPoint->markerName.c_str());
+            }
         }
     }
     else
