@@ -53,17 +53,29 @@ void App42GeoResponse::init()
                 app42Geo.sourceLat = Util::getJSONDouble("sourceLat", child);
                 app42Geo.sourceLng = Util::getJSONDouble("sourceLng", child);
                 app42Geo.distanceInKM = Util::getJSONDouble("distanceInKM", child);
-//                app42User.email = Util::getJSONString("email", child);
-//                app42User.isAccountLocked = Util::getJSONInt("accountLocked", child);
-//                app42User.sessionId = Util::getJSONString("sessionId", child);
-//                app42User.createdOn = Util::getJSONString("createdOn", child);
-//                app42User.password = Util::getJSONString("password", child);
-//                
-//                cJSON* ptrUserProfile = Util::getJSONChild("profile", child);
-//                if (ptrUserProfile)
-//                {
-//                    app42User.profile = buildUserProfile(ptrUserProfile);
-//                }
+                
+                cJSON* ptrPoints = Util::getJSONChild("points", child);
+                if(ptrPoints)
+                {
+                    cJSON* ptrPoint = Util::getJSONChild("point", ptrPoints);
+                    if (ptrPoint)
+                    {
+                        cJSON* pointChild = ptrPoint;
+                        if(pointChild->type == cJSON_Array)
+                        {
+                            pointChild = pointChild->child;
+                        }
+                        while(pointChild != NULL && pointChild->type == cJSON_Object)
+                        {
+                            App42GeoPoint geoPoint;
+                            geoPoint.latitude = Util::getJSONDouble("lat", pointChild);
+                            geoPoint.longitude = Util::getJSONDouble("lng", pointChild);
+                            geoPoint.markerName = Util::getJSONString("marker", pointChild);;
+                            app42Geo.pointList.push_back(geoPoint);
+                            pointChild = pointChild->next;
+                        }
+                    }
+                }
                 geoList.push_back(app42Geo);
                 child = child->next;
             }
