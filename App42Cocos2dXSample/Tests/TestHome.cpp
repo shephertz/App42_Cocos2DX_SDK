@@ -22,6 +22,7 @@
 #include "TestBuddyService.h"
 #include "TestTimerService.h"
 #include "TestGeoService.h"
+//#include "TestEventService.h"
 
 USING_NS_CC;
 
@@ -41,6 +42,7 @@ USING_NS_CC;
 #define BUDDY_SERVICE       114
 #define TIMER_SERVICE       115
 #define GEO_SERVICE         116
+#define EVENT_SERVICE       117
 
 const time_t sec_per_day = 24*60*60;
 
@@ -273,6 +275,16 @@ bool TestHome::init()
     geoServiceItem->setTag(GEO_SERVICE);
     y_pos -= button_y_Offset;
     geoServiceItem->setPosition(Point(x_pos,y_pos));
+    
+    /**
+     * Event Service Test
+     */
+    auto eventServiceLabel = LabelTTF::create("Event Service", "Marker Felt", 24);
+    eventServiceLabel->setColor(Color3B::WHITE);
+    auto eventServiceItem  = MenuItemLabel::create(eventServiceLabel, CC_CALLBACK_1(TestHome::menuCloseCallback, this));
+    eventServiceItem->setTag(EVENT_SERVICE);
+    y_pos -= button_y_Offset;
+    eventServiceItem->setPosition(Point(x_pos,y_pos));
 
     // create menu, it's an autorelease object
     auto menu = Menu::create(userServiceItem,
@@ -291,7 +303,8 @@ bool TestHome::init()
                              sessionServiceItem,
                              buddyServiceItem,
                              timerServiceItem,
-                             geoServiceItem,NULL);
+                             geoServiceItem,
+                             eventServiceItem,NULL);
     
     menu->setPosition(Point::ZERO);
     this->addChild(menu, 1);
@@ -301,7 +314,7 @@ bool TestHome::init()
     
     
     App42API::Initialize(API_KEY, SECRET_KEY);
-
+    
     App42API::setIsTraceEnabled(true);
     return true;
 }
@@ -473,6 +486,16 @@ void TestHome::menuCloseCallback(Ref* pSender)
             
             break;
         }
+        /*case EVENT_SERVICE:
+        {
+            // create a scene. it's an autorelease object
+            auto scene = TestEventService::createScene();
+            
+            // run
+            Director::getInstance()->replaceScene(scene);
+            
+            break;
+        }*/
         default:
             break;
     }

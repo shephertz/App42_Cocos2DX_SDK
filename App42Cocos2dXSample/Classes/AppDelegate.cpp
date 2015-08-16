@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "TestHome.h"
+//#include "App42FileManager.h"
 
 USING_NS_CC;
 
@@ -21,6 +22,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
+    //App42FileManager::CreateFile("abc.txt");
+    
     // turn on display FPS
     director->setDisplayStats(true);
 

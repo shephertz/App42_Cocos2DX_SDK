@@ -423,6 +423,7 @@ void TestPushNotificationService::subscribeDeviceToChannel(Ref *sender)
     
     pushService->SubscribeToChannel(channelName.c_str(),userName.c_str(),deviceToken.c_str(), APP42_IOS, app42callback(TestPushNotificationService::onPushRequestCompleted, this));
 }
+
 void TestPushNotificationService::unsubscribeDeviceToChannel(Ref *sender)
 {
     //App42API::setIsTraceEnabled(true);
@@ -430,10 +431,12 @@ void TestPushNotificationService::unsubscribeDeviceToChannel(Ref *sender)
     
     pushService->UnsubscribeDeviceToChannel(channelName.c_str(),userName.c_str(),deviceToken.c_str(),app42callback(TestPushNotificationService::onPushRequestCompleted, this));
 }
+
 void TestPushNotificationService::sendPushMessageToGroup(Ref *sender)
 {
     //App42API::setIsTraceEnabled(true);
     PushNotificationService *pushService = App42API::BuildPushNotificationService();
+    //PushNotificationService *pushService = PushNotificationService::getInstance();//
     std::vector<std::string>group;
     group.push_back("Nick");
     group.push_back("John");
@@ -458,16 +461,11 @@ void TestPushNotificationService::scheduleMessageToUser(Ref *sender)
 {
     //App42API::setIsTraceEnabled(true);
     PushNotificationService *pushService = App42API::BuildPushNotificationService();
-    
     tm *expiryDate;
-    
 	time_t t = time(NULL);
-    
     expiryDate = gmtime(&t);
-    
     pushService->ScheduleMessageToUser(userName.c_str(), message.c_str(), expiryDate, app42callback(TestPushNotificationService::onPushRequestCompleted, this));
 }
-
 
 void TestPushNotificationService::sendPushMeassageToChannel(Ref *sender)
 {
@@ -499,7 +497,6 @@ void TestPushNotificationService::clearAllBadgeCountForDevice(Ref *sender)
     PushNotificationService *pushService = App42API::BuildPushNotificationService();
     pushService->ClearAllBadgeCount(userName.c_str(),deviceToken.c_str(),app42callback(TestPushNotificationService::onPushRequestCompleted, this));
 }
-
 
 
 /**

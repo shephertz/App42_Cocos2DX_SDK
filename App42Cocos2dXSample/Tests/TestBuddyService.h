@@ -56,7 +56,7 @@ public:
  
     void checkedInGeoLocation(Ref* sender);
     void getFriendsByLocation(Ref* sender);
-
+    void deleteUser(Ref* sender);
     
     
     // a selector callback

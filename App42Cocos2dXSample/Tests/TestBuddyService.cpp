@@ -270,6 +270,15 @@ bool TestBuddyService::init()
     y_pos -= button_y_Offset;
 
     getFriendsByLocationItem->setPosition(Point(x_pos,y_pos));
+    
+    /**
+     * DeleteUser
+     */
+    auto deleteUserLabel = LabelTTF::create("DeleteUser", "Marker Felt", 24);
+    deleteUserLabel->setColor(Color3B::WHITE);
+    auto deleteUserItem  = MenuItemLabel::create(deleteUserLabel, CC_CALLBACK_1(TestBuddyService::deleteUser, this));
+    y_pos -= button_y_Offset;
+    deleteUserItem->setPosition(Point(x_pos,y_pos));
  	 
 
     // create menu, it's an autorelease object
@@ -303,6 +312,7 @@ bool TestBuddyService::init()
                              deleteMessageByIdsItem,
                              checkedInGeoLocationItem,
                              getFriendsByLocationItem,
+                             deleteUserItem,
                              NULL);
     
     menu->setPosition(Point::ZERO);
@@ -325,8 +335,6 @@ bool TestBuddyService::init()
 }
 
 
-
-
 /**
  * API Test Cases
  */
@@ -334,54 +342,57 @@ void TestBuddyService::sendFrndRequest(Ref* sender)
 {
     //static int counter =0;
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Rajeev1231223";
-    const char* buddyName = "R";
-    const char* message = "Please add me to ur network";
+    userName = "R2";
+    buddyName = "R3";
+    message = "Please add me to ur network";
     buddyService->SendFriendRequest(userName, buddyName, message, app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
 
 void TestBuddyService::getFrndRequest(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Ranjan1234";
+    userName = "Ranjan1234";
     buddyService->GetFriendRequest( userName, app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
 
 void TestBuddyService::acceptFriendRequest(Ref* sender)
 {
-    static int counter =0;
+    //static int counter =0;
     
     BuddyService* buddyService = App42API::BuildBuddyService();
-    string userName = "R";
-    userName.append(Util::ItoA(++counter));
+    userName = "R3";
+    buddyName = "R2";
+    //userName->append(Util::ItoA(++counter));
     //const char* userName ="Ranjan1234" ;
     //const char* buddyName = "Rajeev1231223";
 
-    buddyService->AcceptFriendRequest(userName.c_str(), buddyName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
+    buddyService->AcceptFriendRequest(userName, buddyName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
 
 void TestBuddyService::rejectFriendRequest(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Rajeev123";
-    const char* buddyName = "Ranjan123";
+    userName = "Rajeev123";
+    buddyName = "Ranjan123";
     buddyService->RejectFriendRequest(userName, buddyName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
 
 void TestBuddyService::getAllFriends(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Rajeev123";
+    userName = "R2";
     buddyService->GetAllFriends(userName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
+
 void TestBuddyService::createGroup(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Rajeev1231223";
-    const char* groupName = "Trending1234";
+    userName = "Rajeev1231223";
+    groupName = "Trending1234";
    // App42API::setLoggedInUser(userName);
     buddyService->CreateGroupByUser(userName,groupName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
+
 void TestBuddyService::addFriendsToGroup(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
@@ -389,24 +400,24 @@ void TestBuddyService::addFriendsToGroup(Ref* sender)
     friends.push_back("R1");
     friends.push_back("R2");
     friends.push_back("R3");
-    const char* userName = "Rajeev1231223";
-    const char* groupName = "Trending1234";
+    userName = "Rajeev1231223";
+    groupName = "Trending1234";
     buddyService->AddFriendsToGroup(userName,groupName, friends,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
 
 void TestBuddyService::getAllGroups(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Rajeev123";
+    userName = "Rajeev123";
     buddyService->GetAllGroups(userName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
 
 void TestBuddyService::getAllFriendsInGroup(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Rajeev123";
-    const char* groupName = "Trending";
-    const char* ownerName = "Rajeev123";
+    userName = "Rajeev123";
+    groupName = "Trending";
+    ownerName = "Rajeev123";
     //App42API::setLoggedInUser(userName);
     buddyService->GetAllFriendsInGroup(userName,ownerName,groupName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
@@ -414,27 +425,31 @@ void TestBuddyService::getAllFriendsInGroup(Ref* sender)
 void TestBuddyService::blockFriendRequest(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
-    const char* userName = "Rajeev123";
-    const char* buddyName = "R4";
+    userName = "Rajeev123";
+    buddyName = "R4";
     buddyService->BlockFriendRequest(buddyName,userName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
+
 void TestBuddyService::blockUser(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
     buddyService->BlockUser(userName,buddyName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
+
 void TestBuddyService::unblockUser(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
     buddyService->UnblockUser(userName,buddyName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 
 }
+
 void TestBuddyService::sendMessageToGroup(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
     buddyService->SendMessageToGroup(userName, ownerName, groupName, message,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 
 }
+
 void TestBuddyService::sendMessageToFriend(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
@@ -442,6 +457,7 @@ void TestBuddyService::sendMessageToFriend(Ref* sender)
     buddyService->SendMessageToFriend(userName,buddyName,message,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 
 }
+
 void TestBuddyService::sendMessageToFriends(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
@@ -449,12 +465,14 @@ void TestBuddyService::sendMessageToFriends(Ref* sender)
     buddyService->SendMessageToFriends(userName,message,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 
 }
+
 void TestBuddyService::getAllMessages(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
     buddyService->GetAllMessages(userName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 
 }
+
 void TestBuddyService::getAllMessagesFromBuddy(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
@@ -462,6 +480,7 @@ void TestBuddyService::getAllMessagesFromBuddy(Ref* sender)
     buddyService->GetAllMessagesFromBuddy(buddyName,userName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 
 }
+
 void TestBuddyService::getAllMessagesFromGroup(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
@@ -474,11 +493,14 @@ void TestBuddyService::unFriend(Ref* sender)
     buddyName = "R1";
     buddyService->UnFriend(userName,buddyName,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
+
 void TestBuddyService::deleteMessageById(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
+   
     buddyService->DeleteMessageById(userName,messageId,app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
+
 void TestBuddyService::deleteMessageByIds(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
@@ -505,6 +527,7 @@ void TestBuddyService::checkedInGeoLocation(Ref* sender)
     buddyService->CheckedInGeoLocation(userName, geoPoint, app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 
 }
+
 void TestBuddyService::getFriendsByLocation(Ref* sender)
 {
     BuddyService* buddyService = App42API::BuildBuddyService();
@@ -513,6 +536,13 @@ void TestBuddyService::getFriendsByLocation(Ref* sender)
     double maxDistance = 500;
     int max = 5;
     buddyService->GetFriendsByLocation(userName, latitude, longitude, maxDistance, max, app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
+}
+
+void TestBuddyService::deleteUser(Ref* sender)
+{
+    BuddyService* buddyService = App42API::BuildBuddyService();
+     userName = "R3";
+    buddyService->DeleteUser(userName, app42callback(TestBuddyService::onBuddyServiceRequestCompleted, this));
 }
 
 /**
