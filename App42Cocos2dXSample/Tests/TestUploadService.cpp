@@ -342,7 +342,7 @@ bool TestUploadService::init()
 void TestUploadService::uploadFile(Ref *sender)
 {
     UploadService *uploadService = App42API::BuildUploadService();
-    uploadService->setAdminKey(APP_ADMIN_KEY);
+    //uploadService->setAdminKey(APP_ADMIN_KEY);
     string filePath = FileUtils::getInstance()->fullPathForFilename("BackButton.png");
     //App42API::setLoggedInUser("Nick");
     const char* fileName = "BackButton11";//"<Your_file_name>";

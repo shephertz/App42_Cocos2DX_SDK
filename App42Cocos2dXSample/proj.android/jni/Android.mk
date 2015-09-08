@@ -19,6 +19,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Tests/TestCustomCodeService.cpp \
                    ../../Tests/TestEmailService.cpp \
                    ../../Tests/TestGameService.cpp \
+                   ../../Tests/TestGeoService.cpp \
                    ../../Tests/TestHome.cpp \
                    ../../Tests/TestPushNotificationService.cpp \
                    ../../Tests/TestRewardService.cpp \
@@ -59,6 +60,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../App42/GameService/RewardService.cpp \
                    ../../App42/GameService/ScoreBoardService.cpp \
                    ../../App42/GameService/ScoreService.cpp \
+                   ../../App42/GeoService/App42GeoResponse.cpp \
+                   ../../App42/GeoService/GeoService.cpp \
                    ../../App42/PushNotificationService/App42PushNotificationResponse.cpp \
                    ../../App42/PushNotificationService/PushNotificationService.cpp \
                    ../../App42/SessionService/App42SessionResponse.cpp \
@@ -90,6 +93,7 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
                     $(LOCAL_PATH)/../../App42/UserService \
                     $(LOCAL_PATH)/../../App42/PushNotificationService \
                     $(LOCAL_PATH)/../../App42/TimerService \
+                    $(LOCAL_PATH)/../../App42/GeoService \
                     $(LOCAL_PATH)/../../App42/AvatarService \
                     $(LOCAL_PATH)/../../App42/CustomCodeService \
                     $(LOCAL_PATH)/../../App42/SessionService \

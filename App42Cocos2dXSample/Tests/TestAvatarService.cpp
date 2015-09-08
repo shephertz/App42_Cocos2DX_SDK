@@ -198,9 +198,10 @@ bool TestAvatarService::init()
 void TestAvatarService::createAvatar(Ref* sender)
 {
     AvatarService *avatarService = App42API::BuildAvatarService();
+    avatarService->setSessionId("Session ID of the user");
     string filePath = FileUtils::getInstance()->fullPathForFilename("BackButton.png");
-    const char* avatarName = "Shephertz Nick1";
-    const char* userName = "Nick";
+    const char* avatarName = "Nick243453232323";
+    const char* userName = "Nick243453232323";
     //const char* filePath = "Your File Path";
     const char* description = "My Profile Pic";
 
