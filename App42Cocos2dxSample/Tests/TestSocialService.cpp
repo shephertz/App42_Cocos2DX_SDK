@@ -269,7 +269,7 @@ void TestSocialService::linkUserFacebookAccountWithToken(Ref *sender)
     SocialService *socialService = App42API::BuildSocialService();
     
     const char* userName = "Rajeev";
-    const char* accessToken = "CAACEdEose0cBAOFz6pJZA74LxWzaZBYTi18KQZCLU4BIeR89rlNaZBYnx5S2kkK02ofX5Gl24SjAm9kfTMNRPZCFZCdTblLprtjhcyezJglqeffodC1JPRU8KjXooaptR7OizMi7m4O5lepU1pl7Yl9O4RZB1r120WAHgO7EP8jsfiDT8TUK4jsX8EdZByDd4kfhWg1PNi2ChwZDZD";
+    const char* accessToken = "EAACEdEose0cBAKhUSpZChNHfiLh2lOOIMmLD1j0seaeim9QMceXAOmanXIoZCYPU2mIHRlpJVPhfOMAbKp8cx6uo0dAn85RjnKRpmwtFXuatetcYlsz1GI55aZA3h6cyZBkwPIfiREG0sDM4ywVYSFwjcfa2chbcruzgoHh8igZDZD";
     
     socialService->LinkUserFacebookAccount(userName, accessToken, app42callback(TestSocialService::onSocialServiceRequestCompleted, this));
 }

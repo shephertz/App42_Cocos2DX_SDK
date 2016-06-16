@@ -405,8 +405,8 @@ bool TestStorageService::init()
     this->addChild(menu3, 1);
     
     
-    dbName = "DBNAME";
-    collectionName = "Debug_Scores";
+    dbName = "TEST";
+    collectionName = "IoT";
     docId = "";
     
     App42API::setDbName(dbName);
@@ -484,6 +484,9 @@ void TestStorageService::findAllCollections(Ref *sender)
     storageService->FindAllCollections(dbName, app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
 
+//#define GameName  "test"
+//#define DBName  "LEADERBOARD"
+//#define CollectionNameLB  "WaterBird"
 
 void TestStorageService::findAllDocuments(Ref *sender)
 {
@@ -491,7 +494,7 @@ void TestStorageService::findAllDocuments(Ref *sender)
     StorageService *storageService = App42API::BuildStorageService();
     map<string,string>otherMetaHeaders;
     otherMetaHeaders["orderByAscending"] = "Score";
-    storageService->setOtherMetaHeaders(otherMetaHeaders);
+    //storageService->setOtherMetaHeaders(otherMetaHeaders);
     storageService->FindAllDocuments(dbName, collectionName,app42callback(TestStorageService::onStorageRequestCompleted, this));
 }
 

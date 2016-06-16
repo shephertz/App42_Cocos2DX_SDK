@@ -116,12 +116,34 @@ namespace Util
 		else
 			date.append(ItoA(utcTime_tm->tm_mday));
 		date.append("T");
-		date.append(ItoA(utcTime_tm->tm_hour));
+        if((utcTime_tm->tm_hour) < 10)
+        {
+            date.append("0");
+            date.append(ItoA(utcTime_tm->tm_hour));
+        }
+        else
+            date.append(ItoA(utcTime_tm->tm_hour));
 		date.append(":");
-		date.append(ItoA(utcTime_tm->tm_min));
-		date.append(":");
-		date.append(ItoA(utcTime_tm->tm_sec));
-		date.append(".000Z");
+        
+        if((utcTime_tm->tm_min) < 10)
+        {
+            date.append("0");
+            date.append(ItoA(utcTime_tm->tm_min));
+        }
+        else
+            date.append(ItoA(utcTime_tm->tm_min));
+		
+        date.append(":");
+        
+        if((utcTime_tm->tm_sec) < 10)
+        {
+            date.append("0");
+            date.append(ItoA(utcTime_tm->tm_sec));
+        }
+        else
+            date.append(ItoA(utcTime_tm->tm_sec));
+		
+        date.append(".000Z");
 		return date;
     }
     

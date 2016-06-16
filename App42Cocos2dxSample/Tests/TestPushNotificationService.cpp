@@ -41,9 +41,9 @@ bool TestPushNotificationService::init()
     
     channelName = "App42TestPushChannelReturnsss";
     description = "Testing channel";
-    userName = "MyiPhone5S";
+    userName = "myiphone";
     deviceToken =  "204b3b21148a2b67b769c331a10c81f789213330d641133848b5e1bb6a4e3b0a";//
-    message = "Hello from cocos2d-X!";
+    message = "Hello Test";
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();

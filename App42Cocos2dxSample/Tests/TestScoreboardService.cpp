@@ -31,6 +31,9 @@ Scene* TestScoreboardService::createScene()
     return scene;
 }
 
+#define GameName  "test"
+#define DBName  "LEADERBOARD"
+#define CollectionNameLB  "WaterBird"
 
 bool TestScoreboardService::init()
 {
@@ -41,11 +44,11 @@ bool TestScoreboardService::init()
         return false;
     }
     
-    gameName = "TestScore";
+    gameName = GameName;
     userName1 =  "Rajeev";
     userName2 = "Ranjan";
-    dbName = "jsonDocument2";
-    collectionName = "TestingScore";
+    dbName = DBName;
+    collectionName = CollectionNameLB;
     
     App42API::setDbName(dbName);
     
@@ -491,6 +494,15 @@ void TestScoreboardService::getTopNRankers(Ref *sender)
 {
     ScoreBoardService *scoreBoardService = App42API::BuildScoreBoardService();
     int max =10;
+    //const char* dbName = "";
+    //const char* collectionName = "";
+    
+    const char* key = "name";
+    const char* value = "MrBird240558030";/* what value I need to put hear */
+                                           
+    //App42API::setDbName(dbName);
+    Query *query = QueryBuilder::BuildQuery(key, value, APP42_OP_EQUALS);
+    scoreBoardService->setQuery(collectionName, query); /*Tryed Queary with Null Pointer as well but no result*/
     scoreBoardService->GetTopNRankers(gameName, max, app42callback(TestScoreboardService::onScoreBoardRequestCompleted, this));
 }
 

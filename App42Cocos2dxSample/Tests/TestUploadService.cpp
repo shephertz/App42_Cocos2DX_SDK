@@ -359,12 +359,12 @@ void TestUploadService::uploadFileData(Ref *sender)
     //App42API::setIsTraceEnabled(true);
     UploadService *uploadService = App42API::BuildUploadService();
     
-    const char* fileName = "BackButtonabcd";
-    string filePath = FileUtils::getInstance()->fullPathForFilename("BackButton.png");
-    FileType fileType = IMAGE;
+    const char* fileName = "upload";
+    string filePath = FileUtils::getInstance()->fullPathForFilename("upload.json");
+    FileType fileType = JSON;
     const char* description = "File Description";
     unsigned char* imageData = copy_file(filePath.c_str());
-    uploadService->UploadFile(fileName, imageData,imageDataLength, fileType, description, app42callback(TestUploadService::onUploadRequestCompleted, this));
+    uploadService->UploadFile(fileName, imageData,(int)imageDataLength, fileType, description, app42callback(TestUploadService::onUploadRequestCompleted, this));
 }
 
 void TestUploadService::getAllFiles(Ref *sender)
